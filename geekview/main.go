@@ -1,17 +1,17 @@
 package geekview
 
 import (
-	. "github.com/geekappio/itonchain/common/logging"
-	. "github.com/geekappio/itonchain/config"
-	. "github.com/geekappio/itonchain/dao"
+	. "github.com/geekappio/itonchain/geekview/common/logging"
+	. "github.com/geekappio/itonchain/geekview/config"
+	. "github.com/geekappio/itonchain/geekview/dao"
 	"flag"
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/gorilla/websocket"
 	"log"
 	"net/http"
-	. "github.com/geekappio/itonchain/web"
-	"github.com/geekappio/itonchain/util"
+	. "github.com/geekappio/itonchain/geekview/web"
+	"github.com/geekappio/itonchain/geekview/util"
 )
 
 func initConfig() error {
