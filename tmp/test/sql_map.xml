@@ -1,0 +1,13 @@
+<sqlMap>
+    <sql id="sql_1">
+        select * from article_share
+    </sql>
+
+    <sql id="sql_2">
+        select * from article_share where id = ?
+    </sql>
+
+    <sql id="sql_3">
+        select * from article_share where id = ?id
+    </sql>
+</sqlMap>

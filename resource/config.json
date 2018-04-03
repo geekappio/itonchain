@@ -1,0 +1,25 @@
+{
+  "server":{
+    "address": "127.0.0.1:9888"
+  },
+  "redis":{
+    "address":"127.0.0.1:6379",
+    "db":0
+  },
+  "database":{
+    "driverName":"mysql",
+    "datasourceName":"root:cgV8vokF@tcp(121.40.78.46:3306)/geekapp?parseTime=true",
+    "maxIdelConnections":20,
+    "maxOpenConnections":20
+  },
+  "xormPlus":{
+    "xmlDirectory":"resource/xorm/",
+    "stplDirectory":"resource/xorm/"
+  },
+  "logging":{
+    "logLevel":"debug",
+    "defaultLogPath":"log/default.log",
+    "errorLogPath":"log/error.log",
+    "apiLogPath":"log/api.log"
+  }
+}
