@@ -1,4 +1,4 @@
-package main
+package geekview
 
 import (
 	. "github.com/geekappio/itonchain/common/logging"
