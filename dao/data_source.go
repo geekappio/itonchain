@@ -3,8 +3,8 @@ package dao
 import (
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/xormplus/xorm"
-	"util"
-	. "config"
+	"github.com/geekappio/itonchain/util"
+	. "github.com/geekappio/itonchain/config"
 )
 
 // 数据源参数定义

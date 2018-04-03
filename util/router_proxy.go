@@ -5,8 +5,8 @@ import (
 	"reflect"
 	"encoding/json"
 	"net/http"
-	"common/model/api"
-	"common/model/enum"
+	"github.com/geekappio/itonchain/common/model/api"
+	"github.com/geekappio/itonchain/common/model/enum"
 )
 
 // FIXME 目前该方法为实验性质，传入 handler 必须遵循规则为 func(BaseRequest) (BaseResponse, errorCode string)

@@ -1,17 +1,17 @@
 package main
 
 import (
-	. "common/logging"
-	. "config"
-	. "dao"
+	. "github.com/geekappio/itonchain/common/logging"
+	. "github.com/geekappio/itonchain/config"
+	. "github.com/geekappio/itonchain/dao"
 	"flag"
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/gorilla/websocket"
 	"log"
 	"net/http"
-	. "web"
-	"util"
+	. "github.com/geekappio/itonchain/web"
+	"github.com/geekappio/itonchain/util"
 )
 
 func initConfig() error {

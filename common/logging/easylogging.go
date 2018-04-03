@@ -1,7 +1,7 @@
 package logging
 
 import (
-	. "config"
+	. "github.com/geekappio/itonchain/config"
 	"fmt"
 	"github.com/lestrrat-go/file-rotatelogs"
 	"github.com/rifflock/lfshook"

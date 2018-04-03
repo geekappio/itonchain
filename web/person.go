@@ -3,8 +3,8 @@ package web
 import (
 	"github.com/gin-gonic/gin"
 	"net/http"
-	"common/model/dal"
-	"service"
+	"github.com/geekappio/itonchain/common/model/dal"
+	"github.com/geekappio/itonchain/service"
 )
 
 func UserRegister(c *gin.Context) {
