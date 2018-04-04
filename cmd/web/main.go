@@ -10,8 +10,8 @@ import (
 	"github.com/gorilla/websocket"
 	"log"
 	"net/http"
-	. "github.com/geekappio/itonchain/geekview/web"
-	"github.com/geekappio/itonchain/geekview/util"
+	. "github.com/geekappio/itonchain/web"
+	"github.com/geekappio/itonchain/util"
 )
 
 func initConfig() error {
