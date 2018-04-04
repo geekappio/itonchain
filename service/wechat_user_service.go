@@ -1,7 +1,7 @@
 package service
 
 import (
-	"github.com/geekappio/itonchain/geekview/common/model/dal"
+	"github.com/geekappio/itonchain/common/model/dal"
 )
 
 type WechatUserService interface {

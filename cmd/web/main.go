@@ -1,9 +1,9 @@
-package geekview
+package web
 
 import (
-	. "github.com/geekappio/itonchain/geekview/common/logging"
-	. "github.com/geekappio/itonchain/geekview/config"
-	. "github.com/geekappio/itonchain/geekview/dao"
+	. "github.com/geekappio/itonchain/common/logging"
+	. "github.com/geekappio/itonchain/config"
+	. "github.com/geekappio/itonchain/dao"
 	"flag"
 	"fmt"
 	"github.com/gin-gonic/gin"

@@ -1,11 +1,11 @@
 package web
 
 import (
-	"github.com/geekappio/itonchain/geekview/util"
-	"github.com/geekappio/itonchain/geekview/service"
-	"github.com/geekappio/itonchain/geekview/common/model/api"
-	"github.com/geekappio/itonchain/geekview/common/model/dal"
-	"github.com/geekappio/itonchain/geekview/common/model/enum"
+	"github.com/geekappio/itonchain/util"
+	"github.com/geekappio/itonchain/service"
+	"github.com/geekappio/itonchain/common/model/api"
+	"github.com/geekappio/itonchain/common/model/dal"
+	"github.com/geekappio/itonchain/common/model/enum"
 )
 
 func ArticleShareHandler(request api.ArticleShareRequest) (*api.ArticleShareResponse, string) {

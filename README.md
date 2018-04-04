@@ -1,1 +1,12 @@
 # itonchain
+cmd             命令行应用
+    web         web命令行应用
+common          公用代码
+config          系统配置
+dao             数据源管理，数据库操作
+resource        配置和资源文件
+service         业务层，处理业务
+sql             数据库脚本
+util            工具类
+vender          第三方依赖项目
+web             web层

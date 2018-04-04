@@ -2,10 +2,10 @@ package dao
 
 import (
 	"testing"
-	. "github.com/geekappio/itonchain/geekview/config"
+	. "github.com/geekappio/itonchain/config"
 
 	"github.com/ian-kent/go-log/log"
-	"github.com/geekappio/itonchain/geekview/common/model/dal"
+	"github.com/geekappio/itonchain/common/model/dal"
 )
 
 func TestQuery(t *testing.T) {
