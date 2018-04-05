@@ -1,4 +1,5 @@
-# itonchain ## 如何创建开发环境 
+# itonchain 
+## 如何创建开发环境 
 1. 在本机安装Go环境    
 2. 设置好本机GOROOT和默认的GOPATH路径    
 3. 像下面一样在本地创建itonchain项目环境    
