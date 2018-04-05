@@ -1,10 +1,10 @@
 package dao
 
 import (
+	. "github.com/geekappio/itonchain/app/config"
+	"github.com/geekappio/itonchain/app/util"
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/xormplus/xorm"
-	"github.com/geekappio/itonchain/app/utilutil"
-	. "github.com/geekappio/itonchain/app/config"
 )
 
 // 数据源参数定义

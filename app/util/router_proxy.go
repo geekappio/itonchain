@@ -1,12 +1,13 @@
 package util
 
 import (
-	"github.com/gin-gonic/gin"
-	"reflect"
 	"encoding/json"
 	"net/http"
+	"reflect"
+
 	"github.com/geekappio/itonchain/app/common/model/api"
 	"github.com/geekappio/itonchain/app/common/model/enum"
+	"github.com/gin-gonic/gin"
 )
 
 // FIXME 目前该方法为实验性质，传入 handler 必须遵循规则为 func(BaseRequest) (BaseResponse, errorCode string)
@@ -29,9 +30,9 @@ func AddPostRouter(engine *gin.Engine, path string, handler interface{}) {
 		response := results[0].Interface()
 		errorCode := results[1].Interface().(string)
 		head := api.ResponseHead{
-			ReturnCode:errorCode,
-			ReturnMsg:enum.GetErrorMsg(errorCode),
-			ReturnData:response,
+			ReturnCode: errorCode,
+			ReturnMsg:  enum.GetErrorMsg(errorCode),
+			ReturnData: response,
 		}
 		c.JSON(http.StatusOK, head)
 	})

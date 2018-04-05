@@ -2,10 +2,11 @@ package dao
 
 import (
 	"testing"
+
 	. "github.com/geekappio/itonchain/app/config"
 
-	"github.com/ian-kent/go-log/log"
 	"github.com/geekappio/itonchain/app/common/model/dal"
+	"github.com/ian-kent/go-log/log"
 )
 
 func TestQuery(t *testing.T) {
@@ -136,8 +137,6 @@ func TestQuery(t *testing.T) {
 	} else {
 		err = session.Commit()
 	}
-
-
 
 }
 

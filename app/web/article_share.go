@@ -1,11 +1,11 @@
 package web
 
 import (
-	"github.com/geekappio/itonchain/app/util"
-	"github.com/geekappio/itonchain/app/service"
 	"github.com/geekappio/itonchain/app/common/model/api"
 	"github.com/geekappio/itonchain/app/common/model/dal"
 	"github.com/geekappio/itonchain/app/common/model/enum"
+	"github.com/geekappio/itonchain/app/service"
+	"github.com/geekappio/itonchain/app/util"
 )
 
 func ArticleShareHandler(request api.ArticleShareRequest) (*api.ArticleShareResponse, string) {
@@ -18,12 +18,12 @@ func ArticleShareHandler(request api.ArticleShareRequest) (*api.ArticleShareResp
 		return nil, enum.SYSTEM_FAILED
 	}
 	articleShare := &dal.ArticleShare{
-		ArticleId:request.ArticleId,
-		UserId:user.Id,
+		ArticleId: request.ArticleId,
+		UserId:    user.Id,
 	}
 	ok := shareService.DoArticleShare(articleShare)
 	if ok {
-		return &api.ArticleShareResponse{ShareTimes:123}, enum.SYSTEM_SUCCESS
+		return &api.ArticleShareResponse{ShareTimes: 123}, enum.SYSTEM_SUCCESS
 	} else {
 		return nil, enum.SYSTEM_FAILED
 	}

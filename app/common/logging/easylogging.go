@@ -1,12 +1,13 @@
 package logging
 
 import (
-	. "github.com/geekappio/itonchain/app/confignfig"
 	"fmt"
+	"time"
+
+	. "github.com/geekappio/itonchain/app/config"
 	"github.com/lestrrat-go/file-rotatelogs"
 	"github.com/rifflock/lfshook"
 	"github.com/sirupsen/logrus"
-	"time"
 )
 
 var Logger *logrus.Logger

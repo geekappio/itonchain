@@ -1,17 +1,19 @@
 package main
 
 import (
-	. "github.com/geekappio/itonchain/app/commonmmon/logging"
-	. "github.com/geekappio/itonchain/app/confignfig"
-	. "github.com/geekappio/itonchain/app/dao/dao"
 	"flag"
 	"fmt"
-	"github.com/gin-gonic/gin"
-	"github.com/gorilla/websocket"
 	"log"
 	"net/http"
-	. "github.com/geekappio/itonchain/app/web/web"
-	"github.com/geekappio/itonchain/app/utilutil"
+
+	"github.com/geekappio/itonchain/app/util"
+
+	. "github.com/geekappio/itonchain/app/common/logging"
+	. "github.com/geekappio/itonchain/app/config"
+	. "github.com/geekappio/itonchain/app/dao"
+	. "github.com/geekappio/itonchain/app/web"
+	"github.com/gin-gonic/gin"
+	"github.com/gorilla/websocket"
 )
 
 func initConfig() error {
@@ -68,6 +70,8 @@ func main() {
 
 	router.GET(ApiRequestMapping.UserRegister, UserRegister)
 	util.AddPostRouter(router, ApiRequestMapping.ArticleShare, ArticleShareHandler)
+	// 修改修改文章类别信息
+	router.GET(ApiRequestMapping.ArticleCategoryInfoChange, ArticleCategoryChange)
 
 	// Handle websocket
 	router.GET("/ws", func(c *gin.Context) {

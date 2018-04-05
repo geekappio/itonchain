@@ -3,6 +3,7 @@ package enum
 const (
 	SYSTEM_SUCCESS = "0000"
 	SYSTEM_FAILED = "0001"
+	ILLEGAL_PARAMETERS = "1001"
 )
 
 // FIXME go里边没有类似 enum 的类型，const 只能定义编译期就能确定的类型，暂时没有更好的办法
