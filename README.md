@@ -62,7 +62,7 @@ PC端功能类似知乎，可以编辑文章与微信端打通。
     
     **注意：这里一定要在src/github.com/geekappio/itonchain目录下拉代码**  
  5. 设置GOBIN=xxx/itonchain/bin环境变量, 指定go insall命令的默认执行文件的位置（可选）  
- 6. 启动Golang, 打开项目，路径xxx/itonchain/github.com/geekappio/itonchain为当前项目的路径  
+ 6. 启动Goland, 打开项目，路径xxx/itonchain/github.com/geekappio/itonchain为当前项目的路径  
  7. 设置项目的GOPATH为xxx/itonchain  
       
 ## 代码结构 
