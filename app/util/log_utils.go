@@ -1,6 +1,6 @@
 package util
 
-import "github.com/geekappio/itonchain/common/logging"
+import "github.com/geekappio/itonchain/app/common/logging"
 
 func LogError(err error) {
 	if err != nil {

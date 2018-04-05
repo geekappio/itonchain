@@ -1,7 +1,7 @@
 package service
 
 import (
-	"github.com/geekappio/itonchain/common/model/dal"
+	"github.com/geekappio/itonchain/app/common/model/dal"
 )
 
 type ArticleShareService interface {

@@ -3,7 +3,7 @@ package dao
 import (
 	"github.com/go-redis/redis"
 	"log"
-	. "github.com/geekappio/itonchain/config"
+	. "github.com/geekappio/itonchain/app/config"
 )
 
 var redisClient *redis.Client

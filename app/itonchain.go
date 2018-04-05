@@ -1,17 +1,17 @@
-package web
+package main
 
 import (
-	. "github.com/geekappio/itonchain/common/logging"
-	. "github.com/geekappio/itonchain/config"
-	. "github.com/geekappio/itonchain/dao"
+	. "github.com/geekappio/itonchain/app/commonmmon/logging"
+	. "github.com/geekappio/itonchain/app/confignfig"
+	. "github.com/geekappio/itonchain/app/dao/dao"
 	"flag"
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/gorilla/websocket"
 	"log"
 	"net/http"
-	. "github.com/geekappio/itonchain/web"
-	"github.com/geekappio/itonchain/util"
+	. "github.com/geekappio/itonchain/app/web/web"
+	"github.com/geekappio/itonchain/app/utilutil"
 )
 
 func initConfig() error {
