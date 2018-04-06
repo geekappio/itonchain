@@ -14,7 +14,7 @@ func UserRegister(c *gin.Context) {
 		NickName: name,
 	}
 
-	wechatUserService := service.NewWechatUserService()
+	wechatUserService := service.GetWechatUserService()
 	ok := wechatUserService.CreateUser(&user)
 	if ok {
 		c.JSON(http.StatusOK, gin.H{

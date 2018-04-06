@@ -10,8 +10,8 @@ import (
 
 func ArticleShareHandler(request model.ArticleShareRequest) (*model.ResponseModel) {
 	util.LogInfo(request)
-	userService := service.NewWechatUserService()
-	shareService := service.NewArticleShareService()
+	userService := service.GetWechatUserService()
+	shareService := service.GetArticleShareService()
 
 	user := userService.FindUserByOpenId(request.OpenId)
 	if nil == user {
