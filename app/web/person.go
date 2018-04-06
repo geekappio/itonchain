@@ -3,14 +3,14 @@ package web
 import (
 	"net/http"
 
-	"github.com/geekappio/itonchain/app/common/model/dal"
+	"github.com/geekappio/itonchain/app/dal/entity"
 	"github.com/geekappio/itonchain/app/service"
 	"github.com/gin-gonic/gin"
 )
 
 func UserRegister(c *gin.Context) {
 	name := c.Param("name")
-	user := dal.WechatUser{
+	user := entity.WechatUser{
 		NickName: name,
 	}
 

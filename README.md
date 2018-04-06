@@ -66,7 +66,7 @@ PC端功能类似知乎，可以编辑文章与微信端打通。
  7. 设置项目的GOPATH为xxx/itonchain  
       
 ## 代码结构 
- >app             代码    
+app             代码    
   common          公用代码    
     config          系统配置    
     dao             数据源管理，数据库操作    
@@ -76,6 +76,11 @@ PC端功能类似知乎，可以编辑文章与微信端打通。
     util            工具类    
     vender          第三方依赖项目    
     web             web层    
-reousrce        资源配置    
+   reousrce        资源配置    
 sql             数据库模板    
 tmp             临时目录
+
+## 开发约定
+### 数据操作ORM 
+ 1. 使用xormplus作为数据库orm类库，使用stpl模板
+ 2. 默认模板都放置在项目的/resource/xorm目录下，每个Table创建一个子目录，每个查询语句创建一个模板文件

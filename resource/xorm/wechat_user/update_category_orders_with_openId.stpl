@@ -1,0 +1,3 @@
+UPDATE wechat_user
+SET category_orders = ?categoryOrders
+WHERE open_id = ?openId

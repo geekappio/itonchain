@@ -18,7 +18,7 @@ var ApiRequestMapping *requestMapping
 
 func init() {
 	ApiRequestMapping = &requestMapping{
-		UserRegister:               "/user/register",
+		UserRegister:               "/wechat_user/register",
 		ArticleListQuery:           "/article/list/query",
 		ArticleFavorite:            "/article/favorite",
 		ArticleShare:               "/article/share",

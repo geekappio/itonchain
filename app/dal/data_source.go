@@ -1,4 +1,4 @@
-package dao
+package dal
 
 import (
 	. "github.com/geekappio/itonchain/app/config"

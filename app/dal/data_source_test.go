@@ -1,11 +1,11 @@
-package dao
+package dal
 
 import (
 	"testing"
 
 	. "github.com/geekappio/itonchain/app/config"
 
-	"github.com/geekappio/itonchain/app/common/model/dal"
+	"github.com/geekappio/itonchain/app/dal/entity"
 	"github.com/ian-kent/go-log/log"
 )
 
@@ -93,7 +93,7 @@ func TestQuery(t *testing.T) {
 	// endregion
 
 	// region 6. 填充模型
-	var articleShares []dal.ArticleShare
+	var articleShares []entity.ArticleShare
 	err = DB.SQL(sql_1).Find(&articleShares)
 	logErr(t, articleShares, err)
 
@@ -115,7 +115,7 @@ func TestQuery(t *testing.T) {
 	// endregion
 
 	// region 9. 查询单条
-	var articleShare dal.ArticleShare
+	var articleShare entity.ArticleShare
 	has, err := DB.SQL(sql_1).Get(&articleShare)
 	if has {
 		logErr(t, articleShare, err)

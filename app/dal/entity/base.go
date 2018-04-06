@@ -1,8 +1,9 @@
-package dal
+package entity
 
 import "time"
 
-type Base struct {
+// BaseEntity
+type BaseEntity struct {
 	Id 			int
 	GmtCreate 	time.Time
 	GmtUpdate 	time.Time

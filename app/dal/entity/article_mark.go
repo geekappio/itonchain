@@ -1,4 +1,4 @@
-package dal
+package entity
 
 type ArticleMark struct {
 	ArticleId 		int

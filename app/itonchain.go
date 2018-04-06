@@ -8,9 +8,10 @@ import (
 
 	"github.com/geekappio/itonchain/app/util"
 
-	. "github.com/geekappio/itonchain/app/common/logging"
+	"github.com/geekappio/itonchain/app/common/logging"
+	. "github.com/geekappio/itonchain/app/common/redis"
 	. "github.com/geekappio/itonchain/app/config"
-	. "github.com/geekappio/itonchain/app/dao"
+	. "github.com/geekappio/itonchain/app/dal"
 	. "github.com/geekappio/itonchain/app/web"
 	"github.com/gin-gonic/gin"
 	"github.com/gorilla/websocket"
@@ -33,7 +34,7 @@ func initConfig() error {
 	}
 
 	// Init Loggers
-	err = InitLoggers()
+	err = logging.InitLoggers()
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -72,6 +73,13 @@ func main() {
 	util.AddPostRouter(router, ApiRequestMapping.ArticleShare, ArticleShareHandler)
 	// 修改修改文章类别信息
 	router.GET(ApiRequestMapping.ArticleCategoryInfoChange, ArticleCategoryChange)
+
+	// 添加文章类目
+	util.AddPostRouter(router, ApiRequestMapping.ArticleCategoryAdd, HandleArticleCategoryAdd)
+	// 删除文章类目
+	util.AddPostRouter(router, ApiRequestMapping.ArticleCategoryDelete, HandleArticleCategoryDelete)
+	// 修改文章类目次序
+	util.AddPostRouter(router, ApiRequestMapping.ArticleCategoryOrderChange, HandleArticleCategoryOrderChange)
 
 	// Handle websocket
 	router.GET("/ws", func(c *gin.Context) {

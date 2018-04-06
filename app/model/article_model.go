@@ -1,4 +1,4 @@
-package api
+package model
 
 type ArticleShareRequest struct {
 	BaseRequest
@@ -6,7 +6,7 @@ type ArticleShareRequest struct {
 	ArticleId int    `json:"articleId"`
 }
 
-type ArticleShareResponse struct {
-	BaseResponse
+// Return Data field of article share response
+type ArticleShareReturnData struct {
 	ShareTimes int `json:"shareTimes"`
 }

@@ -1,28 +1,39 @@
 package service
 
 import (
-	"github.com/geekappio/itonchain/app/common/model/dal"
+	"github.com/geekappio/itonchain/app/dal/entity"
+	"github.com/geekappio/itonchain/app/model"
 )
 
-type WechatUserService interface {
-	CreateUser(model *dal.WechatUser) bool
-	FindUserByOpenId(openId string) *dal.WechatUser
+var wechatUserService *WechatUserService
+
+// GetArticleCategoryService returns ArticleCategory service instance which provides method calls.
+func GetWechatUserService() *WechatUserService {
+	if wechatUserService == nil {
+		wechatUserService = &WechatUserService{}
+	}
+
+	return wechatUserService
 }
 
-func NewWechatUserService() WechatUserService {
-	return WechatUserServiceImpl{}
+
+// Implementation struct of ArticleCategory to bind functions wi
+type WechatUserService struct {
 }
 
-type WechatUserServiceImpl struct {
-}
-
-func (self WechatUserServiceImpl) CreateUser(model *dal.WechatUser) bool {
+func (self *WechatUserService) CreateUser(model *entity.WechatUser) bool {
 	println("模拟创建用户成功！")
 	return true
 }
 
-func (self WechatUserServiceImpl) FindUserByOpenId(openId string) *dal.WechatUser {
-	return &dal.WechatUser{
-		Base:dal.Base{Id:123321,},
+func (self *WechatUserService) FindUserByOpenId(openId string) *entity.WechatUser {
+	return &entity.WechatUser{
+		BaseEntity: entity.BaseEntity{Id: 123321,},
 	}
+}
+
+func (service *WechatUserService) ChaningArticleCategoryOrder(request *model.ArticleCategoryOrderChangeRequest) *model.ResponseModel {
+	// Here calls dao method to access database.
+	// TODO ...
+	return &model.ResponseModel{}
 }

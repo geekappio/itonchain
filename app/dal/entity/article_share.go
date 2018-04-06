@@ -1,7 +1,7 @@
-package dal
+package entity
 
 type ArticleShare struct {
-	Base
+	BaseEntity
 	ArticleId 	int
 	UserId 		int
 }

@@ -1,7 +1,7 @@
-package dal
+package entity
 
 type ArticleFavorite struct {
-	Base
+	BaseEntity
 	ArticleId 			int
 	UserId 				int
 }

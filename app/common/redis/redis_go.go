@@ -1,9 +1,10 @@
-package dao
+package redis
 
 import (
-	"github.com/go-redis/redis"
 	"log"
+
 	. "github.com/geekappio/itonchain/app/config"
+	"github.com/go-redis/redis"
 )
 
 var redisClient *redis.Client

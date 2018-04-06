@@ -1,7 +1,7 @@
-package dal
+package entity
 
 type ArticlePending struct {
-	Base
+	BaseEntity
 	ArticleTitle 		string
 	ArticleFrom 		string
 	ArticleUrl 			string

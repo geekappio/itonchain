@@ -1,7 +1,7 @@
-package dal
+package entity
 
 type WechatUser struct {
-	Base
+	BaseEntity
 	OpenId 			string
 	NickName 		string
 	AvatarUrl 		string

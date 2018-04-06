@@ -1,9 +1,10 @@
 package config
 
 import (
+	"encoding/json"
+
 	"github.com/golang/go/src/io/ioutil"
 	"github.com/ian-kent/go-log/log"
-	"encoding/json"
 )
 
 // App configs.

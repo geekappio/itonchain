@@ -1,7 +1,7 @@
-package dal
+package entity
 
 type Category struct {
-	Base
+	BaseEntity
 	UserId 			int
 	CategoryName 	string
 	Description 	string

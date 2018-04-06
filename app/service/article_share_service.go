@@ -1,11 +1,11 @@
 package service
 
 import (
-	"github.com/geekappio/itonchain/app/common/model/dal"
+	"github.com/geekappio/itonchain/app/dal/entity"
 )
 
 type ArticleShareService interface {
-	DoArticleShare(share *dal.ArticleShare) bool
+	DoArticleShare(share *entity.ArticleShare) bool
 }
 
 func NewArticleShareService() ArticleShareService {
@@ -15,7 +15,7 @@ func NewArticleShareService() ArticleShareService {
 type ArticleShareServiceImpl struct {
 }
 
-func (self ArticleShareServiceImpl) DoArticleShare(model *dal.ArticleShare) bool {
+func (self ArticleShareServiceImpl) DoArticleShare(model *entity.ArticleShare) bool {
 	println("模拟文件分享完成")
 	return true
 }

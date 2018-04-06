@@ -1,7 +1,7 @@
-package dal
+package entity
 
 type Article struct {
-	Base
+	BaseEntity
 	ArticleTitle		string
 	ArticleFrom			string
 	ArticleUrl			string

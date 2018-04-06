@@ -1,0 +1,4 @@
+INSERT INTO category
+(user_id, category_name, description, gmt_create, gmt_update)
+VALUES
+(?userId, ?categoryName, ?description, ?gmtCreate, ?gmtUpdate)
