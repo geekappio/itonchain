@@ -6,7 +6,7 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/geekappio/itonchain/app/util"
+	"github.com/geekappio/itonchain/app/logging"
 
 	"github.com/geekappio/itonchain/app/common/logging"
 	. "github.com/geekappio/itonchain/app/common/redis"
@@ -70,16 +70,16 @@ func main() {
 	router.Use(Middleware)
 
 	router.GET(ApiRequestMapping.UserRegister, UserRegister)
-	util.AddPostRouter(router, ApiRequestMapping.ArticleShare, ArticleShareHandler)
+	logging.AddPostRouter(router, ApiRequestMapping.ArticleShare, HandleArticleShare)
 	// 修改修改文章类别信息
 	router.GET(ApiRequestMapping.ArticleCategoryInfoChange, ArticleCategoryChange)
 
 	// 添加文章类目
-	util.AddPostRouter(router, ApiRequestMapping.ArticleCategoryAdd, HandleArticleCategoryAdd)
+	logging.AddPostRouter(router, ApiRequestMapping.ArticleCategoryAdd, HandleArticleCategoryAdd)
 	// 删除文章类目
-	util.AddPostRouter(router, ApiRequestMapping.ArticleCategoryDelete, HandleArticleCategoryDelete)
+	logging.AddPostRouter(router, ApiRequestMapping.ArticleCategoryDelete, HandleArticleCategoryDelete)
 	// 修改文章类目次序
-	util.AddPostRouter(router, ApiRequestMapping.ArticleCategoryOrderChange, HandleArticleCategoryOrderChange)
+	logging.AddPostRouter(router, ApiRequestMapping.ArticleCategoryOrderChange, HandleArticleCategoryOrderChange)
 
 	// Handle websocket
 	router.GET("/ws", func(c *gin.Context) {

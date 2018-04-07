@@ -1,0 +1,3 @@
+SELECT id, open_id,
+FROM wechat_user
+WHERE open_id = ?openId

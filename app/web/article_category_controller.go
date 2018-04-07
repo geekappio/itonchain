@@ -2,9 +2,9 @@ package web
 
 import (
 	"github.com/geekappio/itonchain/app/enum"
+	"github.com/geekappio/itonchain/app/logging"
 	"github.com/geekappio/itonchain/app/model"
 	"github.com/geekappio/itonchain/app/service"
-	"github.com/geekappio/itonchain/app/util"
 	"github.com/gin-gonic/gin"
 )
 
@@ -25,7 +25,7 @@ func ArticleCategoryChange(c *gin.Context) {
 
 	request := model.ArticleCategoryChange{OpenId: openId, CategoryId: categoryId, CategoryName: categoryName, Description: description}
 	// 输出日志
-	util.LogInfo(request)
+	logging.LogInfo(request)
 
 	// 调用服务
 	result := service.ArticleCategoryChangeService(request)
@@ -38,11 +38,9 @@ func ArticleCategoryChange(c *gin.Context) {
 
 // HandleArticleCategoryAdd handles request of adding article category.
 func HandleArticleCategoryAdd(reqeustModel *model.ArticleCategoryAddRequest) (response *model.ResponseModel) {
-
 	// Call service
 	service := service.GetArticleCategoryService()
 	return service.AddArticleCategory(reqeustModel)
-
 }
 
 // HandleArticleCategoryDelete handles request of deleting article category.
@@ -50,7 +48,6 @@ func HandleArticleCategoryDelete(reqeustModel *model.ArticleCategoryDeleteReques
 	// Call service
 	service := service.GetArticleCategoryService()
 	return service.DeleteArticleCategory(reqeustModel)
-
 }
 
 // HandleArticleCategoryOrderChange handles request of changing order of user's article categories.
@@ -58,5 +55,4 @@ func HandleArticleCategoryOrderChange(reqeustModel *model.ArticleCategoryOrderCh
 	// Call service
 	service := service.GetWechatUserService()
 	return service.ChaningArticleCategoryOrder(reqeustModel)
-
 }

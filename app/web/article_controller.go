@@ -5,11 +5,11 @@ import (
 	"github.com/geekappio/itonchain/app/enum"
 	"github.com/geekappio/itonchain/app/model"
 	"github.com/geekappio/itonchain/app/service"
-	"github.com/geekappio/itonchain/app/util"
+	"github.com/geekappio/itonchain/app/logging"
 )
 
-func ArticleShareHandler(request model.ArticleShareRequest) (*model.ResponseModel) {
-	util.LogInfo(request)
+func HandleArticleShare(request model.ArticleShareRequest) (*model.ResponseModel) {
+	logging.LogInfo(request)
 	userService := service.GetWechatUserService()
 	shareService := service.GetArticleShareService()
 

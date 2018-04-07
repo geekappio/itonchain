@@ -1,8 +1,7 @@
-package util
+package logging
 
 import (
 	"github.com/geekappio/itonchain/app/common/logging"
-	"github.com/geekappio/itonchain/app/model"
 	"github.com/json-iterator/go"
 )
 
@@ -20,7 +19,6 @@ func LogWarn(args ...interface{}) {
 
 func LogError(args ...interface{}) {
 	logging.Logger.Error(args)
-
 }
 
 func LogRequest(requestUri string, requestData []byte) {
