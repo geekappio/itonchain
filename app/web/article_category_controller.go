@@ -2,7 +2,7 @@ package web
 
 import (
 	"github.com/geekappio/itonchain/app/enum"
-	"github.com/geekappio/itonchain/app/logging"
+	"github.com/geekappio/itonchain/app/util"
 	"github.com/geekappio/itonchain/app/model"
 	"github.com/geekappio/itonchain/app/service"
 	"github.com/gin-gonic/gin"
@@ -23,9 +23,9 @@ func ArticleCategoryChange(c *gin.Context) {
 		BuildResopone(c, enum.ILLEGAL_PARAMETERS, "参数非法")
 	}
 
-	request := model.ArticleCategoryChange{OpenId: openId, CategoryId: categoryId, CategoryName: categoryName, Description: description}
+	request := model.ArticleCategoryChangeRequest{OpenId: openId, CategoryId: categoryId, CategoryName: categoryName, Description: description}
 	// 输出日志
-	logging.LogInfo(request)
+	util.LogInfo(request)
 
 	// 调用服务
 	result := service.ArticleCategoryChangeService(request)
@@ -54,5 +54,5 @@ func HandleArticleCategoryDelete(reqeustModel *model.ArticleCategoryDeleteReques
 func HandleArticleCategoryOrderChange(reqeustModel *model.ArticleCategoryOrderChangeRequest) (response *model.ResponseModel) {
 	// Call service
 	service := service.GetWechatUserService()
-	return service.ChaningArticleCategoryOrder(reqeustModel)
+	return service.ChangingArticleCategoryOrder(reqeustModel)
 }

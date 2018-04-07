@@ -1,13 +1,13 @@
 package service
 
 import (
-	"github.com/geekappio/itonchain/app/dal/entity"
-	"github.com/geekappio/itonchain/app/model"
 	"github.com/geekappio/itonchain/app/dal/dao"
+	"github.com/geekappio/itonchain/app/dal/entity"
 	"github.com/geekappio/itonchain/app/util"
+	"github.com/geekappio/itonchain/app/model"
 
-	"github.com/jinzhu/copier"
 	"github.com/geekappio/itonchain/app/enum"
+	"github.com/jinzhu/copier"
 )
 
 var wechatUserService *WechatUserService
@@ -20,7 +20,6 @@ func GetWechatUserService() *WechatUserService {
 	return wechatUserService
 }
 
-
 type WechatUserService struct {
 }
 
@@ -29,7 +28,7 @@ func (self *WechatUserService) CreateUser(request *model.WechatUserRequest) (*mo
 	copier.Copy(wechatUser, request)
 	//查询openId是否存在，存在报错
 	wechatUserSqlMapper := dao.GetWechatUserSqlMapper()
-	bool ,err :=wechatUserSqlMapper.UserRegister(&wechatUser)
+	bool, err := wechatUserSqlMapper.UserRegister(&wechatUser)
 	if err != nil {
 		util.LogError(err)
 	}
@@ -44,12 +43,12 @@ func (self *WechatUserService) CreateUser(request *model.WechatUserRequest) (*mo
 		util.LogError("Error happened when inserting wechat_user: ", wechatUser, err)
 		return &model.ResponseModel{
 			ReturnCode: enum.DB_INSERT_ERROR,
-			ReturnMsg: "添加category数据失败",
+			ReturnMsg:  "添加category数据失败",
 		}
 	} else {
 		return &model.ResponseModel{
 			ReturnCode: enum.SYSTEM_SUCCESS,
-			ReturnMsg: "用户注册成功",
+			ReturnMsg:  "用户注册成功",
 			ReturnData: id,
 		}
 	}
@@ -61,7 +60,7 @@ func (self *WechatUserService) FindUserByOpenId(openId string) *entity.WechatUse
 	}
 }
 
-func (service *WechatUserService) ChaningArticleCategoryOrder(request *model.ArticleCategoryOrderChangeRequest) *model.ResponseModel {
+func (service *WechatUserService) ChangingArticleCategoryOrder(request *model.ArticleCategoryOrderChangeRequest) *model.ResponseModel {
 	// Here calls dao method to access database.
 	// TODO ...
 	return &model.ResponseModel{}

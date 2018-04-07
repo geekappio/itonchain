@@ -3,7 +3,7 @@ package model
 /**
  * 文章类型修改
  */
-type ArticleCategoryChange struct {
+type ArticleCategoryChangeRequest struct {
 	BaseRequest
 	OpenId       string `json:"openId"`
 	CategoryId   int    `json:"categoryId"`
@@ -30,4 +30,11 @@ type ArticleCategoryDeleteRequest struct {
 	BaseRequest
 	OpenId     string `json:"openId"`
 	CategoryId int64  `json:"categoryId"`
+}
+
+type ArticleCategoryOrderChangeRequest struct {
+	BaseRequest
+	OpenId     string `json:"openId"`
+	CategoryId int    `json:"categoryId"`
+	UpDown     string `json:"upDown"`
 }

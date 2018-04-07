@@ -2,8 +2,7 @@ package web
 
 import (
 	"net/http"
-
-	"github.com/geekappio/itonchain/app/model"
+	
 	"github.com/gin-gonic/gin"
 )
 
@@ -17,9 +16,4 @@ func BuildResopone(c *gin.Context, code string, msg string) {
 		"returnMsg":  msg,
 		"returnData": "",
 	})
-}
-
-// SendResponse set the response data into http response and send to client.
-func SendResponse(c *gin.Context, response *model.ResponseModel) {
-	c.JSON(http.StatusOK, response)
 }

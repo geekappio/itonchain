@@ -1,4 +1,4 @@
-package logging
+package util
 
 import (
 	"github.com/geekappio/itonchain/app/common/logging"

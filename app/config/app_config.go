@@ -11,7 +11,7 @@ import (
 type AppConfig struct {
 	// "debug"、"release"、"test"
 	RunMode  string         `json:"runMode"`
-	Logging  LoggingConfig  `json:"logging"`
+	Logging  LoggingConfig  `json:"util"`
 	Server   ServerConfig   `json:"server"`
 	Redis    RedisConfig    `json:"redis"`
 	Database DatabaseConfig `json:"database"`

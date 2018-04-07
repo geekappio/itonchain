@@ -6,13 +6,14 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/geekappio/itonchain/app/logging"
+	"github.com/geekappio/itonchain/app/util"
 
 	"github.com/geekappio/itonchain/app/common/logging"
-	. "github.com/geekappio/itonchain/app/common/redis"
-	. "github.com/geekappio/itonchain/app/config"
-	. "github.com/geekappio/itonchain/app/dal"
-	. "github.com/geekappio/itonchain/app/web"
+	"github.com/geekappio/itonchain/app/common/redis"
+	"github.com/geekappio/itonchain/app/config"
+	"github.com/geekappio/itonchain/app/dal"
+	"github.com/geekappio/itonchain/app/web"
+	"github.com/geekappio/itonchain/app/web/api"
 	"github.com/gin-gonic/gin"
 	"github.com/gorilla/websocket"
 )
@@ -21,13 +22,13 @@ func initConfig() error {
 
 	// Parse command line arguments
 	// Config file path
-	configPath := flag.String("config", DEFAULT_CONFIG_PATH, "Needs config file path.")
+	configPath := flag.String("config", config.DEFAULT_CONFIG_PATH, "Needs config file path.")
 	flag.Parse()
 
 	var err error
 
 	// Init application configurations.
-	err = InitAppConfig(*configPath)
+	err = config.InitAppConfig(*configPath)
 	if err != nil {
 		log.Fatal(err)
 		return err
@@ -39,14 +40,14 @@ func initConfig() error {
 		log.Fatal(err)
 	}
 	// Init redis.
-	err = InitRedis()
+	err = redis.InitRedis()
 	if err != nil {
 		log.Fatal(err)
 		return err
 	}
 
 	// Init database
-	err = InitDataSource()
+	err = dal.InitDataSource()
 	if err != nil {
 		log.Fatal(err)
 		return err
@@ -64,29 +65,30 @@ func main() {
 		return
 	}
 
-	gin.SetMode(Config.RunMode) //全局设置环境，此为开发环境，线上环境为gin.ReleaseMode
-	router := gin.Default()     //获得路由实例
+	gin.SetMode(config.Config.RunMode) //全局设置环境，此为开发环境，线上环境为gin.ReleaseMode
+	router := gin.Default()            //获得路由实例
 	//添加中间件
 	router.Use(Middleware)
 
-	router.GET(ApiRequestMapping.UserRegister, UserRegister)
-	logging.AddPostRouter(router, ApiRequestMapping.ArticleShare, HandleArticleShare)
+	util.AddPostRouter(router, api.ApiRequestMapping.UserRegister, web.HandleUserRegister)
+
+	util.AddPostRouter(router, api.ApiRequestMapping.ArticleShare, web.HandleArticleShare)
 	// 修改修改文章类别信息
-	router.GET(ApiRequestMapping.ArticleCategoryInfoChange, ArticleCategoryChange)
+	router.GET(api.ApiRequestMapping.ArticleCategoryInfoChange, web.ArticleCategoryChange)
 
 	// 添加文章类目
-	logging.AddPostRouter(router, ApiRequestMapping.ArticleCategoryAdd, HandleArticleCategoryAdd)
+	util.AddPostRouter(router, api.ApiRequestMapping.ArticleCategoryAdd, web.HandleArticleCategoryAdd)
 	// 删除文章类目
-	logging.AddPostRouter(router, ApiRequestMapping.ArticleCategoryDelete, HandleArticleCategoryDelete)
+	util.AddPostRouter(router, api.ApiRequestMapping.ArticleCategoryDelete, web.HandleArticleCategoryDelete)
 	// 修改文章类目次序
-	logging.AddPostRouter(router, ApiRequestMapping.ArticleCategoryOrderChange, HandleArticleCategoryOrderChange)
+	util.AddPostRouter(router, api.ApiRequestMapping.ArticleCategoryOrderChange, web.HandleArticleCategoryOrderChange)
 
 	// Handle websocket
 	router.GET("/ws", func(c *gin.Context) {
 		wshandler(c.Writer, c.Request)
 	})
 
-	router.Run(Config.Server.Address)
+	router.Run(config.Config.Server.Address)
 }
 
 var wsupgrader = websocket.Upgrader{

@@ -3,7 +3,7 @@ package dao
 import (
 	"github.com/geekappio/itonchain/app/dal"
 	"github.com/geekappio/itonchain/app/dal/entity"
-	"github.com/geekappio/itonchain/app/logging"
+	"github.com/geekappio/itonchain/app/util"
 )
 
 var wechatUserSQLMapper *WechatUserSQLMapper
@@ -24,7 +24,7 @@ func (sqlMapper *WechatUserSQLMapper) SelectUser(openId string) (user *entity.We
 	wechatUser := &entity.WechatUser{}
 	ok, err := dal.DB.SqlTemplateClient("select_user_by_openId").Get(wechatUser)
 	if err != nil {
-		logging.LogError(err)
+		util.LogError(err)
 		return nil, err
 	}
 
