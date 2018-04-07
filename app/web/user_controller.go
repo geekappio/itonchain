@@ -1,32 +1,20 @@
 package web
 
 import (
-	"net/http"
 
-	"github.com/geekappio/itonchain/app/dal/entity"
 	"github.com/geekappio/itonchain/app/service"
-	"github.com/gin-gonic/gin"
+	"github.com/geekappio/itonchain/app/model"
+	"github.com/geekappio/itonchain/app/util"
 )
 
-func UserRegister(c *gin.Context) {
-	name := c.Param("name")
-	user := entity.WechatUser{
-		NickName: name,
-	}
 
-	wechatUserService := service.GetWechatUserService()
-	ok := wechatUserService.CreateUser(&user)
-	if ok {
-		c.JSON(http.StatusOK, gin.H{
-			"returnCode": "1000",
-			"returnMsg":  "成功",
-			"returnData": user,
-		})
-	} else {
-		c.JSON(http.StatusOK, gin.H{
-			"returnCode": "1001",
-			"returnMsg":  "失败",
-			"returnData": user,
-		})
-	}
+func UserRegisterHandler(request model.WechatUserRequest) (*model.ResponseModel) {
+	util.LogInfo(request)
+	//统一校验请求参数
+	userService := service.GetWechatUserService()
+
+	return userService.CreateUser(&request)
+
 }
+
+
