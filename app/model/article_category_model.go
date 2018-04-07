@@ -17,17 +17,17 @@ type ArticleCategoryAddRequest struct {
 	OpenId       string `json:"openId"`
 	CategoryName string `json:"categoryName"`
 	Description  string `json:"description"`
-	InsertPos    int32  `json:"insertPos"`
+	InsertPos    int64  `json:"insertPos"`
 }
 
 // Return data field of "/article_category/add" api
 type ArticleCategoryAddReturnData struct {
-	CategoryId int32 `json:"categoryId"`
+	CategoryId int64 `json:"categoryId"`
 }
 
 // Request of "/article_category/delete" api
 type ArticleCategoryDeleteRequest struct {
 	BaseRequest
 	OpenId     string `json:"openId"`
-	CategoryId int32  `json:"categoryId"`
+	CategoryId int64  `json:"categoryId"`
 }

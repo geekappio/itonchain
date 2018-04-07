@@ -4,8 +4,12 @@ import (
 	"time"
 
 	"github.com/geekappio/itonchain/app/dal"
+	"github.com/geekappio/itonchain/app/dal/entity"
+	"github.com/geekappio/itonchain/app/enum"
 	"github.com/geekappio/itonchain/app/model"
 	"github.com/geekappio/itonchain/app/util"
+	"github.com/jinzhu/copier"
+	"github.com/geekappio/itonchain/app/dal/dao"
 )
 
 var articleCategoryService *ArticleCategoryService
@@ -26,8 +30,23 @@ type ArticleCategoryService struct {
 
 func (service *ArticleCategoryService) AddArticleCategory(requestModel *model.ArticleCategoryAddRequest) (*model.ResponseModel) {
 	// Here calls dao method to access database.
-	// TODO ...
-	return &model.ResponseModel{}
+	category := entity.Category{}
+	copier.Copy(category, requestModel)
+
+	id, err := dao.GetCategorySQLMapper().AddCategory(&category)
+	if err != nil {
+		util.LogError("Error happened when inserting category: ", category, err)
+		return &model.ResponseModel{
+			ReturnCode: enum.DB_INSERT_ERROR,
+			ReturnMsg: "添加category数据失败",
+		}
+	 } else {
+		return &model.ResponseModel{
+			ReturnCode: enum.DB_INSERT_ERROR,
+			ReturnMsg: "添加category数据失败",
+			ReturnData: model.ArticleCategoryAddReturnData{CategoryId: id},
+		}
+	}
 }
 
 func (service *ArticleCategoryService) DeleteArticleCategory(request *model.ArticleCategoryDeleteRequest) *model.ResponseModel {
