@@ -3,11 +3,15 @@ package service
 import (
 	"github.com/geekappio/itonchain/app/dal/entity"
 	"github.com/geekappio/itonchain/app/model"
+	"github.com/geekappio/itonchain/app/dal/dao"
+	"github.com/geekappio/itonchain/app/util"
+
+	"github.com/jinzhu/copier"
+	"github.com/geekappio/itonchain/app/enum"
 )
 
 var wechatUserService *WechatUserService
 
-// GetArticleCategoryService returns ArticleCategory service instance which provides method calls.
 func GetWechatUserService() *WechatUserService {
 	if wechatUserService == nil {
 		wechatUserService = &WechatUserService{}
@@ -17,13 +21,38 @@ func GetWechatUserService() *WechatUserService {
 }
 
 
-// Implementation struct of ArticleCategory to bind functions wi
 type WechatUserService struct {
 }
 
-func (self *WechatUserService) CreateUser(model *entity.WechatUser) bool {
-	println("模拟创建用户成功！")
-	return true
+func (self *WechatUserService) CreateUser(request *model.WechatUserRequest) (*model.ResponseModel) {
+	wechatUser := entity.WechatUser{}
+	copier.Copy(wechatUser, request)
+	//查询openId是否存在，存在报错
+	wechatUserSqlMapper := dao.GetWechatUserSqlMapper()
+	bool ,err :=wechatUserSqlMapper.UserRegister(&wechatUser)
+	if err != nil {
+		util.LogError(err)
+	}
+	if bool {
+		//openId已存在
+		util.LogError("用户已存在")
+	}
+	//否则创建用户
+	id, err := wechatUserSqlMapper.InsertUser(&wechatUser)
+
+	if err != nil {
+		util.LogError("Error happened when inserting wechat_user: ", wechatUser, err)
+		return &model.ResponseModel{
+			ReturnCode: enum.DB_INSERT_ERROR,
+			ReturnMsg: "添加category数据失败",
+		}
+	} else {
+		return &model.ResponseModel{
+			ReturnCode: enum.SYSTEM_SUCCESS,
+			ReturnMsg: "用户注册成功",
+			ReturnData: id,
+		}
+	}
 }
 
 func (self *WechatUserService) FindUserByOpenId(openId string) *entity.WechatUser {

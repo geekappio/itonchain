@@ -10,6 +10,6 @@ type WechatUser struct {
 	Province 		string
 	Country 		string
 	Language 		string
-	IdDel 			string
+	IsDel 			string
 	CategoryOrders 	string
 }

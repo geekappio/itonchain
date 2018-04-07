@@ -1,0 +1,4 @@
+INSERT INTO wechat_user
+(open_id, nick_name, avatar_url, gender, city, province, country, language, is_del, gmt_create, gmt_update)
+VALUES
+(?OpenId, ?NickName, ?AvatarUrl, ?Gender, ?City, ?Province, ?Country, ?Language, ?IsDel, ?GmtCreate, ?GmtUpdate)

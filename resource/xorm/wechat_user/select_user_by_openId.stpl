@@ -1,0 +1,3 @@
+SELECT wechat_user
+WHERE open_id = ?open_id
+AND is_del = "NO"

@@ -1,6 +1,5 @@
-package model
+package api
 
-// Request of "/article_category/order/change" api
 type WechatUserRequest struct {
 	OpenId string `json:"user" binding:"required"`
 	NickName string `json:"nickName" binding:"required"`
