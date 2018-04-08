@@ -41,12 +41,12 @@ func (service *ArticleCategoryService) AddArticleCategory(requestModel *model.Ar
 	if err != nil {
 		util.LogError("Error happened when inserting category: ", category, err)
 		return &model.ResponseModel{
-			ReturnCode: enum.DB_INSERT_ERROR,
+			ReturnCode: enum.DB_INSERT_ERROR.GetRespCode(),
 			ReturnMsg:  "添加category数据失败",
 		}
 	} else {
 		return &model.ResponseModel{
-			ReturnCode: enum.SYSTEM_SUCCESS,
+			ReturnCode: enum.SYSTEM_SUCCESS.GetRespCode(),
 			ReturnData: model.ArticleCategoryAddReturnData{CategoryId: id},
 		}
 	}
@@ -70,12 +70,12 @@ func (service *ArticleCategoryService) ArticleCategoryChangeService(request *mod
 	if err != nil {
 		util.LogError("Error happened when inserting category: ", category, err)
 		return &model.ResponseModel{
-			ReturnCode: enum.DB_INSERT_ERROR,
+			ReturnCode: enum.DB_INSERT_ERROR.GetRespCode(),
 			ReturnMsg:  "更新category数据失败",
 		}
 	} else {
 		return &model.ResponseModel{
-			ReturnCode: enum.SYSTEM_SUCCESS,
+			ReturnCode: enum.SYSTEM_SUCCESS.GetRespCode(),
 			ReturnMsg:  "更新数据成功",
 		}
 	}

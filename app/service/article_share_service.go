@@ -1,9 +1,5 @@
 package service
 
-import (
-	"github.com/geekappio/itonchain/app/dal/entity"
-)
-
 var articleShareService *ArticleShareService
 
 // GetArticleCategoryService returns ArticleCategory service instance which provides method calls.
@@ -19,7 +15,7 @@ func GetArticleShareService() *ArticleShareService {
 type ArticleShareService struct {
 }
 
-func (service *ArticleShareService) DoArticleShare(model *entity.ArticleShare) bool {
+func (service *ArticleShareService) DoArticleShare(userId, articleId int64) bool {
 	println("模拟文件分享完成")
 	return true
 }

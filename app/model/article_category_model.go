@@ -38,3 +38,16 @@ type ArticleCategoryOrderChangeRequest struct {
 	CategoryId int    `json:"categoryId"`
 	UpDown     string `json:"upDown"`
 }
+
+type ArticleCategoryListRequest struct {
+	BaseRequest
+	OpenId string `json:"openId"`
+}
+
+type ArticleCategoryListResponse struct {
+	BaseResponse
+	CategoryId   int64  `json:"categoryId"`
+	CategoryName string `json:"categoryName"`
+	ArticleCount int64  `json:"articleCount"`
+	GmtCreate    string `json:"gmtCreate"`
+}
