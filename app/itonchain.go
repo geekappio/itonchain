@@ -73,8 +73,6 @@ func main() {
 	util.AddPostRouter(router, api.ApiRequestMapping.UserRegister, web.HandleUserRegister)
 
 	util.AddPostRouter(router, api.ApiRequestMapping.ArticleShare, web.HandleArticleShare)
-	// 修改修改文章类别信息
-	util.AddPostRouter(router,api.ApiRequestMapping.ArticleCategoryInfoChange, web.HandleArticleCategoryChange)
 
 	// 添加文章类目
 	util.AddPostRouter(router, api.ApiRequestMapping.ArticleCategoryAdd, web.HandleArticleCategoryAdd)
@@ -82,6 +80,8 @@ func main() {
 	util.AddPostRouter(router, api.ApiRequestMapping.ArticleCategoryDelete, web.HandleArticleCategoryDelete)
 	// 修改文章类目次序
 	util.AddPostRouter(router, api.ApiRequestMapping.ArticleCategoryOrderChange, web.HandleArticleCategoryOrderChange)
+	// 修改修改文章类别信息
+	util.AddPostRouter(router, api.ApiRequestMapping.ArticleCategoryInfoChange, web.HandleArticleCategoryChange)
 
 	// Handle websocket
 	router.GET("/ws", func(c *gin.Context) {

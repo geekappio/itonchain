@@ -6,21 +6,21 @@ import (
 	"github.com/geekappio/itonchain/app/util"
 )
 
-var wechatUserSQLMapper *WechatUserSQLMapper
+var wechatUserSqlMapper *WechatUserSqlMapper
 
-func GetWechatUserSQLMapper() (categorySqlMapper *WechatUserSQLMapper) {
-	if wechatUserSQLMapper == nil {
-		wechatUserSQLMapper = &WechatUserSQLMapper{}
+func GetWechatUserSqlMapper() (wechatUserSqlMapper *WechatUserSqlMapper) {
+	if wechatUserSqlMapper == nil {
+		wechatUserSqlMapper = &WechatUserSqlMapper{}
 	}
 
-	return wechatUserSQLMapper
+	return wechatUserSqlMapper
 }
 
-type WechatUserSQLMapper struct {
+type WechatUserSqlMapper struct {
 }
 
 // Call predefined sql template to insert category
-func (sqlMapper *WechatUserSQLMapper) SelectUser(openId string) (user *entity.WechatUser, err error) {
+func (sqlMapper *WechatUserSqlMapper) SelectUser(openId string) (user *entity.WechatUser, err error) {
 	wechatUser := &entity.WechatUser{}
 	ok, err := dal.DB.SqlTemplateClient("select_user_by_openId").Get(wechatUser)
 	if err != nil {
@@ -33,19 +33,6 @@ func (sqlMapper *WechatUserSQLMapper) SelectUser(openId string) (user *entity.We
 	} else {
 		return nil, err
 	}
-}
-
-var wechatUserSqlMapper *WechatUserSqlMapper
-
-func GetWechatUserSqlMapper() (wechatUserSqlMapper *WechatUserSqlMapper) {
-	if wechatUserSqlMapper == nil {
-		wechatUserSqlMapper = &WechatUserSqlMapper{}
-	}
-
-	return wechatUserSqlMapper
-}
-
-type WechatUserSqlMapper struct {
 }
 
 // Call predefined sql template to insert category

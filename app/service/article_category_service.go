@@ -31,13 +31,13 @@ func (service *ArticleCategoryService) AddArticleCategory(requestModel *model.Ar
 	copier.Copy(category, requestModel)
 
 	// Get user model by open id.
-	userModel, err := dao.GetWechatUserSQLMapper().SelectUser(requestModel.OpenId)
+	userModel, err := dao.GetWechatUserSqlMapper().SelectUser(requestModel.OpenId)
 	if err != nil {
 		util.LogError("Error happened when getting user model from wechat_user table with openId: ", requestModel.OpenId, err)
 	}
 	category.Id = userModel.Id
 
-	id, err := dao.GetCategorySQLMapper().AddCategory(&category)
+	id, err := dao.GetCategorySqlMapper().AddCategory(&category)
 	if err != nil {
 		util.LogError("Error happened when inserting category: ", category, err)
 		return &model.ResponseModel{
@@ -66,7 +66,7 @@ func (service *ArticleCategoryService) ArticleCategoryChangeService(request *mod
 	category := entity.Category{}
 	copier.Copy(category, request)
 
-	_,err := dao.GetCategorySQLMapper().UpdateCategory(&category)
+	_,err := dao.GetCategorySqlMapper().UpdateCategory(&category)
 	if err != nil {
 		util.LogError("Error happened when inserting category: ", category, err)
 		return &model.ResponseModel{
