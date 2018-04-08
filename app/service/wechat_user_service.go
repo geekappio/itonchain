@@ -1,6 +1,8 @@
 package service
 
 import (
+	"strings"
+
 	"github.com/geekappio/itonchain/app/dal/dao"
 	"github.com/geekappio/itonchain/app/dal/entity"
 	"github.com/geekappio/itonchain/app/util"
@@ -62,6 +64,33 @@ func (self *WechatUserService) FindUserByOpenId(openId string) *entity.WechatUse
 
 func (service *WechatUserService) ChangingArticleCategoryOrder(request *model.ArticleCategoryOrderChangeRequest) *model.ResponseModel {
 	// Here calls dao method to access database.
-	// TODO ...
+	userModel, err := dao.GetWechatUserSqlMapper().SelectUser(request.OpenId)
+	if err != nil{
+		util.LogError("Error happened when getting user model from wechat_user table with openId: ", request.OpenId, err)
+		return &model.ResponseModel{
+			ReturnCode: enum.DB_ERROR,
+			ReturnMsg:  "从数据库查询数据发送错误",
+		}
+	}
+	if userModel == nil {
+		util.LogInfo("Cannot find user by specified open id:", request.OpenId)
+		return &model.ResponseModel{
+			ReturnCode: enum.USER_NOT_EXISTS,
+			ReturnMsg:  "指定用户不存在",
+		}
+	}
+
+	orders := userModel.CategoryOrders
+	if orders == "" {
+		return &model.ResponseModel{
+			ReturnCode: enum.NULL_CATEGORY_ORDERS,
+			ReturnMsg:  "空的目录顺序项",
+		}
+	} else {
+		// TODO, HENRY, 20180409, 根据参数调整次序
+		strings.Split(orders, ",")
+	}
+
+	dao.GetWechatUserSqlMapper().UpdateCategoryOrders(request.OpenId, orders)
 	return &model.ResponseModel{}
 }
