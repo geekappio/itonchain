@@ -5,25 +5,25 @@ import (
 	"github.com/geekappio/itonchain/app/dal/entity"
 )
 
-var categorySqlMapper *CategorySQLMapper
+var categorySqlMapper *CategorySqlMapper
 
-func GetCategorySQLMapper() (categorySqlMapper *CategorySQLMapper) {
+func GetCategorySqlMapper() (categorySqlMapper *CategorySqlMapper) {
 	if categorySqlMapper == nil {
-		categorySqlMapper = &CategorySQLMapper{}
+		categorySqlMapper = &CategorySqlMapper{}
 	}
 
 	return categorySqlMapper
 }
 
-type CategorySQLMapper struct {
+type CategorySqlMapper struct {
 }
 
 // Call predefined sql template to insert category
-func (sqlMapper *CategorySQLMapper) AddCategory(category *entity.Category) (id int64, err error) {
+func (sqlMapper *CategorySqlMapper) AddCategory(category *entity.Category) (id int64, err error) {
 	return dal.DB.SqlTemplateClient("insert_category").InsertOne(category)
 }
 
 // 更新文章种类
-func (sqlMapper *CategorySQLMapper) UpdateCategory(category *entity.Category) (id int64 ,err error) {
+func (sqlMapper *CategorySqlMapper) UpdateCategory(category *entity.Category) (id int64 ,err error) {
 	return dal.DB.SqlTemplateClient("update_category").Update(category)
 }
