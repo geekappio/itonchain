@@ -38,7 +38,7 @@ func (service *ArticleCategoryService) AddArticleCategory(request *model.Article
 	if userModel == nil {
 		util.LogError("Cannot find user by specified open id: ", request.OpenId, err)
 		return &model.ResponseModel{
-			ReturnCode: enum.USER_NOT_EXISTS,
+			ReturnCode: enum.USER_NOT_EXISTS.GetRespCode(),
 			ReturnMsg:  "指定的用户不存在",
 		}
 	}
@@ -70,14 +70,14 @@ func (service *ArticleCategoryService) DeleteArticleCategory(request *model.Arti
 	if err != nil {
 		util.LogError("Error happened when getting user model from wechat_user table with openId: ", request.OpenId, err)
 		return &model.ResponseModel{
-			ReturnCode: enum.DB_INSERT_ERROR,
+			ReturnCode: enum.DB_INSERT_ERROR.GetRespCode(),
 			ReturnMsg:  "更新category数据失败",
 		}
 	}
 	if userModel == nil {
 		util.LogError("Cannot find user by specified open id: ", request.OpenId, err)
 		return &model.ResponseModel{
-			ReturnCode: enum.USER_NOT_EXISTS,
+			ReturnCode: enum.USER_NOT_EXISTS.GetRespCode(),
 			ReturnMsg:  "指定的用户不存在",
 		}
 	}
@@ -88,12 +88,12 @@ func (service *ArticleCategoryService) DeleteArticleCategory(request *model.Arti
 	if er != nil {
 		util.LogError("Error happened when deleting category: ", request.CategoryId, err)
 		return &model.ResponseModel{
-			ReturnCode: enum.DB_DELETE_ERROR,
+			ReturnCode: enum.DB_DELETE_ERROR.GetRespCode(),
 			ReturnMsg:  "删除category数据失败",
 		}
 	} else {
 		return &model.ResponseModel{
-			ReturnCode: enum.SYSTEM_SUCCESS,
+			ReturnCode: enum.SYSTEM_SUCCESS.GetRespCode(),
 		}
 	}
 

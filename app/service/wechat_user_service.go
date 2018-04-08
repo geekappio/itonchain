@@ -68,14 +68,14 @@ func (service *WechatUserService) ChangingArticleCategoryOrder(request *model.Ar
 	if err != nil{
 		util.LogError("Error happened when getting user model from wechat_user table with openId: ", request.OpenId, err)
 		return &model.ResponseModel{
-			ReturnCode: enum.DB_ERROR,
+			ReturnCode: enum.DB_ERROR.GetRespCode(),
 			ReturnMsg:  "从数据库查询数据发送错误",
 		}
 	}
 	if userModel == nil {
 		util.LogInfo("Cannot find user by specified open id:", request.OpenId)
 		return &model.ResponseModel{
-			ReturnCode: enum.USER_NOT_EXISTS,
+			ReturnCode: enum.USER_NOT_EXISTS.GetRespCode(),
 			ReturnMsg:  "指定用户不存在",
 		}
 	}
@@ -83,7 +83,7 @@ func (service *WechatUserService) ChangingArticleCategoryOrder(request *model.Ar
 	orders := userModel.CategoryOrders
 	if orders == "" {
 		return &model.ResponseModel{
-			ReturnCode: enum.NULL_CATEGORY_ORDERS,
+			ReturnCode: enum.NULL_CATEGORY_ORDERS.GetRespCode(),
 			ReturnMsg:  "空的目录顺序项",
 		}
 	} else {

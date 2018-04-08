@@ -1,4 +1,4 @@
-package enum
+package field_enum
 
 import "github.com/geekappio/itonchain/app/common/util"
 

@@ -3,7 +3,7 @@ package dao
 import (
 	"github.com/geekappio/itonchain/app/dal"
 	"github.com/geekappio/itonchain/app/dal/entity"
-	"github.com/geekappio/itonchain/app/model/enum"
+	"github.com/geekappio/itonchain/app/model/field_enum"
 )
 
 var categorySqlMapper *CategorySqlMapper
@@ -29,7 +29,7 @@ func (sqlMapper *CategorySqlMapper) DeleteCategory(categoryId int64, userId int6
 	category := entity.Category{}
 	category.Id = categoryId
 	category.UserId = userId
-	category.IsDel = enum.NO.Value
+	category.IsDel = field_enum.NO.Value
 	return dal.DB.SqlTemplateClient("delete_category").Delete(category)
 }
 
