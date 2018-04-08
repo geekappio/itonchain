@@ -10,7 +10,7 @@ import (
 /**
  * 修改文章类别信息
  */
-func HandleArticleCategoryChange(reqeustModel *model.ArticleCategoryChangeRequest) (response *model.ResponseModel){
+func HandleArticleCategoryChange(reqeustModel *model.ArticleCategoryChangeRequest) (*model.ResponseModel){
 	// 输出日志
 	util.LogInfo(reqeustModel)
 
@@ -20,21 +20,21 @@ func HandleArticleCategoryChange(reqeustModel *model.ArticleCategoryChangeReques
 }
 
 // HandleArticleCategoryAdd handles request of adding article category.
-func HandleArticleCategoryAdd(reqeustModel *model.ArticleCategoryAddRequest) (response *model.ResponseModel) {
+func HandleArticleCategoryAdd(reqeustModel *model.ArticleCategoryAddRequest) (*model.ResponseModel) {
 	// Call service
 	service := service.GetArticleCategoryService()
 	return service.AddArticleCategory(reqeustModel)
 }
 
 // HandleArticleCategoryDelete handles request of deleting article category.
-func HandleArticleCategoryDelete(reqeustModel *model.ArticleCategoryDeleteRequest) (response *model.ResponseModel) {
+func HandleArticleCategoryDelete(reqeustModel *model.ArticleCategoryDeleteRequest) (*model.ResponseModel) {
 	// Call service
 	service := service.GetArticleCategoryService()
 	return service.DeleteArticleCategory(reqeustModel)
 }
 
 // HandleArticleCategoryOrderChange handles request of changing order of user's article categories.
-func HandleArticleCategoryOrderChange(reqeustModel *model.ArticleCategoryOrderChangeRequest) (response *model.ResponseModel) {
+func HandleArticleCategoryOrderChange(reqeustModel *model.ArticleCategoryOrderChangeRequest) (*model.ResponseModel) {
 	// Call service
 	service := service.GetWechatUserService()
 	return service.ChangingArticleCategoryOrder(reqeustModel)
