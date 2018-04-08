@@ -74,7 +74,7 @@ func main() {
 
 	util.AddPostRouter(router, api.ApiRequestMapping.ArticleShare, web.HandleArticleShare)
 	// 修改修改文章类别信息
-	router.GET(api.ApiRequestMapping.ArticleCategoryInfoChange, web.ArticleCategoryChange)
+	util.AddPostRouter(router,api.ApiRequestMapping.ArticleCategoryInfoChange, web.HandleArticleCategoryChange)
 
 	// 添加文章类目
 	util.AddPostRouter(router, api.ApiRequestMapping.ArticleCategoryAdd, web.HandleArticleCategoryAdd)
