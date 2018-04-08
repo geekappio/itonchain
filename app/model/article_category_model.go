@@ -5,8 +5,8 @@ package model
  */
 type ArticleCategoryChangeRequest struct {
 	BaseRequest
-	OpenId       string `json:"openId"`
-	CategoryId   int    `json:"categoryId"`
+	Id   int    `json:"categoryId"`
+	UserId       string `json:"openId"`
 	CategoryName string `json:"categoryName"`
 	Description  string `json:"description"`
 }

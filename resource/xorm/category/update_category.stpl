@@ -1,0 +1,3 @@
+UPDATE CATEGORY SET
+CATEGORY_NAME = ?categoryName, DESCRIPTION = ?description, GMT_UPDATE = NOW(), UPDATE_USER = ?userId
+WHERE USER_ID = ?userId AND ID = ?id

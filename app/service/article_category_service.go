@@ -1,9 +1,6 @@
 package service
 
 import (
-	"time"
-
-	"github.com/geekappio/itonchain/app/dal"
 	"github.com/geekappio/itonchain/app/dal/dao"
 	"github.com/geekappio/itonchain/app/dal/entity"
 	"github.com/geekappio/itonchain/app/enum"
@@ -64,13 +61,22 @@ func (service *ArticleCategoryService) DeleteArticleCategory(request *model.Arti
 /**
   文章类别统一管理服务实现
  */
-func ArticleCategoryChangeService(request model.ArticleCategoryChangeRequest) (bool) {
-	affected, err := dal.DB.Where("where id = ? and user_id = ?", request.CategoryId, request.OpenId).
-		Update("update category set category_name = ?, description=?, gmt_update=?, update_user=? ",
-		request.CategoryName, request.Description, time.Now(), request.OpenId)
-	if err != nil && affected != 1 {
-		util.LogInfo("更新文章类别失败", err)
-		return false
+func (service *ArticleCategoryService) ArticleCategoryChangeService(request *model.ArticleCategoryChangeRequest) (*model.ResponseModel) {
+	// Here calls dao method to access database.
+	category := entity.Category{}
+	copier.Copy(category, request)
+
+	_,err := dao.GetCategorySQLMapper().UpdateCategory(&category)
+	if err != nil {
+		util.LogError("Error happened when inserting category: ", category, err)
+		return &model.ResponseModel{
+			ReturnCode: enum.DB_INSERT_ERROR,
+			ReturnMsg:  "更新category数据失败",
+		}
+	} else {
+		return &model.ResponseModel{
+			ReturnCode: enum.SYSTEM_SUCCESS,
+			ReturnMsg:  "更新数据成功",
+		}
 	}
-	return true
 }

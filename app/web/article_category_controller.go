@@ -1,39 +1,21 @@
 package web
 
 import (
-	"github.com/geekappio/itonchain/app/enum"
 	"github.com/geekappio/itonchain/app/util"
 	"github.com/geekappio/itonchain/app/model"
 	"github.com/geekappio/itonchain/app/service"
-	"github.com/gin-gonic/gin"
 )
 
 /**
  * 修改文章类别信息
  */
-func ArticleCategoryChange(c *gin.Context) {
-
-	openId := c.Param("openId")
-	categoryId := c.GetInt("categoryId")
-	categoryName := c.Param("categoryName")
-	description := c.Param("description")
-
-	// 校验参数
-	if openId == "" && categoryId == 0 {
-		BuildResopone(c, enum.ILLEGAL_PARAMETERS, "参数非法")
-	}
-
-	request := model.ArticleCategoryChangeRequest{OpenId: openId, CategoryId: categoryId, CategoryName: categoryName, Description: description}
+func HandleArticleCategoryChange(reqeustModel *model.ArticleCategoryChangeRequest) (response *model.ResponseModel){
 	// 输出日志
-	util.LogInfo(request)
+	util.LogInfo(reqeustModel)
 
 	// 调用服务
-	result := service.ArticleCategoryChangeService(request)
-	if result {
-		BuildResopone(c, enum.SYSTEM_SUCCESS, "处理成功")
-	} else {
-		BuildResopone(c, enum.SYSTEM_FAILED, "处理失败")
-	}
+	service := service.GetArticleCategoryService()
+	return service.ArticleCategoryChangeService(reqeustModel)
 }
 
 // HandleArticleCategoryAdd handles request of adding article category.
