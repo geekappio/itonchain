@@ -5,10 +5,21 @@ type ErrorCode string
 const (
 	SYSTEM_SUCCESS ErrorCode = "0000"
 	SYSTEM_FAILED ErrorCode = "0001"
+
 	ILLEGAL_PARAMETERS ErrorCode = "1001"
+
 	DB_INSERT_ERROR ErrorCode = "2001"
+	DB_UPDATE_ERROR ErrorCode = "2002"
+	DB_TRANSACTION_ERROR ErrorCode = "2010"
 )
 
+func (self ErrorCode) IsSuccess() bool {
+	return SYSTEM_SUCCESS == self
+}
+
+func (self ErrorCode) IsFailed() bool {
+	return !self.IsSuccess()
+}
 func (self ErrorCode) GetRespCode() string {
 	return string(self)
 }
@@ -19,6 +30,8 @@ func (self ErrorCode) GetRespMsg() string {
 	case SYSTEM_SUCCESS: return "成功"
 	case SYSTEM_FAILED: return "系统异常"
 	case DB_INSERT_ERROR: return "数据库插入失败"
+	case DB_UPDATE_ERROR: return "数据库更新失败"
+	case DB_TRANSACTION_ERROR: return "数据库事务失败"
 
 	default: return "未定义错误码"
 	}

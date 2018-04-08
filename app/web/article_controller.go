@@ -5,6 +5,9 @@ import (
 	. "github.com/geekappio/itonchain/app/model"
 	"github.com/geekappio/itonchain/app/service"
 	"github.com/geekappio/itonchain/app/util"
+	"github.com/xormplus/xorm"
+	"github.com/geekappio/itonchain/app/dal/entity"
+	"github.com/geekappio/itonchain/app/dal"
 )
 
 func HandleArticleShare(request ArticleShareRequest) (*ArticleShareReturnData, ErrorCode) {
@@ -32,18 +35,40 @@ func HandlerArticleMark(request ArticleMarkRequest) (*ArticleMarkResponse, Error
 		return nil, SYSTEM_FAILED
 	}
 
-	markService := service.GetArticleMarkService()
-	articleService := service.GetArticleService()
-
-	var times int64
-	// FIXME doMark 参数待定
-	if util.EqualsIgnoreCase(request.DoMark, "YES") {
-		// TODO 增加事务处理
-		_ = markService.AddArticleMark(user.Id, request.ArticleId, request.CategoryId)
-		times, _ = articleService.IncMarkTimes(request.ArticleId)
+	times, respCode := doArticleMark(request, user)
+	if respCode.IsSuccess() {
+		return &ArticleMarkResponse{MarkTimes:times}, SYSTEM_SUCCESS
 	} else {
-		_ = markService.DelArticleMark(user.Id, request.ArticleId, request.CategoryId)
-		times, _ = articleService.DecMarkTimes(request.ArticleId)
+		return nil, SYSTEM_FAILED
 	}
-	return &ArticleMarkResponse{MarkTimes:times}, SYSTEM_SUCCESS
+}
+
+func doArticleMark(request ArticleMarkRequest, user *entity.WechatUser) (times int64, code ErrorCode){
+	code = dal.Transaction(func(session *xorm.Session) ErrorCode {
+		markService := service.GetArticleMarkServiceBySession(session)
+		articleService := service.GetArticleServiceBySession(session)
+		// FIXME doMark 参数待定
+		if util.EqualsIgnoreCase(request.DoMark, "YES") {
+			err := markService.AddArticleMark(user.Id, request.ArticleId, request.CategoryId)
+			if nil != err {
+				return DB_INSERT_ERROR
+			}
+			times, err = articleService.IncMarkTimes(request.ArticleId)
+			if nil != err {
+				return DB_UPDATE_ERROR
+			}
+			return SYSTEM_SUCCESS
+		} else {
+			err := markService.DelArticleMark(user.Id, request.ArticleId, request.CategoryId)
+			if nil != err {
+				return DB_INSERT_ERROR
+			}
+			times, err = articleService.DecMarkTimes(request.ArticleId)
+			if nil != err {
+				return DB_UPDATE_ERROR
+			}
+			return SYSTEM_SUCCESS
+		}
+	})
+	return
 }

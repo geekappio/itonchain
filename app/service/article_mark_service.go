@@ -1,15 +1,17 @@
 package service
 
+import "github.com/xormplus/xorm"
+
 type ArticleMarkService struct {
+	session *xorm.Session
 }
 
-var articleMarkService *ArticleMarkService
-
 func GetArticleMarkService() *ArticleMarkService {
-	if nil == articleMarkService {
-		articleMarkService = &ArticleMarkService{}
-	}
-	return articleMarkService
+	return &ArticleMarkService{}
+}
+
+func GetArticleMarkServiceBySession(session *xorm.Session) *ArticleMarkService {
+	return &ArticleMarkService{session:session}
 }
 
 // TODO

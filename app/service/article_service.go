@@ -1,16 +1,17 @@
 package service
 
+import "github.com/xormplus/xorm"
+
 type ArticleService struct {
-	
+	session *xorm.Session
 }
 
-var articleService *ArticleService
-
 func GetArticleService() *ArticleService {
-	if nil == articleService {
-		articleService = &ArticleService{}
-	}
-	return articleService
+	return &ArticleService{}
+}
+
+func GetArticleServiceBySession(session *xorm.Session) *ArticleService {
+	return &ArticleService{session:session,}
 }
 
 // TODO 增长并返回mark数
