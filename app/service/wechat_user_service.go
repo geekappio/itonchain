@@ -44,12 +44,12 @@ func (self *WechatUserService) CreateUser(request *model.WechatUserRequest) (*mo
 	if err != nil {
 		util.LogError("Error happened when inserting wechat_user: ", wechatUser, err)
 		return &model.ResponseModel{
-			ReturnCode: enum.DB_INSERT_ERROR,
+			ReturnCode: enum.DB_INSERT_ERROR.GetRespCode(),
 			ReturnMsg:  "添加category数据失败",
 		}
 	} else {
 		return &model.ResponseModel{
-			ReturnCode: enum.SYSTEM_SUCCESS,
+			ReturnCode: enum.SYSTEM_SUCCESS.GetRespCode(),
 			ReturnMsg:  "用户注册成功",
 			ReturnData: id,
 		}

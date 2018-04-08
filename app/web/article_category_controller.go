@@ -1,6 +1,7 @@
 package web
 
 import (
+	"github.com/geekappio/itonchain/app/enum"
 	"github.com/geekappio/itonchain/app/util"
 	"github.com/geekappio/itonchain/app/model"
 	"github.com/geekappio/itonchain/app/service"
@@ -37,4 +38,9 @@ func HandleArticleCategoryOrderChange(reqeustModel *model.ArticleCategoryOrderCh
 	// Call service
 	service := service.GetWechatUserService()
 	return service.ChangingArticleCategoryOrder(reqeustModel)
+}
+
+// TODO
+func HandlerArticleCategoryListQuery(request model.ArticleCategoryListRequest) (*model.ArticleCategoryListResponse, enum.ErrorCode) {
+	return nil, enum.SYSTEM_FAILED
 }
