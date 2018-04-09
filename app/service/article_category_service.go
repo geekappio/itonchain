@@ -122,3 +122,8 @@ func (service *ArticleCategoryService) ArticleCategoryChangeService(request *mod
 		}
 	}
 }
+
+// TODO
+func (self *ArticleCategoryService) ListCategoryByUserId(userId int64) []*entity.Category {
+	return make([]*entity.Category,0)
+}

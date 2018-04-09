@@ -5,6 +5,7 @@ import (
 	"github.com/geekappio/itonchain/app/util"
 	"github.com/geekappio/itonchain/app/model"
 	"github.com/geekappio/itonchain/app/service"
+	"github.com/geekappio/itonchain/app/dal/entity"
 )
 
 /**
@@ -40,7 +41,28 @@ func HandleArticleCategoryOrderChange(reqeustModel *model.ArticleCategoryOrderCh
 	return service.ChangingArticleCategoryOrder(reqeustModel)
 }
 
-// TODO
-func HandlerArticleCategoryListQuery(request model.ArticleCategoryListRequest) (*model.ArticleCategoryListResponse, enum.ErrorCode) {
-	return nil, enum.SYSTEM_FAILED
+func HandlerArticleCategoryListQuery(request model.ArticleCategoryListRequest) ([]*model.ArticleCategoryListResponse, enum.ErrorCode) {
+	util.LogInfo(request)
+	userService := service.GetWechatUserService()
+	user := userService.FindUserByOpenId(request.OpenId)
+	if nil == user {
+		return nil, enum.SYSTEM_FAILED
+	}
+
+	categoryService := service.GetArticleCategoryService()
+	categorys := categoryService.ListCategoryByUserId(user.Id)
+	response := make([]*model.ArticleCategoryListResponse, len(categorys))
+	for i, c := range categorys {
+		response[i] = buildCategoryListResponse(c)
+	}
+	return response, enum.SYSTEM_SUCCESS
+}
+
+func buildCategoryListResponse(category *entity.Category) *model.ArticleCategoryListResponse{
+	return &model.ArticleCategoryListResponse{
+		CategoryId:category.Id,
+		CategoryName:category.CategoryName,
+		ArticleCount:category.ArticleCount,
+		GmtCreate:util.TimeFormat(category.GmtCreate),
+	}
 }

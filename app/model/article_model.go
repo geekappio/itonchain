@@ -8,7 +8,7 @@ type ArticleShareRequest struct {
 
 // Return Data field of article share response
 type ArticleShareReturnData struct {
-	ShareTimes int32 `json:"shareTimes" binding:"required"`
+	ShareTimes int64 `json:"shareTimes" binding:"required"`
 }
 
 type ArticleMarkRequest struct {

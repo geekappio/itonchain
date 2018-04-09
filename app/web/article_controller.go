@@ -19,9 +19,10 @@ func HandleArticleShare(request ArticleShareRequest) (*ArticleShareReturnData, E
 	}
 
 	shareService := service.GetArticleShareService()
-	ok := shareService.DoArticleShare(user.Id, request.ArticleId)
+	ok := shareService.AddArticleShare(user.Id, request.ArticleId)
 	if ok {
-		return &ArticleShareReturnData{ShareTimes:123}, SYSTEM_SUCCESS
+		times := shareService.CountArticleShare(request.ArticleId)
+		return &ArticleShareReturnData{ShareTimes:times}, SYSTEM_SUCCESS
 	} else {
 		return nil, SYSTEM_FAILED
 	}
@@ -47,8 +48,7 @@ func doArticleMark(request ArticleMarkRequest, user *entity.WechatUser) (times i
 	code = dal.Transaction(func(session *xorm.Session) ErrorCode {
 		markService := service.GetArticleMarkServiceBySession(session)
 		articleService := service.GetArticleServiceBySession(session)
-		// FIXME doMark 参数待定
-		if util.EqualsIgnoreCase(request.DoMark, "YES") {
+		if MARK.Equals(request.DoMark) {
 			err := markService.AddArticleMark(user.Id, request.ArticleId, request.CategoryId)
 			if nil != err {
 				return DB_INSERT_ERROR
