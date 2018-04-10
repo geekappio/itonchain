@@ -4,6 +4,7 @@ import (
 	"github.com/xormplus/xorm"
 	"github.com/geekappio/itonchain/app/dal/dao"
 	"github.com/geekappio/itonchain/app/util"
+	"github.com/geekappio/itonchain/app/model"
 )
 
 type ArticleService struct {
@@ -47,4 +48,8 @@ func (service *ArticleService) UpdateArticleFavorite(articleId int64, doFavorite
 		return 0, errUpdate
 	}
 	return favoriteTimes, nil
+}
+
+func (service *ArticleService) GetArticleList(request model.ArticleListRequest)  {
+
 }

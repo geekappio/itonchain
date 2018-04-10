@@ -25,7 +25,31 @@ type ArticleMarkResponse struct {
 }
 
 type ArticleFavoriteRequest struct {
+	BaseRequest
 	OpenId    string `json:"openId"`
 	ArticleId int64    `json:"articleId"`
 	DoFavorite string    `json:"doFavorite"`
+}
+
+type ArticleListRequest struct {
+	BaseRequest
+	SearchParams ArticleSearchParams `json:"searchParams"`
+	OrderType string `json:"orderType"`
+	PageNum int32 `json:"pageNum" binding:"required"`
+	PageSize int32 `json:"pageSize"`
+}
+
+type ArticleSearchParams struct {
+	OpenId string `json:"openId"`
+	CategoryId string `json:"categoryId"`
+	ArticleTitle string `json:"articleTitle"`
+	ArticleLabels string `json:"articleLabels"`
+	ArticleKeywords string `json:"articleKeywords"`
+	GetTechnology string `json:"getTechnology"`
+	GetBlockchain string `json:"getBlockchain"`
+	GetRecent string `json:"getRecent"`
+	GetMarked string `json:"getMarked"`
+	StartTime string `json:"startTime"`
+	EndTime string `json:"endTime"`
+	State string `json:"state"`
 }

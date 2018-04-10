@@ -117,3 +117,7 @@ func ArticleFavoriteHandler(request ArticleFavoriteRequest) (*ResponseModel) {
 	}
 
 }
+
+func HandlerArticleList(request ArticleListRequest)  {
+
+}
