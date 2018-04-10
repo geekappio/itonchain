@@ -30,7 +30,7 @@ func (articleFavoriteService *ArticleFavoriteService) InsertArticleFavorite(arti
 			GmtUpdate :	time.Now(),
 	    },
 	}
-	id, err := dao.GetArticleFavoriteSqlMapper().InsertArticleFavorite(&articleFavorite)
+	id, err := dao.GetArticleFavoriteSqlMapper(nil).InsertArticleFavorite(&articleFavorite)
 	if err != nil {
 		util.LogError("Error happened when inserting article_favorite: ", articleId, userId, err)
 	}

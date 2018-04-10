@@ -2,7 +2,6 @@ package util
 
 // Define an enumeration interface
 type Enum interface {
-	Value() string
 	ValueOf(value string) *EnumType
 }
 

@@ -30,7 +30,7 @@ func (self *ArticleService) DecMarkTimes(articleId int64) (int64, error) {
 }
 
 func (service *ArticleService) UpdateArticleFavorite(articleId int64, doFavorite string) (int32, error) {
-	articleSqlMapper := dao.GetArticleSqlMapper()
+	articleSqlMapper := dao.GetArticleSqlMapper(nil)
 	article, err := articleSqlMapper.SelectById(articleId)
 	if err != nil {
 		util.LogError("查询文章失败", err)

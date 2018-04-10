@@ -33,7 +33,7 @@ func (service *ArticleCategoryService) AddArticleCategory(request *model.Article
 	copier.Copy(category, request)
 
 	// Get user model by open id.
-	userModel, err := dao.GetWechatUserSqlMapper().SelectUser(request.OpenId)
+	userModel, err := dao.GetWechatUserSqlMapper(nil).SelectUser(request.OpenId)
 	if err != nil {
 		util.LogError("Error happened when getting user model from wechat_user table with openId: ", request.OpenId, err)
 	}
@@ -68,7 +68,7 @@ func (service *ArticleCategoryService) AddArticleCategory(request *model.Article
 func (service *ArticleCategoryService) DeleteArticleCategory(request *model.ArticleCategoryDeleteRequest) *model.ResponseModel {
 	// Here calls dao method to access database.
 	// Get user model by open id.
-	userModel, err := dao.GetWechatUserSqlMapper().SelectUser(request.OpenId)
+	userModel, err := dao.GetWechatUserSqlMapper(nil).SelectUser(request.OpenId)
 	if err != nil {
 		util.LogError("Error happened when getting user model from wechat_user table with openId: ", request.OpenId, err)
 		return &model.ResponseModel{

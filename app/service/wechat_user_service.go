@@ -29,7 +29,7 @@ func (self *WechatUserService) CreateUser(request *model.WechatUserRequest) (*mo
 	wechatUser := entity.WechatUser{}
 	copier.Copy(wechatUser, request)
 	//查询openId是否存在，存在报错
-	wechatUserSqlMapper := dao.GetWechatUserSqlMapper()
+	wechatUserSqlMapper := dao.GetWechatUserSqlMapper(nil)
 	user ,err := wechatUserSqlMapper.SelectUser(request.OpenId)
 	if err != nil {
 		util.LogError(err)
@@ -57,7 +57,7 @@ func (self *WechatUserService) CreateUser(request *model.WechatUserRequest) (*mo
 }
 
 func (self *WechatUserService) FindUserByOpenId(openId string) (wechatUser *entity.WechatUser, err error) {
-	wechatUserSqlMapper := dao.GetWechatUserSqlMapper()
+	wechatUserSqlMapper := dao.GetWechatUserSqlMapper(nil)
 	user, err := wechatUserSqlMapper.SelectUser(openId)
 	if err != nil {
 		util.LogError("根据openId查询用户失败 ", user, err)
@@ -94,6 +94,6 @@ func (service *WechatUserService) ChangingArticleCategoryOrder(request *model.Ar
 		strings.Split(orders, ",")
 	}
 
-	dao.GetWechatUserSqlMapper().UpdateCategoryOrders(request.OpenId, orders)
+	dao.GetWechatUserSqlMapper(nil).UpdateCategoryOrders(request.OpenId, orders)
 	return &model.ResponseModel{}
 }
