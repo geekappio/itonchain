@@ -1,7 +1,7 @@
 package entity
 
 type WechatUser struct {
-	BaseEntity
+	BaseEntity            `xorm:"extends"`
 	OpenId         string `xorm:'open_id' varchar(45) notnull unqiue`
 	NickName       string `xorm:'nick_name' varchar(45) notnull`
 	AvatarUrl      string `xorm:'avatar_url' varchar(1000)`

@@ -7,6 +7,8 @@ import (
 	"github.com/geekappio/itonchain/app/model"
 	"github.com/geekappio/itonchain/app/util"
 	"github.com/jinzhu/copier"
+	"github.com/geekappio/itonchain/app/dal"
+	"github.com/xormplus/xorm"
 )
 
 var articleCategoryService *ArticleCategoryService
@@ -48,7 +50,7 @@ func (service *ArticleCategoryService) AddArticleCategory(request *model.Article
 	// TODO, HENRY, 20180409,
 	// 这里要做事务处理，添加category和调整wechat_user.category_orders要一起完成
 
-	id, err := dao.GetCategorySqlMapper().AddCategory(&category)
+	id, err := dao.GetCategorySqlMapper(nil).AddCategory(&category)
 	if err != nil {
 		util.LogError("Error happened when inserting category: ", category, err)
 		return &model.ResponseModel{
@@ -84,7 +86,7 @@ func (service *ArticleCategoryService) DeleteArticleCategory(request *model.Arti
 
 	// TODO, HENRY, 20180409,
 	// 这里要做事务处理，删除category和调整wechat_user.category_orders要一起完成
-	_, er := dao.GetCategorySqlMapper().DeleteCategory(request.CategoryId, userModel.Id)
+	_, er := dao.GetCategorySqlMapper(nil).DeleteCategory(request.CategoryId, userModel.Id)
 	if er != nil {
 		util.LogError("Error happened when deleting category: ", request.CategoryId, err)
 		return &model.ResponseModel{
@@ -108,7 +110,7 @@ func (service *ArticleCategoryService) ArticleCategoryChangeService(request *mod
 	category := entity.Category{}
 	copier.Copy(category, request)
 
-	_,err := dao.GetCategorySqlMapper().UpdateCategory(&category)
+	_,err := dao.GetCategorySqlMapper(nil).UpdateCategory(&category)
 	if err != nil {
 		util.LogError("Error happened when inserting category: ", category, err)
 		return &model.ResponseModel{
@@ -121,4 +123,17 @@ func (service *ArticleCategoryService) ArticleCategoryChangeService(request *mod
 			ReturnMsg:  "更新数据成功",
 		}
 	}
+}
+
+func (self *ArticleCategoryService) ListCategoryByUserId(userId int64) []entity.Category {
+	var categories []entity.Category
+	dal.Transaction(func(s *xorm.Session) enum.ErrorCode {
+		var err error
+		categories, err = dao.GetCategorySqlMapper(s).FindByUserId(userId)
+		if err != nil {
+			return enum.DB_ERROR
+		}
+		return enum.SYSTEM_SUCCESS
+	})
+	return categories
 }

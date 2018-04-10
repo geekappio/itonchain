@@ -7,22 +7,16 @@ import (
 
 	"github.com/geekappio/itonchain/app/dal/entity"
 	"github.com/ian-kent/go-log/log"
+	. "github.com/geekappio/itonchain/app/common/logging"
 )
 
 func TestQuery(t *testing.T) {
 
 	// Setup
 	result := t.Run("Init config", func(t *testing.T) {
-		var err error
-		err = InitAppConfig(DEFAULT_CONFIG_PATH)
-		if err != nil {
-			log.Fatal(err)
-		}
-
-		err = InitDataSource()
-		if err != nil {
-			log.Fatal(err)
-		}
+		InitAppConfig(DEFAULT_CONFIG_PATH)
+		InitLoggers()
+		InitDataSource()
 	})
 	if !result {
 		log.Fatal("初始化配置失败")
