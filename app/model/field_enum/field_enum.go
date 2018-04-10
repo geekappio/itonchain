@@ -1,24 +1,24 @@
 package field_enum
 
-import "github.com/geekappio/itonchain/app/common/util"
+import "github.com/geekappio/itonchain/app/common/common_util"
 
 // 排序类型
-var ORDER_TYPE_NO_ORDER = util.DefEnumType("NO_ORDER")
-var ORDER_TYPE_TIME_DESC = util.DefEnumType("TIME_DESC")
+var ORDER_TYPE_NO_ORDER = common_util.DefEnumType("NO_ORDER")
+var ORDER_TYPE_TIME_DESC = common_util.DefEnumType("TIME_DESC")
 
 // YES and No
-var YES = util.DefEnumType("YES")
-var NO = util.DefEnumType("NO")
+var YES = common_util.DefEnumType("YES")
+var NO = common_util.DefEnumType("NO")
 
 // 文章状态
-var ARTICLE_STATE_OFFLINE = util.DefEnumType("OFFLINE")
-var ARTICLE_STATE_ONLINE = util.DefEnumType("ONLINE")
-var ARTICLE_STATE_EDIT = util.DefEnumType("DELETED")
+var ARTICLE_STATE_OFFLINE = common_util.DefEnumType("OFFLINE")
+var ARTICLE_STATE_ONLINE = common_util.DefEnumType("ONLINE")
+var ARTICLE_STATE_EDIT = common_util.DefEnumType("DELETED")
 
 // 收藏和取消收藏
-var MARK = util.DefEnumType("MARK")
-var UNMARK = util.DefEnumType("UNMARK")
+var MARK = common_util.DefEnumType("MARK")
+var UNMARK = common_util.DefEnumType("UNMARK")
 
 // 关注和取消关注
-var FAVORITE = util.DefEnumType("FAVORITE")
-var UNFAVORITE = util.DefEnumType("UNFAVORITE")
+var FAVORITE = common_util.DefEnumType("FAVORITE")
+var UNFAVORITE = common_util.DefEnumType("UNFAVORITE")

@@ -1,4 +1,4 @@
-package util
+package common_util
 
 // Define an enumeration interface
 type Enum interface {

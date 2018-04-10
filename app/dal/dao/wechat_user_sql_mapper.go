@@ -1,6 +1,7 @@
 package dao
 
 import (
+	"github.com/geekappio/itonchain/app/common/common_util"
 	"github.com/geekappio/itonchain/app/dal"
 	"github.com/geekappio/itonchain/app/dal/entity"
 	"github.com/geekappio/itonchain/app/util"
@@ -14,10 +15,11 @@ func GetWechatUserSqlMapper(session *xorm.Session) (*WechatUserSqlMapper) {
 }
 
 type WechatUserSqlMapper struct {
+	common_util.XormSession
 	session *xorm.Session
 }
 
-func (sqlMapper *WechatUserSqlMapper) runtimeSession(sqlTagName string, args ...interface{}) *xorm.Session{
+func (sqlMapper *WechatUserSqlMapper) getSqlTemplateClient(sqlTagName string, args ...interface{}) *xorm.Session{
 	if sqlMapper.session == nil {
 		return dal.DB.SqlTemplateClient(sqlTagName, args ...)
 	} else {
@@ -46,12 +48,12 @@ func (sqlMapper *WechatUserSqlMapper) SelectUser(openId string) (*entity.WechatU
 func (wechatUserSqlMapper *WechatUserSqlMapper) UserRegister(wechatUser *entity.WechatUser) (bool, error) {
 	paramMap := map[string]interface{}{"open_id": wechatUser.OpenId}
 	var user entity.WechatUser
-	return wechatUserSqlMapper.runtimeSession("select_user_by_openId",paramMap).Get(&user)
+	return wechatUserSqlMapper.getSqlTemplateClient("select_user_by_openId",paramMap).Get(&user)
 }
 
 // InsertUser calls predefined sql template to insert user
 func (wechatUserSqlMapper *WechatUserSqlMapper) InsertUser(wechatUser *entity.WechatUser) (int64, error) {
-	return wechatUserSqlMapper.runtimeSession("insert_wechat_user").InsertOne(wechatUser)
+	return wechatUserSqlMapper.getSqlTemplateClient("insert_wechat_user").InsertOne(wechatUser)
 }
 
 // UpdateCategoryOrders call predefined sql template to update category orders
@@ -59,5 +61,5 @@ func (wechatUserSqlMapper *WechatUserSqlMapper) UpdateCategoryOrders(openId stri
 	wechatUser := entity.WechatUser{}
 	wechatUser.OpenId = openId
 	wechatUser.CategoryOrders = categoryOrders
-	return wechatUserSqlMapper.runtimeSession("update_category_orders_with_openId").Update(wechatUser)
+	return wechatUserSqlMapper.getSqlTemplateClient("update_category_orders_with_openId").Update(wechatUser)
 }

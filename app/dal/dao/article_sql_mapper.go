@@ -3,6 +3,7 @@ package dao
 import (
 	"database/sql"
 
+	"github.com/geekappio/itonchain/app/common/common_util"
 	"github.com/geekappio/itonchain/app/dal"
 	"github.com/geekappio/itonchain/app/dal/entity"
 	"github.com/xormplus/xorm"
@@ -15,10 +16,11 @@ func GetArticleSqlMapper(session *xorm.Session) (articleSqlMapper *ArticleSqlMap
 }
 
 type ArticleSqlMapper struct {
+	common_util.XormSession
 	session *xorm.Session
 }
 
-func (sqlMapper *ArticleSqlMapper) runtimeSession(sqlTagName string, args ...interface{}) *xorm.Session {
+func (sqlMapper *ArticleSqlMapper) getSqlTemplateClient(sqlTagName string, args ...interface{}) *xorm.Session {
 	if sqlMapper.session == nil {
 		return dal.DB.SqlTemplateClient(sqlTagName, args ...)
 	} else {
@@ -28,12 +30,12 @@ func (sqlMapper *ArticleSqlMapper) runtimeSession(sqlTagName string, args ...int
 
 func (articleSqlMapper *ArticleSqlMapper) UpdateArticleFavorite(articleId int64, favoriteTimes int32) (affected sql.Result, err error) {
 	paramMap := map[string]interface{}{"id": articleId, "favoriteTimes": favoriteTimes}
-	return articleSqlMapper.runtimeSession("update_article_favorite", &paramMap).Execute()
+	return articleSqlMapper.getSqlTemplateClient("update_article_favorite", &paramMap).Execute()
 }
 
 func (articleSqlMapper *ArticleSqlMapper) SelectById(articleId int64) (*entity.Article, error) {
 	var article entity.Article
 	paramMap := map[string]interface{}{"id": articleId}
-	_, err := articleSqlMapper.runtimeSession("select_article", &paramMap).Get(&article)
+	_, err := articleSqlMapper.getSqlTemplateClient("select_article", &paramMap).Get(&article)
 	return &article, err
 }

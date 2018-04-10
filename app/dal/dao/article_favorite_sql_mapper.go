@@ -4,6 +4,7 @@ import (
 	"github.com/geekappio/itonchain/app/dal"
 	"github.com/geekappio/itonchain/app/dal/entity"
 	"github.com/xormplus/xorm"
+	"github.com/geekappio/itonchain/app/common/common_util"
 )
 
 var articleFavoriteSqlMapper *ArticleFavoriteSqlMapper
@@ -13,10 +14,11 @@ func GetArticleFavoriteSqlMapper(session *xorm.Session) (articleFavoriteSqlMappe
 }
 
 type ArticleFavoriteSqlMapper struct {
+	common_util.XormSession
 	session *xorm.Session
 }
 
-func (sqlMapper *ArticleFavoriteSqlMapper) runtimeSession(sqlTagName string, args ...interface{}) *xorm.Session{
+func (sqlMapper *ArticleFavoriteSqlMapper) getSqlTemplateClient(sqlTagName string, args ...interface{}) *xorm.Session{
 	if sqlMapper.session == nil {
 		return dal.DB.SqlTemplateClient(sqlTagName, args ...)
 	} else {
@@ -25,5 +27,5 @@ func (sqlMapper *ArticleFavoriteSqlMapper) runtimeSession(sqlTagName string, arg
 }
 
 func (articleFavoriteSqlMapper *ArticleFavoriteSqlMapper) InsertArticleFavorite(articleFavorite *entity.ArticleFavorite) (id int64, err error) {
-	return articleFavoriteSqlMapper.runtimeSession("insert_article_favorite").InsertOne(articleFavorite)
+	return articleFavoriteSqlMapper.getSqlTemplateClient("insert_article_favorite").InsertOne(articleFavorite)
 }
