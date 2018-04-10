@@ -1,0 +1,1 @@
+update article set favorite_times = ?favoriteTimes where id = ?id

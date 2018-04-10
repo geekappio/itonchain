@@ -44,7 +44,10 @@ func HandleArticleCategoryOrderChange(reqeustModel *model.ArticleCategoryOrderCh
 func HandlerArticleCategoryListQuery(request model.ArticleCategoryListRequest) ([]*model.ArticleCategoryListResponse, enum.ErrorCode) {
 	util.LogInfo(request)
 	userService := service.GetWechatUserService()
-	user := userService.FindUserByOpenId(request.OpenId)
+	user, err := userService.FindUserByOpenId(request.OpenId)
+	if nil != err {
+		return nil, enum.SYSTEM_FAILED
+	}
 	if nil == user {
 		return nil, enum.SYSTEM_FAILED
 	}

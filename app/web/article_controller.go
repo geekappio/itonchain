@@ -13,7 +13,10 @@ import (
 func HandleArticleShare(request ArticleShareRequest) (*ArticleShareReturnData, ErrorCode) {
 	util.LogInfo(request)
 	userService := service.GetWechatUserService()
-	user := userService.FindUserByOpenId(request.OpenId)
+	user, err := userService.FindUserByOpenId(request.OpenId)
+	if nil != err {
+		return nil, SYSTEM_FAILED
+	}
 	if nil == user {
 		return nil, SYSTEM_FAILED
 	}
@@ -31,7 +34,10 @@ func HandleArticleShare(request ArticleShareRequest) (*ArticleShareReturnData, E
 func HandlerArticleMark(request ArticleMarkRequest) (*ArticleMarkResponse, ErrorCode) {
 	util.LogInfo(request)
 	userService := service.GetWechatUserService()
-	user := userService.FindUserByOpenId(request.OpenId)
+	user, err := userService.FindUserByOpenId(request.OpenId)
+	if nil != err {
+		return nil, SYSTEM_FAILED
+	}
 	if nil == user {
 		return nil, SYSTEM_FAILED
 	}
@@ -71,4 +77,43 @@ func doArticleMark(request ArticleMarkRequest, user *entity.WechatUser) (times i
 		}
 	})
 	return
+}
+
+func ArticleFavoriteHandler(request ArticleFavoriteRequest) (*ResponseModel) {
+	util.LogInfo(request)
+	//TODO 校验参数
+	userService := service.GetWechatUserService()
+	articleFavoriteService := service.GetArticleFavoriteService()
+	articleService := service.GetArticleService()
+
+	user,err := userService.FindUserByOpenId(request.OpenId)
+	if err != nil {
+		return &ResponseModel{ReturnCode: SYSTEM_FAILED.GetRespCode()}
+	}
+	if nil == user {
+		return &ResponseModel{ReturnCode: SYSTEM_FAILED.GetRespCode()}
+	}
+	//点赞
+	var favoriteTimes int32
+	var errUpdate error
+	if request.DoFavorite == "FAVORITE" {
+		//TODO 保证事务
+		_,err = articleFavoriteService.InsertArticleFavorite(request.ArticleId, user.Id)
+		if err != nil {
+			return &ResponseModel{ReturnCode: SYSTEM_FAILED.GetRespCode()}
+		}
+		favoriteTimes, errUpdate = articleService.UpdateArticleFavorite(request.ArticleId, request.DoFavorite)
+
+	} else {
+		favoriteTimes, errUpdate = articleService.UpdateArticleFavorite(request.ArticleId, request.DoFavorite)
+	}
+	if errUpdate != nil {
+		return &ResponseModel{ReturnCode: SYSTEM_FAILED.GetRespCode()}
+	}
+	return &ResponseModel{
+		ReturnCode: SYSTEM_SUCCESS.GetRespCode(),
+		ReturnMsg: "用户点赞/取消点赞成功",
+		ReturnData: favoriteTimes,
+	}
+
 }

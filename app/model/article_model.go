@@ -23,3 +23,9 @@ type ArticleMarkResponse struct {
 	BaseResponse
 	MarkTimes int64 `json:"markTimes"`
 }
+
+type ArticleFavoriteRequest struct {
+	OpenId    string `json:"openId"`
+	ArticleId int64    `json:"articleId"`
+	DoFavorite string    `json:"doFavorite"`
+}

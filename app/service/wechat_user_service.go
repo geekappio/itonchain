@@ -30,11 +30,11 @@ func (self *WechatUserService) CreateUser(request *model.WechatUserRequest) (*mo
 	copier.Copy(wechatUser, request)
 	//查询openId是否存在，存在报错
 	wechatUserSqlMapper := dao.GetWechatUserSqlMapper()
-	bool, err := wechatUserSqlMapper.UserRegister(&wechatUser)
+	user ,err := wechatUserSqlMapper.SelectUser(request.OpenId)
 	if err != nil {
 		util.LogError(err)
 	}
-	if bool {
+	if user != nil {
 		//openId已存在
 		util.LogError("用户已存在")
 	}
@@ -45,21 +45,24 @@ func (self *WechatUserService) CreateUser(request *model.WechatUserRequest) (*mo
 		util.LogError("Error happened when inserting wechat_user: ", wechatUser, err)
 		return &model.ResponseModel{
 			ReturnCode: enum.DB_INSERT_ERROR.GetRespCode(),
-			ReturnMsg:  "添加category数据失败",
+			ReturnMsg: "添加category数据失败",
 		}
 	} else {
 		return &model.ResponseModel{
 			ReturnCode: enum.SYSTEM_SUCCESS.GetRespCode(),
-			ReturnMsg:  "用户注册成功",
+			ReturnMsg: "用户注册成功",
 			ReturnData: id,
 		}
 	}
 }
 
-func (self *WechatUserService) FindUserByOpenId(openId string) *entity.WechatUser {
-	return &entity.WechatUser{
-		BaseEntity: entity.BaseEntity{Id: 123321,},
+func (self *WechatUserService) FindUserByOpenId(openId string) (wechatUser *entity.WechatUser, err error) {
+	wechatUserSqlMapper := dao.GetWechatUserSqlMapper()
+	user, err := wechatUserSqlMapper.SelectUser(openId)
+	if err != nil {
+		util.LogError("根据openId查询用户失败 ", user, err)
 	}
+	return user, err
 }
 
 func (service *WechatUserService) ChangingArticleCategoryOrder(request *model.ArticleCategoryOrderChangeRequest) *model.ResponseModel {

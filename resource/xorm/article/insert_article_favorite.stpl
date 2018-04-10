@@ -1,0 +1,4 @@
+INSERT INTO article_favorite
+(article_id, user_id, gmt_create, gmt_update)
+VALUES
+(?ArticleId, ?UserId, ?GmtCreate, ?GmtUpdate)

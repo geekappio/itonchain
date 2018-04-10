@@ -1,6 +1,10 @@
 package service
 
-import "github.com/xormplus/xorm"
+import (
+	"github.com/xormplus/xorm"
+	"github.com/geekappio/itonchain/app/dal/dao"
+	"github.com/geekappio/itonchain/app/util"
+)
 
 type ArticleService struct {
 	session *xorm.Session
@@ -22,4 +26,25 @@ func (self *ArticleService) IncMarkTimes(articleId int64) (int64, error) {
 // TODO 减少并返回mark数
 func (self *ArticleService) DecMarkTimes(articleId int64) (int64, error) {
 	return 0, nil
+}
+
+func (service *ArticleService) UpdateArticleFavorite(articleId int64, doFavorite string) (int32, error) {
+	articleSqlMapper := dao.GetArticleSqlMapper()
+	article, err := articleSqlMapper.SelectById(articleId)
+	if err != nil {
+		util.LogError("查询文章失败", err)
+		return 0, err
+	}
+	var favoriteTimes int32
+	if doFavorite == "FAVORITE" {
+		favoriteTimes = article.FavoriteTimes + 1
+	} else {
+		favoriteTimes = article.FavoriteTimes - 1
+	}
+	_, errUpdate := articleSqlMapper.UpdateArticleFavorite(articleId, favoriteTimes)
+	if errUpdate != nil {
+		util.LogError("更新文章点赞数失败", errUpdate)
+		return 0, errUpdate
+	}
+	return favoriteTimes, nil
 }
