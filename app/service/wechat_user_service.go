@@ -67,7 +67,7 @@ func (self *WechatUserService) FindUserByOpenId(openId string) (wechatUser *enti
 
 func (service *WechatUserService) ChangingArticleCategoryOrder(request *model.ArticleCategoryOrderChangeRequest) *model.ResponseModel {
 	// Here calls dao method to access database.
-	userModel, err := dao.GetWechatUserSqlMapper().SelectUser(request.OpenId)
+	userModel, err := dao.GetWechatUserSqlMapper(nil).SelectUser(request.OpenId)
 	if err != nil{
 		util.LogError("Error happened when getting user model from wechat_user table with openId: ", request.OpenId, err)
 		return &model.ResponseModel{
