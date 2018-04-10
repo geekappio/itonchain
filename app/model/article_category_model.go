@@ -5,8 +5,8 @@ package model
  */
 type ArticleCategoryChangeRequest struct {
 	BaseRequest
-	Id   int    `json:"categoryId"`
-	UserId       string `json:"openId"`
+	OpenId       string `json:"openId" binding:"required"`
+	CategoryId   int    `json:"categoryId" binding:"required"`
 	CategoryName string `json:"categoryName"`
 	Description  string `json:"description"`
 }
@@ -14,8 +14,8 @@ type ArticleCategoryChangeRequest struct {
 // Request of "/article_category/add" api
 type ArticleCategoryAddRequest struct {
 	BaseRequest
-	OpenId       string `json:"openId"`
-	CategoryName string `json:"categoryName"`
+	OpenId       string `json:"openId" binding:"required"`
+	CategoryName string `json:"categoryName" binding:"required"`
 	Description  string `json:"description"`
 	InsertPos    int64  `json:"insertPos"`
 }
@@ -28,13 +28,26 @@ type ArticleCategoryAddReturnData struct {
 // Request of "/article_category/delete" api
 type ArticleCategoryDeleteRequest struct {
 	BaseRequest
-	OpenId     string `json:"openId"`
-	CategoryId int64  `json:"categoryId"`
+	OpenId     string `json:"openId" binding:"required"`
+	CategoryId int64  `json:"categoryId" binding:"required"`
 }
 
 type ArticleCategoryOrderChangeRequest struct {
 	BaseRequest
-	OpenId     string `json:"openId"`
-	CategoryId int    `json:"categoryId"`
-	UpDown     string `json:"upDown"`
+	OpenId     string `json:"openId" binding:"required"`
+	CategoryId int    `json:"categoryId" binding:"required"`
+	UpDown     string `json:"upDown" binding:"required"`
+}
+
+type ArticleCategoryListRequest struct {
+	BaseRequest
+	OpenId string `json:"openId"`
+}
+
+type ArticleCategoryListResponse struct {
+	BaseResponse
+	CategoryId   int64  `json:"categoryId"`
+	CategoryName string `json:"categoryName"`
+	ArticleCount int64  `json:"articleCount"`
+	GmtCreate    string `json:"gmtCreate"`
 }

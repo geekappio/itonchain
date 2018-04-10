@@ -5,6 +5,7 @@ import (
 	"github.com/geekappio/itonchain/app/util"
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/xormplus/xorm"
+	. "github.com/geekappio/itonchain/app/enum"
 )
 
 // 数据源参数定义
@@ -50,4 +51,37 @@ func InitDataSource() error {
 	}
 
 	return nil
+}
+
+// FIXME
+func Transaction(handler func(session *xorm.Session) ErrorCode) ErrorCode {
+	// 创建新的session
+	session := DB.NewSession()
+	defer session.Close()
+
+	// 捕获异常并rollback
+	defer func() {
+		if r := recover(); r != nil {
+			err, ok := r.(error)
+			if ok && nil != err {
+				session.Rollback()
+			}
+		}
+	}()
+
+	err := session.Begin()
+	if nil != err {
+		return DB_TRANSACTION_ERROR
+	}
+
+	// 将session传入处理器，需要handler内部自行使用session实现数据库操作
+	respCode := handler(session)
+
+	// 基于error进行事务提交或回滚
+	if respCode.IsSuccess() {
+		session.Commit()
+	} else {
+		session.Rollback()
+	}
+	return respCode
 }

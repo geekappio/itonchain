@@ -6,14 +6,17 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/json-iterator/go"
+	"github.com/geekappio/itonchain/app/model"
+	"github.com/geekappio/itonchain/app/enum"
 )
 
-// FIXME 目前该方法为实验性质，传入 handler 必须遵循规则为 func(BaseRequest) (BaseResponse, errorCode string)
+// FIXME 目前该方法为实验性质，传入 handler 必须遵循规则为 func(BaseRequest) (BaseResponse, ErrorCode)
+// FIXME handler 目前有两种方案，一种直接返回ResponseMode, 另一种返回BaseResponse,ErrorCode，暂且做下兼容使编译通过
 func AddPostRouter(engine *gin.Engine, path string, handler interface{}) {
 	typ := reflect.TypeOf(handler)
 	val := reflect.ValueOf(handler)
-	if typ.Kind() != reflect.Func || typ.NumIn() != 1 || typ.NumOut() != 2 {
-		panic("传入 handler 必须遵循规则为 func(BaseRequest) (BaseResponse, errorCode string)")
+	if typ.Kind() != reflect.Func || typ.NumIn() != 1 {
+		panic("传入 handler 必须遵循规则为 func(BaseRequest) (BaseResponse, ErrorCode)")
 	}
 	engine.POST(path, func(c *gin.Context) {
 		rawReq, err := c.GetRawData()
@@ -39,7 +42,15 @@ func AddPostRouter(engine *gin.Engine, path string, handler interface{}) {
 		// Record response log
 		LogResponse(path, &response)
 
-		// 返回结果到客户端
-		c.JSON(http.StatusOK, response)
+		if 1 == len(results) {
+			c.JSON(http.StatusOK, response)
+		} else {
+			errorCode := results[1].Interface().(enum.ErrorCode)
+			c.JSON(http.StatusOK, &model.ResponseModel{
+				ReturnCode: errorCode.GetRespCode(),
+				ReturnMsg: errorCode.GetRespMsg(),
+				ReturnData: response,
+			})
+		}
 	})
 }
