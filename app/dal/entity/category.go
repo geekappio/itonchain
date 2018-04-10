@@ -1,7 +1,7 @@
 package entity
 
 type Category struct {
-	BaseEntity
+	BaseEntity          `xorm:"extends"`
 	UserId       int64  `xorm:'user_id' bigint(20) notnull`
 	CategoryName string `xorm:'category_name' notnull varchar(45)`
 	Description  string `xorm:'description' varchar(500)`

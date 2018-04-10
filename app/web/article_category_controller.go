@@ -50,10 +50,10 @@ func HandlerArticleCategoryListQuery(request model.ArticleCategoryListRequest) (
 	}
 
 	categoryService := service.GetArticleCategoryService()
-	categorys := categoryService.ListCategoryByUserId(user.Id)
-	response := make([]*model.ArticleCategoryListResponse, len(categorys))
-	for i, c := range categorys {
-		response[i] = buildCategoryListResponse(c)
+	categories := categoryService.ListCategoryByUserId(user.Id)
+	response := make([]*model.ArticleCategoryListResponse, len(categories))
+	for i, c := range categories {
+		response[i] = buildCategoryListResponse(&c)
 	}
 	return response, enum.SYSTEM_SUCCESS
 }

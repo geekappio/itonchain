@@ -1,7 +1,7 @@
 package entity
 
 type Article struct {
-	BaseEntity
+	BaseEntity             `xorm:"extends"`
 	ArticleTitle    string `xorm:'article_title' varchar(1000) notnull`
 	ArticleFrom     string `xorm:'article_from' varchar(255)`
 	ArticleUrl      string `xorm:'article_url' varchar(1000) notnull`
