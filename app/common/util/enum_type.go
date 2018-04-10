@@ -21,8 +21,12 @@ func (*EnumType) ValueOf(value string) *EnumType {
 
 // Define a new enumeration type with specified value
 func DefEnumType(value string) (enumType *EnumType) {
-	enumType = &EnumType{Value: value}
-	enumTypeMap[value] = enumType
+	if enumTypeMap[value] != nil {
+		return enumTypeMap[value]
+	} else {
+		enumType = &EnumType{Value: value}
+		enumTypeMap[value] = enumType
+	}
 	return
 }
 
