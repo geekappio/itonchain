@@ -74,10 +74,8 @@ func main() {
 
 	// 分享文章
 	util.AddPostRouter(router, api.ApiRequestMapping.ArticleShare, web.HandleArticleShare)
-
 	// 收藏文章
 	util.AddPostRouter(router, api.ApiRequestMapping.ArticleMark, web.HandlerArticleMark)
-
 	// 查询分类列表
 	util.AddPostRouter(router, api.ApiRequestMapping.ArticleCategoryListQuery, web.HandlerArticleCategoryListQuery)
 

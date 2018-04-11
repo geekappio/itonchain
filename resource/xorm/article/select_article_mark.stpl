@@ -1,0 +1,7 @@
+select * from article_mark
+WHERE
+  article_id=?ArticleId
+  AND
+  user_id=?UserId
+  AND
+  category_id=?CategoryId

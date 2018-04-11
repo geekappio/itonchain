@@ -1,0 +1,3 @@
+update article
+set mark_times = mark_times + ?Addend
+where id = ?Id

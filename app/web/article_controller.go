@@ -22,13 +22,14 @@ func HandleArticleShare(request ArticleShareRequest) (*ArticleShareReturnData, E
 	}
 
 	shareService := service.GetArticleShareService()
-	ok := shareService.AddArticleShare(user.Id, request.ArticleId)
-	if ok {
-		times := shareService.CountArticleShare(request.ArticleId)
-		return &ArticleShareReturnData{ShareTimes:times}, SYSTEM_SUCCESS
-	} else {
-		return nil, SYSTEM_FAILED
+	ok, err := shareService.AddArticleShare(user.Id, request.ArticleId)
+	if ok && nil == err {
+		times, err := shareService.CountArticleShare(request.ArticleId)
+		if nil == err {
+			return &ArticleShareReturnData{ShareTimes: times}, SYSTEM_SUCCESS
+		}
 	}
+	return nil, SYSTEM_FAILED
 }
 
 func HandlerArticleMark(request ArticleMarkRequest) (*ArticleMarkResponse, ErrorCode) {
@@ -50,13 +51,14 @@ func HandlerArticleMark(request ArticleMarkRequest) (*ArticleMarkResponse, Error
 	}
 }
 
-func doArticleMark(request ArticleMarkRequest, user *entity.WechatUser) (times int64, code ErrorCode){
+func doArticleMark(request ArticleMarkRequest, user *entity.WechatUser) (times int32, code ErrorCode){
 	code = dal.Transaction(func(session *xorm.Session) ErrorCode {
-		markService := service.GetArticleMarkServiceBySession(session)
-		articleService := service.GetArticleServiceBySession(session)
+		markService := service.GetArticleMarkService(session)
+		articleService := service.GetArticleService(session)
+
 		if MARK.Equals(request.DoMark) {
-			err := markService.AddArticleMark(user.Id, request.ArticleId, request.CategoryId)
-			if nil != err {
+			ok, err := markService.AddArticleMark(user.Id, request.ArticleId, request.CategoryId)
+			if !ok && nil != err {
 				return DB_INSERT_ERROR
 			}
 			times, err = articleService.IncMarkTimes(request.ArticleId)
@@ -65,8 +67,8 @@ func doArticleMark(request ArticleMarkRequest, user *entity.WechatUser) (times i
 			}
 			return SYSTEM_SUCCESS
 		} else {
-			err := markService.DelArticleMark(user.Id, request.ArticleId, request.CategoryId)
-			if nil != err {
+			ok, err := markService.DelArticleMark(user.Id, request.ArticleId, request.CategoryId)
+			if !ok && nil != err {
 				return DB_INSERT_ERROR
 			}
 			times, err = articleService.DecMarkTimes(request.ArticleId)

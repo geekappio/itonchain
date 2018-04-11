@@ -21,7 +21,7 @@ type ArticleMarkRequest struct {
 
 type ArticleMarkResponse struct {
 	BaseResponse
-	MarkTimes int64 `json:"markTimes"`
+	MarkTimes int32 `json:"markTimes"`
 }
 
 type ArticleFavoriteRequest struct {

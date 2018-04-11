@@ -1,2 +1,2 @@
 SELECT * FROM category
-WHERE user_id=?userId
+WHERE user_id=?UserId
