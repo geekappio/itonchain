@@ -23,3 +23,7 @@ func (self *ArticleMarkService) AddArticleMark(userId, articleId, categoryId int
 func (self *ArticleMarkService) DelArticleMark(userId, articleId, categoryId int64) error {
 	return nil
 }
+
+func (self *ArticleMarkService) GetArticleMarkList(userId int64, articleId int64){
+
+}
