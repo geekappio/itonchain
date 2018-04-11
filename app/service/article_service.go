@@ -5,32 +5,49 @@ import (
 	"github.com/geekappio/itonchain/app/dal/dao"
 	"github.com/geekappio/itonchain/app/util"
 	"github.com/geekappio/itonchain/app/model"
+	"github.com/geekappio/itonchain/app/dal/entity"
 )
 
 type ArticleService struct {
 	session *xorm.Session
 }
 
-func GetArticleService() *ArticleService {
-	return &ArticleService{}
+func GetArticleService(session ...*xorm.Session) *ArticleService {
+	if len(session) == 0 {
+		return &ArticleService{}
+	} else {
+		return &ArticleService{session:session[0]}
+	}
 }
 
-func GetArticleServiceBySession(session *xorm.Session) *ArticleService {
-	return &ArticleService{session:session,}
+func (self *ArticleService) IncMarkTimes(articleId int64) (int32, error) {
+	mapper := dao.GetArticleSqlMapper(self.session)
+	err := mapper.AddArticleMark(articleId, 1)
+	if nil == err {
+		var article *entity.Article
+		article, err = mapper.SelectById(articleId)
+		if nil == err {
+			return article.MarkTimes, nil
+		}
+	}
+	return 0, err
 }
 
-// TODO 增长并返回mark数
-func (self *ArticleService) IncMarkTimes(articleId int64) (int64, error) {
-	return 0, nil
-}
-
-// TODO 减少并返回mark数
-func (self *ArticleService) DecMarkTimes(articleId int64) (int64, error) {
-	return 0, nil
+func (self *ArticleService) DecMarkTimes(articleId int64) (int32, error) {
+	mapper := dao.GetArticleSqlMapper(self.session)
+	err := mapper.AddArticleMark(articleId, -1)
+	if nil == err {
+		var article *entity.Article
+		article, err = mapper.SelectById(articleId)
+		if nil == err {
+			return article.MarkTimes, nil
+		}
+	}
+	return 0, err
 }
 
 func (service *ArticleService) UpdateArticleFavorite(articleId int64, doFavorite string) (int32, error) {
-	articleSqlMapper := dao.GetArticleSqlMapper(nil)
+	articleSqlMapper := dao.GetArticleSqlMapper(service.session)
 	article, err := articleSqlMapper.SelectById(articleId)
 	if err != nil {
 		util.LogError("查询文章失败", err)

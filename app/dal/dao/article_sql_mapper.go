@@ -39,3 +39,9 @@ func (articleSqlMapper *ArticleSqlMapper) SelectById(articleId int64) (*entity.A
 	_, err := articleSqlMapper.getSqlTemplateClient("select_article", &paramMap).Get(&article)
 	return &article, err
 }
+
+func (self *ArticleSqlMapper) AddArticleMark(articleId int64, addend int) error {
+	paramMap := map[string]interface{}{"Id": articleId, "Addend": addend}
+	_, err := articleSqlMapper.getSqlTemplateClient("add_mark_from_article", &paramMap).Execute()
+	return err
+}

@@ -48,6 +48,7 @@ func (sqlMapper *CategorySqlMapper) UpdateCategory(category *entity.Category) (i
 
 func (self *CategorySqlMapper) FindByUserId(userId int64) ([]entity.Category, error) {
 	var categories []entity.Category
-	err := self.getSqlTemplateClient("findByUserId", userId).Find(&categories)
+	paramMap := map[string]interface{}{"UserId": userId}
+	err := self.getSqlTemplateClient("list_category.stpl", &paramMap).Find(&categories)
 	return categories, err
 }

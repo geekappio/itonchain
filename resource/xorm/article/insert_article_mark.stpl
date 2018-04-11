@@ -1,0 +1,4 @@
+INSERT INTO article_mark
+(article_id, user_id, category_id, gmt_create, gmt_update)
+VALUES
+(?ArticleId, ?UserId, ?CategoryId, ?GmtCreate, ?GmtUpdate)

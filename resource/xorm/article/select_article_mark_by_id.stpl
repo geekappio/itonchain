@@ -1,0 +1,1 @@
+select * from article_mark where id = ?Id
