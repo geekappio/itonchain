@@ -6,6 +6,9 @@
     "address":"127.0.0.1:6379",
     "db":0
   },
+  "seaweed":{
+    "uploadAddressUrl":"http://35.194.190.28:9333/submit"
+  },
   "database":{
     "driverName":"mysql",
     "datasourceName":"root:cgV8vokF@tcp(121.40.78.46:3306)/applet.geekapp?parseTime=true",

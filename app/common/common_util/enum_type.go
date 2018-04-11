@@ -11,7 +11,7 @@ type EnumType struct {
 }
 
 // Save all defined enumeration types.
-var enumTypeMap map[string]*EnumType = make(map[string]*EnumType)
+var enumTypeMap = make(map[string]*EnumType)
 
 // Return enumeration type object by its value
 func (*EnumType) ValueOf(value string) *EnumType {
