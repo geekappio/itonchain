@@ -48,6 +48,10 @@ func (self *ArticleMarkService) DelArticleMark(userId, articleId, categoryId int
 	return true, dao.GetArticleMarkSqlMapper(self.session).DeleteArticleMark(userId, articleId, categoryId)
 }
 
-func (self *ArticleMarkService) GetArticleMarkList(userId int64, articleId int64){
-
+func (self *ArticleMarkService) GetArticleMarkList(userId int64, categoryId int64) (*[]entity.ArticleMark, error) {
+	articleMarkList, err := dao.GetArticleMarkSqlMapper(self.session).SelectArticleMarkListByUserIdAndCategoryId(userId, categoryId)
+	if err != nil {
+		util.LogError("Error happened when inserting article_mark: ", userId, categoryId, err)
+	}
+	return articleMarkList, err
 }

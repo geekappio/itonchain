@@ -60,7 +60,7 @@ func (self *WechatUserService) FindUserByOpenId(openId string) (wechatUser *enti
 	wechatUserSqlMapper := dao.GetWechatUserSqlMapper(nil)
 	user, err := wechatUserSqlMapper.SelectUser(openId)
 	if err != nil {
-		util.LogError("根据openId查询用户失败 ", user, err)
+		util.LogError("根据openId查询用户失败 ",openId, user, err)
 	}
 	return user, err
 }

@@ -62,3 +62,10 @@ func (self *ArticleMarkSqlMapper) DeleteArticleMark(userId, articleId, categoryI
 	_, err := self.getSqlTemplateClient("delete_article_mark.stpl", &paramMap).Execute()
 	return err
 }
+
+func (self *ArticleMarkSqlMapper) SelectArticleMarkListByUserIdAndCategoryId(userId int64, categoryId int64) (*[]entity.ArticleMark, error) {
+	paramMap := map[string]interface{}{"UserId":userId, "CategoryId":categoryId}
+	var articleMarkList []entity.ArticleMark
+	err := self.getSqlTemplateClient("select_article_mark_list_by_userId_categoryId.stpl", &paramMap).Find(&articleMarkList);
+	return &articleMarkList, err
+}

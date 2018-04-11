@@ -6,6 +6,7 @@ import (
 	"github.com/geekappio/itonchain/app/util"
 	"github.com/geekappio/itonchain/app/model"
 	"github.com/geekappio/itonchain/app/dal/entity"
+	"github.com/geekappio/itonchain/app/enum"
 )
 
 type ArticleService struct {
@@ -67,6 +68,26 @@ func (service *ArticleService) UpdateArticleFavorite(articleId int64, doFavorite
 	return favoriteTimes, nil
 }
 
-func (service *ArticleService) GetArticleList(request model.ArticleListRequest)  {
+//TODO
+func (service *ArticleService) GetArticleList(request model.ArticleListRequest) *model.ResponseModel {
+	/*openId := request.SearchParams.OpenId
+	var userId int64
+	if openId != nil {
+		wechatUser, err := GetWechatUserService().FindUserByOpenId(openId)
+		if err != nil {
+			return &model.ResponseModel{
+				ReturnCode: enum.DB_ERROR.GetRespCode(),
+				ReturnMsg:  "查询用户信息失败",
+			}
+		}
+		userId = wechatUser.Id
+	}
 
+	if userId != nil || request.SearchParams.CategoryId != nil {
+
+	}*/
+	return &model.ResponseModel{
+		ReturnCode: enum.DB_ERROR.GetRespCode(),
+		ReturnMsg:  "查询用户信息失败",
+	}
 }
