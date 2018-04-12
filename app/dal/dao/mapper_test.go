@@ -52,3 +52,35 @@ func TestArticleMark(t *testing.T) {
 		t.FailNow()
 	}
 }
+
+func TestArticleShare(t *testing.T) {
+	articleShare := &entity.ArticleShare{
+		ArticleId:1,
+		UserId:1,
+		BaseEntity:entity.BaseEntity{
+			GmtCreate:time.Now(),
+			GmtUpdate:time.Now(),
+		},
+	}
+
+	mapper := GetArticleShareSqlMapper(nil)
+
+	rows, err := mapper.InsertArticleShare(articleShare)
+	if nil != err || 1 != rows {
+		t.FailNow()
+	}
+
+	count, err := mapper.CountArticleShare(articleShare.ArticleId)
+	if nil != err || 1 >= count {
+		t.FailNow()
+	}
+}
+
+func TestArticle(t *testing.T) {
+	mapper := GetArticleSqlMapper(nil)
+
+	rows, err := mapper.AddArticleMark(1, -10)
+	if nil != err || 1 != rows {
+		t.FailNow()
+	}
+}

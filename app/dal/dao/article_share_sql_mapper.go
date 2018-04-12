@@ -27,13 +27,21 @@ func (self *ArticleShareSqlMapper) getSqlTemplateClient(sqlTagName string, args 
 }
 
 func (self *ArticleShareSqlMapper) InsertArticleShare(articleShare *entity.ArticleShare) (int64, error) {
-	return self.getSqlTemplateClient("insert_article_share").InsertOne(articleShare)
+	paramMap := map[string]interface{}{"ArticleId":articleShare.ArticleId, "UserId":articleShare.UserId, "GmtCreate":articleShare.GmtCreate, "GmtUpdate":articleShare.GmtUpdate}
+	r, err := self.getSqlTemplateClient("insert_article_share.stpl", &paramMap).Execute()
+	id, _ := r.LastInsertId()
+	articleShare.Id = id
+	rows, _ := r.RowsAffected()
+	return rows, err
 }
 
-// FIXME 测试看是否正确
 func (self *ArticleShareSqlMapper) CountArticleShare(articleId int64) (int64, error) {
-	var count int
+	var count []int64
 	paramMap := map[string]interface{}{"ArticleId":articleId}
-	_, err := self.getSqlTemplateClient("count_article_share", &paramMap).Get(&count)
-	return int64(count), err
+	err := self.getSqlTemplateClient("count_article_share.stpl", &paramMap).Find(&count)
+	if len(count) == 1 {
+		return count[0], err
+	} else {
+		return 0, err
+	}
 }

@@ -9,8 +9,6 @@ import (
 	"github.com/xormplus/xorm"
 )
 
-var articleSqlMapper *ArticleSqlMapper
-
 func GetArticleSqlMapper(session *xorm.Session) (articleSqlMapper *ArticleSqlMapper) {
 	return &ArticleSqlMapper{session:session}
 }
@@ -40,8 +38,9 @@ func (articleSqlMapper *ArticleSqlMapper) SelectById(articleId int64) (*entity.A
 	return &article, err
 }
 
-func (self *ArticleSqlMapper) AddArticleMark(articleId int64, addend int) error {
+func (self *ArticleSqlMapper) AddArticleMark(articleId int64, addend int) (int64, error) {
 	paramMap := map[string]interface{}{"Id": articleId, "Addend": addend}
-	_, err := articleSqlMapper.getSqlTemplateClient("add_mark_from_article", &paramMap).Execute()
-	return err
+	r, err := self.getSqlTemplateClient("add_mark_from_article.stpl", &paramMap).Execute()
+	rows, _ := r.RowsAffected()
+	return rows, err
 }
