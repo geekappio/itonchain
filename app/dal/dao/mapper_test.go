@@ -6,6 +6,7 @@ import (
 	"github.com/geekappio/itonchain/app/common/logging"
 	"github.com/geekappio/itonchain/app/dal"
 	"github.com/geekappio/itonchain/app/dal/entity"
+	"github.com/geekappio/itonchain/app/model"
 	"time"
 )
 
@@ -82,5 +83,39 @@ func TestArticle(t *testing.T) {
 	rows, err := mapper.AddArticleMark(1, -10)
 	if nil != err || 1 != rows {
 		t.FailNow()
+	}
+}
+
+func TestWechatUserSqlMapper_InsertUser(t *testing.T) {
+	mapper := GetWechatUserSqlMapper(nil)
+	wechatUser := entity.WechatUser{
+		BaseEntity : entity.BaseEntity{
+			GmtCreate:time.Now(),
+			GmtUpdate:time.Now(),
+		},
+		OpenId:        "1",
+		NickName:       "哈哈",
+		Gender:   "1",
+		IsDel:          "NO",
+	}
+	id, err := mapper.InsertUser(&wechatUser)
+	if err != nil {
+		t.Error(err)
+	}
+	t.Log(id)
+}
+
+func TestArticleSqlMapper_SelectListByParamsInPage(t *testing.T) {
+	mapper := GetArticleSqlMapper(nil)
+	request := model.ArticleListRequest{
+		SearchParams : model.ArticleSearchParams{
+			ArticleTitle : "数学",
+		},
+	}
+	articleList, err := mapper.SelectListByParams(request)
+	if err != nil {
+		t.Error(err)
+	} else {
+		t.Log(articleList)
 	}
 }

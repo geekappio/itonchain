@@ -1,2 +1,2 @@
 SELECT * FROM article
-WHERE article_title like ?%articleTitle%
+WHERE article_title like ?articleTitle
