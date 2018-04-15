@@ -69,25 +69,7 @@ func (service *ArticleService) UpdateArticleFavorite(articleId int64, doFavorite
 }
 
 //TODO
-func (service *ArticleService) GetArticleList(request model.ArticleListRequest) *model.ResponseModel {
-	/*openId := request.SearchParams.OpenId
-	var userId int64
-	if openId != nil {
-		wechatUser, err := GetWechatUserService().FindUserByOpenId(openId)
-		if err != nil {
-			return &model.ResponseModel{
-				ReturnCode: enum.DB_ERROR.GetRespCode(),
-				ReturnMsg:  "查询用户信息失败",
-			}
-		}
-		userId = wechatUser.Id
-	}
-
-	if userId != nil || request.SearchParams.CategoryId != nil {
-
-	}*/
-	return &model.ResponseModel{
-		ReturnCode: enum.DB_ERROR.GetRespCode(),
-		ReturnMsg:  "查询用户信息失败",
-	}
+func (service *ArticleService) GetArticleList(request model.ArticleListRequest, articleIdList *[]int64) (*[]entity.Article, error) {
+	articleSqlMapper := dao.GetArticleSqlMapper(service.session)
+	return articleSqlMapper.SelectListByParamsInPage(request, articleIdList)
 }
