@@ -46,7 +46,7 @@ func (sqlMapper *WechatUserSqlMapper) SelectUser(openId string) (*entity.WechatU
 
 // InsertUser calls predefined sql template to insert user
 func (wechatUserSqlMapper *WechatUserSqlMapper) InsertUser(wechatUser *entity.WechatUser) (int64, error) {
-	return wechatUserSqlMapper.getSqlTemplateClient("insert_wechat_user").InsertOne(wechatUser)
+	return wechatUserSqlMapper.getSqlTemplateClient("insert_wechat_user.stpl").InsertOne(wechatUser)
 }
 
 // UpdateCategoryOrders call predefined sql template to update category orders

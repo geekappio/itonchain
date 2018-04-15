@@ -70,7 +70,14 @@ func main() {
 	//添加中间件
 	router.Use(Middleware)
 
+	//注册用户
 	util.AddPostRouter(router, api.ApiRequestMapping.UserRegister, web.HandleUserRegister)
+
+	//查询/搜索文章列表
+	util.AddPostRouter(router, api.ApiRequestMapping.ArticleListQuery, web.HandlerArticleList)
+
+	//点赞文章
+	util.AddPostRouter(router, api.ApiRequestMapping.ArticleFavorite, web.HandlerArticleMark)
 
 	// 分享文章
 	util.AddPostRouter(router, api.ApiRequestMapping.ArticleShare, web.HandleArticleShare)
