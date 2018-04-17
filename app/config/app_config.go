@@ -16,6 +16,7 @@ type AppConfig struct {
 	Redis    RedisConfig    `json:"redis"`
 	Database DatabaseConfig `json:"database"`
 	XormPlus XormPlusConfig `json:"xormPlus"`
+	SeaWeedFS SeaWeedFSConfig `json:"seaweed"`
 }
 
 type LoggingConfig struct {
@@ -34,6 +35,12 @@ type ServerConfig struct {
 type RedisConfig struct {
 	Address string `json:"address"`
 	DB      int    `json:"db"`
+}
+
+// SeaWeedFS configs.
+type SeaWeedFSConfig struct {
+	// 上传地址 url
+	UploadAddrUrl string `json:"uploadAddressUrl"`
 }
 
 //  Databae configs.

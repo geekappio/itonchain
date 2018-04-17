@@ -54,7 +54,7 @@ func HandlerArticleCategoryListQuery(request model.ArticleCategoryListRequest) (
 	}
 
 	categoryService := service.GetArticleCategoryService()
-	categories := categoryService.ListCategoryByUserId(user.Id)
+	categories, _ := categoryService.ListCategoryByUserId(user.Id)
 	response := make([]*model.ArticleCategoryListResponse, len(categories))
 	for i, c := range categories {
 		response[i] = buildCategoryListResponse(&c)

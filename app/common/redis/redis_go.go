@@ -3,7 +3,7 @@ package redis
 import (
 	"log"
 
-	. "github.com/geekappio/itonchain/app/config"
+	"github.com/geekappio/itonchain/app/config"
 	"github.com/go-redis/redis"
 )
 
@@ -11,8 +11,8 @@ var redisClient *redis.Client
 
 func InitRedis() error {
 	redisClient = redis.NewClient(&redis.Options{
-		Addr: Config.Redis.Address,
-		DB:   Config.Redis.DB,
+		Addr: config.Config.Redis.Address,
+		DB:   config.Config.Redis.DB,
 	})
 
 	pong, err := redisClient.Ping().Result()

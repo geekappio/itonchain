@@ -10,6 +10,7 @@ import (
 
 	"github.com/geekappio/itonchain/app/enum"
 	"github.com/jinzhu/copier"
+	"time"
 )
 
 var wechatUserService *WechatUserService
@@ -26,7 +27,13 @@ type WechatUserService struct {
 }
 
 func (self *WechatUserService) CreateUser(request *model.WechatUserRequest) (*model.ResponseModel) {
-	wechatUser := entity.WechatUser{}
+	wechatUser := entity.WechatUser{
+		BaseEntity: entity.BaseEntity{
+			GmtCreate: time.Now(),
+			GmtUpdate: time.Now(),
+		},
+		IsDel: "NO",
+	}
 	copier.Copy(wechatUser, request)
 	//查询openId是否存在，存在报错
 	wechatUserSqlMapper := dao.GetWechatUserSqlMapper(nil)
@@ -45,7 +52,7 @@ func (self *WechatUserService) CreateUser(request *model.WechatUserRequest) (*mo
 		util.LogError("Error happened when inserting wechat_user: ", wechatUser, err)
 		return &model.ResponseModel{
 			ReturnCode: enum.DB_INSERT_ERROR.GetRespCode(),
-			ReturnMsg: "添加category数据失败",
+			ReturnMsg: "添加用户数据失败",
 		}
 	} else {
 		return &model.ResponseModel{
@@ -60,7 +67,7 @@ func (self *WechatUserService) FindUserByOpenId(openId string) (wechatUser *enti
 	wechatUserSqlMapper := dao.GetWechatUserSqlMapper(nil)
 	user, err := wechatUserSqlMapper.SelectUser(openId)
 	if err != nil {
-		util.LogError("根据openId查询用户失败 ", user, err)
+		util.LogError("根据openId查询用户失败 ",openId, user, err)
 	}
 	return user, err
 }

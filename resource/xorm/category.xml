@@ -1,5 +1,0 @@
-<sqlMap>
-    <sql id="findByUserId">
-        select * from category where user_id=?
-    </sql>
-</sqlMap>

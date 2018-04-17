@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"time"
 
-	. "github.com/geekappio/itonchain/app/config"
+	"github.com/geekappio/itonchain/app/config"
 	"github.com/lestrrat-go/file-rotatelogs"
 	"github.com/rifflock/lfshook"
 	"github.com/sirupsen/logrus"
@@ -26,12 +26,12 @@ func initLoggerWriter(loggerPath string) (*rotatelogs.RotateLogs, error) {
 }
 
 func initCommonLogger() (*logrus.Logger, error) {
-	defaultWriter, err := initLoggerWriter(Config.Logging.DefaultLogPath)
+	defaultWriter, err := initLoggerWriter(config.Config.Logging.DefaultLogPath)
 	if err != nil {
 		return nil, err
 	}
 
-	errorWriter, err := initLoggerWriter(Config.Logging.ErrorLogPath)
+	errorWriter, err := initLoggerWriter(config.Config.Logging.ErrorLogPath)
 	if err != nil {
 		return nil, err
 	}
@@ -49,7 +49,7 @@ func initCommonLogger() (*logrus.Logger, error) {
 	)
 
 	logger := logrus.New()
-	level, err := logrus.ParseLevel(Config.Logging.LogLevel)
+	level, err := logrus.ParseLevel(config.Config.Logging.LogLevel)
 	if err != nil {
 		fmt.Errorf("Not specified log level, use info as default.")
 		level = logrus.InfoLevel
@@ -61,7 +61,7 @@ func initCommonLogger() (*logrus.Logger, error) {
 }
 
 func initApiLogger() (*logrus.Logger, error) {
-	apiWriter, err := initLoggerWriter(Config.Logging.ApiLogPath)
+	apiWriter, err := initLoggerWriter(config.Config.Logging.ApiLogPath)
 	if err != nil {
 		return nil, err
 	}
@@ -79,7 +79,7 @@ func initApiLogger() (*logrus.Logger, error) {
 	)
 
 	logger := logrus.New()
-	level, err := logrus.ParseLevel(Config.Logging.LogLevel)
+	level, err := logrus.ParseLevel(config.Config.Logging.LogLevel)
 	if err != nil {
 		fmt.Errorf("Not specified log level, use info as default.")
 		level = logrus.InfoLevel

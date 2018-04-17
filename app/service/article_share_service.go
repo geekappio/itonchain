@@ -1,5 +1,12 @@
 package service
 
+import (
+	"github.com/geekappio/itonchain/app/dal/entity"
+	"github.com/geekappio/itonchain/app/dal/dao"
+	"github.com/geekappio/itonchain/app/util"
+	"time"
+)
+
 var articleShareService *ArticleShareService
 
 // GetArticleCategoryService returns ArticleCategory service instance which provides method calls.
@@ -15,11 +22,22 @@ func GetArticleShareService() *ArticleShareService {
 type ArticleShareService struct {
 }
 
-func (service *ArticleShareService) AddArticleShare(userId, articleId int64) bool {
-	println("模拟文件分享完成")
-	return true
+func (service *ArticleShareService) AddArticleShare(userId, articleId int64) (bool, error) {
+	articleShare := entity.ArticleShare{
+		ArticleId : articleId,
+		UserId : userId,
+		BaseEntity : entity.BaseEntity{
+			GmtCreate :	time.Now(),
+			GmtUpdate :	time.Now(),
+		},
+	}
+	ok, err := dao.GetArticleShareSqlMapper(nil).InsertArticleShare(&articleShare)
+	if err != nil {
+		util.LogError("Error happened when inserting article_share: ", articleId, userId, err)
+	}
+	return ok, err
 }
 
-func (self *ArticleShareService) CountArticleShare(articleId int64) int64 {
-	return 0
+func (self *ArticleShareService) CountArticleShare(articleId int64) (int64, error) {
+	return dao.GetArticleShareSqlMapper(nil).CountArticleShare(articleId)
 }

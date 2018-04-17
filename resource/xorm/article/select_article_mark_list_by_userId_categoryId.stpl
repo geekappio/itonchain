@@ -1,0 +1,8 @@
+SELECT * FROM article_mark
+WHERE 1==1
+{% if UserId != nil%}
+ADN user_id = ?UserId
+{% endif %}
+{% if CategoryId != nil%}
+AND category_id = ?CategoryId
+{% endif %}

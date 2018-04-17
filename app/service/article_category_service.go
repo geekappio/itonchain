@@ -12,7 +12,6 @@ import (
 	"github.com/geekappio/itonchain/app/model"
 	"github.com/geekappio/itonchain/app/util"
 	"github.com/jinzhu/copier"
-	"github.com/xormplus/xorm"
 )
 
 var articleCategoryService *ArticleCategoryService
@@ -169,15 +168,6 @@ func (service *ArticleCategoryService) ArticleCategoryChangeService(request *mod
 	}
 }
 
-func (self *ArticleCategoryService) ListCategoryByUserId(userId int64) []entity.Category {
-	var categories []entity.Category
-	dal.Transaction(func(s *xorm.Session) enum.ErrorCode {
-		var err error
-		categories, err = dao.GetCategorySqlMapper(s).FindByUserId(userId)
-		if err != nil {
-			return enum.DB_ERROR
-		}
-		return enum.SYSTEM_SUCCESS
-	})
-	return categories
+func (self *ArticleCategoryService) ListCategoryByUserId(userId int64) ([]entity.Category, error) {
+	return dao.GetCategorySqlMapper(nil).FindByUserId(userId)
 }

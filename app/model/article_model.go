@@ -21,7 +21,7 @@ type ArticleMarkRequest struct {
 
 type ArticleMarkResponse struct {
 	BaseResponse
-	MarkTimes int64 `json:"markTimes"`
+	MarkTimes int32 `json:"markTimes"`
 }
 
 type ArticleFavoriteRequest struct {
@@ -32,11 +32,9 @@ type ArticleFavoriteRequest struct {
 }
 
 type ArticleListRequest struct {
-	BaseRequest
+	PageRequest
 	SearchParams ArticleSearchParams `json:"searchParams"`
 	OrderType string `json:"orderType"`
-	PageNum int32 `json:"pageNum" binding:"required"`
-	PageSize int32 `json:"pageSize"`
 }
 
 type ArticleSearchParams struct {
@@ -52,4 +50,21 @@ type ArticleSearchParams struct {
 	StartTime string `json:"startTime"`
 	EndTime string `json:"endTime"`
 	State string `json:"state"`
+}
+
+type ArticleListResponse struct {
+	Id int64 `json:"openId"`
+	ArticleTitle string `json:"articleTitle"`
+	ArticleFrom string `json:"articleFrom"`
+	ArticleUrl string `json:"articleUrl"`
+	ArticleLabels string `json:"articleLabels"`
+	ArticleKeywords string `json:"articleKeywords"`
+	FavoriteTimes int32 `json:"favoriteTimes"`
+	ViewTimes int32 `json:"viewTimes"`
+	MarkTimes int32 `json:"markTimes"`
+	IsTechnology string `json:"isTechnology"`
+	IsBlockchain string `json:"isBlockchain"`
+	State string `json:"state"`
+	Comment string `json:"comment"`
+	GmtCreate string `json:"gmtCreate"`
 }

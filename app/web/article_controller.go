@@ -8,6 +8,8 @@ import (
 	"github.com/xormplus/xorm"
 	"github.com/geekappio/itonchain/app/dal/entity"
 	"github.com/geekappio/itonchain/app/dal"
+
+	"strconv"
 )
 
 func HandleArticleShare(request ArticleShareRequest) (*ArticleShareReturnData, ErrorCode) {
@@ -22,13 +24,14 @@ func HandleArticleShare(request ArticleShareRequest) (*ArticleShareReturnData, E
 	}
 
 	shareService := service.GetArticleShareService()
-	ok := shareService.AddArticleShare(user.Id, request.ArticleId)
-	if ok {
-		times := shareService.CountArticleShare(request.ArticleId)
-		return &ArticleShareReturnData{ShareTimes:times}, SYSTEM_SUCCESS
-	} else {
-		return nil, SYSTEM_FAILED
+	ok, err := shareService.AddArticleShare(user.Id, request.ArticleId)
+	if ok && nil == err {
+		times, err := shareService.CountArticleShare(request.ArticleId)
+		if nil == err {
+			return &ArticleShareReturnData{ShareTimes: times}, SYSTEM_SUCCESS
+		}
 	}
+	return nil, SYSTEM_FAILED
 }
 
 func HandlerArticleMark(request ArticleMarkRequest) (*ArticleMarkResponse, ErrorCode) {
@@ -50,13 +53,14 @@ func HandlerArticleMark(request ArticleMarkRequest) (*ArticleMarkResponse, Error
 	}
 }
 
-func doArticleMark(request ArticleMarkRequest, user *entity.WechatUser) (times int64, code ErrorCode){
+func doArticleMark(request ArticleMarkRequest, user *entity.WechatUser) (times int32, code ErrorCode){
 	code = dal.Transaction(func(session *xorm.Session) ErrorCode {
-		markService := service.GetArticleMarkServiceBySession(session)
-		articleService := service.GetArticleServiceBySession(session)
+		markService := service.GetArticleMarkService(session)
+		articleService := service.GetArticleService(session)
+
 		if MARK.Equals(request.DoMark) {
-			err := markService.AddArticleMark(user.Id, request.ArticleId, request.CategoryId)
-			if nil != err {
+			ok, err := markService.AddArticleMark(user.Id, request.ArticleId, request.CategoryId)
+			if !ok && nil != err {
 				return DB_INSERT_ERROR
 			}
 			times, err = articleService.IncMarkTimes(request.ArticleId)
@@ -65,8 +69,8 @@ func doArticleMark(request ArticleMarkRequest, user *entity.WechatUser) (times i
 			}
 			return SYSTEM_SUCCESS
 		} else {
-			err := markService.DelArticleMark(user.Id, request.ArticleId, request.CategoryId)
-			if nil != err {
+			ok, err := markService.DelArticleMark(user.Id, request.ArticleId, request.CategoryId)
+			if !ok && nil != err {
 				return DB_INSERT_ERROR
 			}
 			times, err = articleService.DecMarkTimes(request.ArticleId)
@@ -118,6 +122,78 @@ func ArticleFavoriteHandler(request ArticleFavoriteRequest) (*ResponseModel) {
 
 }
 
-func HandlerArticleList(request ArticleListRequest)  {
+func HandlerArticleList(request ArticleListRequest) (*ResponseModel) {
+	openId := request.SearchParams.OpenId
+	var user *entity.WechatUser
+	if openId != "" {
+		wechatUser, err := service.GetWechatUserService().FindUserByOpenId(openId)
+		if err != nil {
+			return &ResponseModel{
+				ReturnCode: DB_ERROR.GetRespCode(),
+				ReturnMsg:  "查询用户信息失败",
+			}
+		}
+		user = wechatUser
+	}
 
+	categoryId := request.SearchParams.CategoryId
+	categoryIdOther, err := strconv.ParseInt(categoryId, 10, 64)
+	if err != nil {
+		util.LogError("字符串转int64错误", categoryId, err)
+		return &ResponseModel{
+			ReturnCode: DB_ERROR.GetRespCode(),
+			ReturnMsg:  "查询用户信息失败",
+		}
+	}
+
+	var articleIdList *[]int64
+	if user != nil || categoryId != "" {
+		articleMarkList, err := service.GetArticleMarkService().GetArticleMarkList(user.Id, categoryIdOther)
+		if err != nil {
+			util.LogError("根据用户id和种类查询文章失败", articleMarkList, err)
+			return &ResponseModel{
+				ReturnCode: DB_ERROR.GetRespCode(),
+				ReturnMsg:  "查询文章失败",
+			}
+		}
+		articleIds := make([]int64, len(*articleMarkList))
+		for i, value := range *articleMarkList {
+			articleIds[i] = value.ArticleId
+		}
+		articleIdList = &articleIds
+	}
+
+	//分页查询文章
+	articleList, err := service.GetArticleService().GetArticleList(request, articleIdList)
+	if err != nil {
+		util.LogError("根据用户id和种类查询文章失败", articleList, err)
+		return &ResponseModel{
+			ReturnCode: DB_ERROR.GetRespCode(),
+			ReturnMsg:  "查询文章失败",
+		}
+	}
+	articleListResponse := make([]ArticleListResponse, len(*articleList))
+	for i, article := range *articleList {
+		articleListResponse[i] = ArticleListResponse{
+			Id:              article.Id,
+			ArticleTitle:    article.ArticleTitle,
+			ArticleFrom:     article.ArticleFrom,
+			ArticleUrl:      article.ArticleUrl,
+			ArticleLabels:   article.ArticleLabels,
+			ArticleKeywords: article.ArticleKeywords,
+			FavoriteTimes:   article.FavoriteTimes,
+			ViewTimes:       article.ViewTimes,
+			MarkTimes:       article.MarkTimes,
+			IsTechnology:    article.IsTechnology,
+			IsBlockchain:    article.IsBlockchain,
+			State:           article.State,
+			Comment:         article.Comment,
+			GmtCreate:       article.GmtCreate.String(),
+		}
+	}
+	return &ResponseModel{
+		ReturnCode: SYSTEM_SUCCESS.GetRespCode(),
+		ReturnMsg:  "查询文章列表成功",
+		ReturnData: articleListResponse,
+	}
 }

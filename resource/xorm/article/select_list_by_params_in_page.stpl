@@ -1,0 +1,8 @@
+SELECT * FROM article
+WHERE article_title like ?articleTitle
+AND article_labels like ?articleLabels
+AND article_keywords like ?articleKeywords
+AND is_technology = ?getTechnology
+AND is_blockchain = ?getBlockchain
+AND state = ?state
+AND gmt_create between ?startTime and ?endTime

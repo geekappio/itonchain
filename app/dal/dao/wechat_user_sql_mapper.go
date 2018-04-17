@@ -44,16 +44,9 @@ func (sqlMapper *WechatUserSqlMapper) SelectUser(openId string) (*entity.WechatU
 	}
 }
 
-// UserRegister calls predefined sql template to insert category
-func (wechatUserSqlMapper *WechatUserSqlMapper) UserRegister(wechatUser *entity.WechatUser) (bool, error) {
-	paramMap := map[string]interface{}{"open_id": wechatUser.OpenId}
-	var user entity.WechatUser
-	return wechatUserSqlMapper.getSqlTemplateClient("select_user_by_openId",paramMap).Get(&user)
-}
-
 // InsertUser calls predefined sql template to insert user
 func (wechatUserSqlMapper *WechatUserSqlMapper) InsertUser(wechatUser *entity.WechatUser) (int64, error) {
-	return wechatUserSqlMapper.getSqlTemplateClient("insert_wechat_user").InsertOne(wechatUser)
+	return wechatUserSqlMapper.getSqlTemplateClient("insert_wechat_user.stpl").InsertOne(wechatUser)
 }
 
 // UpdateCategoryOrders call predefined sql template to update category orders

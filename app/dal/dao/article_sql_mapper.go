@@ -6,10 +6,9 @@ import (
 	"github.com/geekappio/itonchain/app/common/common_util"
 	"github.com/geekappio/itonchain/app/dal"
 	"github.com/geekappio/itonchain/app/dal/entity"
+	."github.com/geekappio/itonchain/app/model"
 	"github.com/xormplus/xorm"
 )
-
-var articleSqlMapper *ArticleSqlMapper
 
 func GetArticleSqlMapper(session *xorm.Session) (articleSqlMapper *ArticleSqlMapper) {
 	return &ArticleSqlMapper{session:session}
@@ -39,3 +38,34 @@ func (articleSqlMapper *ArticleSqlMapper) SelectById(articleId int64) (*entity.A
 	_, err := articleSqlMapper.getSqlTemplateClient("select_article", &paramMap).Get(&article)
 	return &article, err
 }
+
+func (self *ArticleSqlMapper) AddArticleMark(articleId int64, addend int) (int64, error) {
+	paramMap := map[string]interface{}{"Id": articleId, "Addend": addend}
+	r, err := self.getSqlTemplateClient("add_mark_from_article.stpl", &paramMap).Execute()
+	rows, _ := r.RowsAffected()
+	return rows, err
+}
+func (self *ArticleSqlMapper) SelectListByParamsInPage(request ArticleListRequest, articleIdList *[]int64) (*[]entity.Article, error) {
+	var articleList []entity.Article
+	//TODO 优化分页 类似实现拦截器统一封装
+	start := (request.PageNum - 1) * request.PageSize
+	end := request.PageNum * request.PageSize
+	paramMap := map[string]interface{}{"articleTitle": "%" + request.SearchParams.ArticleTitle + "%", "articleLabels": "%" + request.SearchParams.ArticleLabels + "%",
+	"articleKeywords": "%" + request.SearchParams.ArticleKeywords + "%", "getTechnology": request.SearchParams.GetTechnology, "getBlockchain": request.SearchParams.GetBlockchain,
+	"getRecent": request.SearchParams.GetRecent, "getMarked": request.SearchParams.GetMarked, "startTime": request.SearchParams.StartTime, "endTime": request.SearchParams.EndTime,
+	"state": request.SearchParams.State}
+	err := self.getSqlTemplateClient("select_list_by_params_in_page.stpl", &paramMap).In("id",articleIdList).Limit(end, start).Find(&articleList)
+	return &articleList, err
+}
+
+func (self *ArticleSqlMapper) SelectListByParams(request ArticleListRequest) (*[]entity.Article, error) {
+	var articleList []entity.Article
+	//TODO 优化分页 类似实现拦截器统一封装
+	//start := (request.PageNum - 1) * request.PageSize
+	//end := request.PageNum * request.PageSize
+	paramMap := map[string]interface{}{"articleTitle": "%" + request.SearchParams.ArticleTitle + "%"}
+	err := self.getSqlTemplateClient("select_list_by_params.stpl", &paramMap).Find(&articleList)
+	return &articleList, err
+}
+
+
