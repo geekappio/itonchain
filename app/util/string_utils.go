@@ -13,3 +13,13 @@ func Contains(s, substr string) bool {
 func EqualsIgnoreCase(s1, s2 string) bool {
 	return strings.ToLower(s1) == strings.ToLower(s2)
 }
+
+// Check if specified string is nil.
+func StringIsNil(str string) bool {
+	return str == ""
+}
+
+// Check if specified string is nil or is space.
+func StringIsBlack(str string) bool {
+	return StringIsNil(str) || strings.Trim(str, " ") == ""
+}

@@ -41,6 +41,7 @@ func HandleArticleCategoryOrderChange(reqeustModel *model.ArticleCategoryOrderCh
 	return service.ChangingArticleCategoryOrder(reqeustModel)
 }
 
+// HandlerArticleCategoryListQuery
 func HandlerArticleCategoryListQuery(request model.ArticleCategoryListRequest) ([]*model.ArticleCategoryListResponse, enum.ErrorCode) {
 	util.LogInfo(request)
 	userService := service.GetWechatUserService()
