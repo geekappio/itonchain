@@ -86,7 +86,6 @@ func (service *WechatUserService) ChangingArticleCategoryOrder(request *model.Ar
 	if orders == "" {
 		return model.NewFailedResponseModel(enum.NULL_CATEGORY_ORDERS, "空的目录顺序项")
 	} else {
-		// TODO, HENRY, 20180409, 根据参数调整次序
 		categoryStr := strconv.FormatInt(request.CategoryId, 10)
 		categories := strings.Split(userModel.CategoryOrders, config.FIELD_CATEGORY_ORDRES_SEPARATER)
 		for index, v:= range categories {
