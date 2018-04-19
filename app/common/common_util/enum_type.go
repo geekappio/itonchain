@@ -14,7 +14,7 @@ type EnumType struct {
 var enumTypeMap = make(map[string]*EnumType)
 
 // Return enumeration type object by its value
-func (*EnumType) ValueOf(value string) *EnumType {
+func EnumValueOf(value string) *EnumType {
 	return enumTypeMap[value]
 }
 

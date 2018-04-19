@@ -17,7 +17,7 @@ type ArticleCategoryAddRequest struct {
 	OpenId       string `json:"openId" binding:"required"`
 	CategoryName string `json:"categoryName" binding:"required"`
 	Description  string `json:"description"`
-	InsertPos    int64  `json:"insertPos"`
+	InsertPos    int  `json:"insertPos"`
 }
 
 // Return data field of "/article_category/add" api
@@ -35,7 +35,7 @@ type ArticleCategoryDeleteRequest struct {
 type ArticleCategoryOrderChangeRequest struct {
 	BaseRequest
 	OpenId     string `json:"openId" binding:"required"`
-	CategoryId int    `json:"categoryId" binding:"required"`
+	CategoryId int64    `json:"categoryId" binding:"required"`
 	UpDown     string `json:"upDown" binding:"required"`
 }
 

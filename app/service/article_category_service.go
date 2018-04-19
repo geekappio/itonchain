@@ -42,14 +42,12 @@ func (service *ArticleCategoryService) AddArticleCategory(request *model.Article
 	}
 	if user == nil {
 		util.LogError("Cannot find user by specified open id: ", request.OpenId, userErr)
-		return &model.ResponseModel{
-			ReturnCode: enum.USER_NOT_EXISTS.GetRespCode(),
-			ReturnMsg:  "指定的用户不存在",
-		}
+		return model.NewFailedResponseModel(enum.USER_NOT_EXISTS, "指定的用户不存在")
 	}
 
 	category.Id = user.Id
 
+	// Create transaction session
 	session := dal.DB.NewSession();
 	defer session.Close()
 
@@ -58,10 +56,7 @@ func (service *ArticleCategoryService) AddArticleCategory(request *model.Article
 		session.Rollback()
 
 		util.LogError("Error happened when inserting category: ", category, addErr)
-		return &model.ResponseModel{
-			ReturnCode: enum.DB_INSERT_ERROR.GetRespCode(),
-			ReturnMsg:  "添加category数据失败",
-		}
+		return model.NewFailedResponseModel(enum.DB_INSERT_ERROR, "添加category数据失败")
 	}
 
 	if util.StringIsBlack(user.CategoryOrders) {
@@ -71,10 +66,7 @@ func (service *ArticleCategoryService) AddArticleCategory(request *model.Article
 			session.Rollback()
 
 			util.LogError("Error happened when updating user with categorOrders, user_id =  ", user.Id, updatedErr)
-			return &model.ResponseModel{
-				ReturnCode: enum.DB_UPDATE_ERROR.GetRespCode(),
-				ReturnMsg:  "添加category数据失败",
-			}
+			return model.NewFailedResponseModel(enum.DB_UPDATE_ERROR, "添加category数据失败")
 		}
 
 	} else {
@@ -92,57 +84,56 @@ func (service *ArticleCategoryService) AddArticleCategory(request *model.Article
 			session.Rollback()
 
 			util.LogError("Error happened when updating user with categorOrders, user_id =  ", user.Id, updatedErr)
-			return &model.ResponseModel{
-				ReturnCode: enum.DB_UPDATE_ERROR.GetRespCode(),
-				ReturnMsg:  "添加category数据失败",
-			}
+			return model.NewFailedResponseModel(enum.DB_UPDATE_ERROR, "添加category数据失败")
 		}
 	}
 
+	// Commit transaction.
 	session.Commit();
-
-	return &model.ResponseModel{
-		ReturnCode: enum.SYSTEM_SUCCESS.GetRespCode(),
-		ReturnData: model.ArticleCategoryAddReturnData{CategoryId: categoryId},
-	}
-
+	return model.NewSuccessResponseModelWithData(model.ArticleCategoryAddReturnData{CategoryId: categoryId})
 }
 
 func (service *ArticleCategoryService) DeleteArticleCategory(request *model.ArticleCategoryDeleteRequest) *model.ResponseModel {
 	// Here calls dao method to access database.
 	// Get user model by open id.
-	userModel, err := dao.GetWechatUserSqlMapper(nil).SelectUser(request.OpenId)
+	user, err := dao.GetWechatUserSqlMapper(nil).SelectUser(request.OpenId)
 	if err != nil {
 		util.LogError("Error happened when getting user model from wechat_user table with openId: ", request.OpenId, err)
-		return &model.ResponseModel{
-			ReturnCode: enum.DB_INSERT_ERROR.GetRespCode(),
-			ReturnMsg:  "更新category数据失败",
-		}
+		return model.NewFailedResponseModel(enum.DB_INSERT_ERROR, "更新category数据失败")
 	}
-	if userModel == nil {
+	if user == nil {
 		util.LogError("Cannot find user by specified open id: ", request.OpenId, err)
-		return &model.ResponseModel{
-			ReturnCode: enum.USER_NOT_EXISTS.GetRespCode(),
-			ReturnMsg:  "指定的用户不存在",
-		}
+		return model.NewFailedResponseModel(enum.USER_NOT_EXISTS, "指定的用户不存在")
 	}
 
-	// TODO, HENRY, 20180409,
-	// 这里要做事务处理，删除category和调整wechat_user.category_orders要一起完成
-	_, er := dao.GetCategorySqlMapper(nil).DeleteCategory(request.CategoryId, userModel.Id)
-	if er != nil {
+	session := dal.DB.NewSession();
+	defer session.Close()
+
+	_, deleteErr := dao.GetCategorySqlMapper(session).DeleteCategory(request.CategoryId, user.Id)
+	if deleteErr != nil {
 		util.LogError("Error happened when deleting category: ", request.CategoryId, err)
-		return &model.ResponseModel{
-			ReturnCode: enum.DB_DELETE_ERROR.GetRespCode(),
-			ReturnMsg:  "删除category数据失败",
-		}
-	} else {
-		return &model.ResponseModel{
-			ReturnCode: enum.SYSTEM_SUCCESS.GetRespCode(),
+
+		session.Rollback();
+		return model.NewFailedResponseModel(enum.DB_DELETE_ERROR,
+			"删除category数据失败")
+	}
+
+	categories := strings.Split(user.CategoryOrders, config.FIELD_CATEGORY_ORDRES_SEPARATER)
+	categories = util.StrigArrayRemove(categories, strconv.FormatInt(request.CategoryId, 10));
+	if categories != nil {
+		_, updatedErr := dao.GetWechatUserSqlMapper(session).UpdateCategoryOrders(request.OpenId, strings.Join(categories, config.FIELD_CATEGORY_ORDRES_SEPARATER))
+		if updatedErr != nil {
+			session.Rollback()
+
+			util.LogError("Error happened when updating user with categorOrders, user_id =  ", user.Id, updatedErr)
+			return model.NewFailedResponseModel(enum.DB_UPDATE_ERROR,
+				"添加category数据失败")
 		}
 	}
 
-	return &model.ResponseModel{}
+	session.Commit()
+
+	return model.NewSuccessResponseModel();
 }
 
 /**
@@ -156,18 +147,14 @@ func (service *ArticleCategoryService) ArticleCategoryChangeService(request *mod
 	_, err := dao.GetCategorySqlMapper(nil).UpdateCategory(&category)
 	if err != nil {
 		util.LogError("Error happened when inserting category: ", category, err)
-		return &model.ResponseModel{
-			ReturnCode: enum.DB_INSERT_ERROR.GetRespCode(),
-			ReturnMsg:  "更新category数据失败",
-		}
+		return model.NewFailedResponseModel(enum.DB_INSERT_ERROR, "更新category数据失败")
 	} else {
-		return &model.ResponseModel{
-			ReturnCode: enum.SYSTEM_SUCCESS.GetRespCode(),
-			ReturnMsg:  "更新数据成功",
-		}
+		return model.NewFailedResponseModel(enum.SYSTEM_SUCCESS, "更新数据成功")
 	}
 }
 
+// 查询某个用户的目录分类信息列表
+// @param userId 用户Id
 func (self *ArticleCategoryService) ListCategoryByUserId(userId int64) ([]entity.Category, error) {
 	return dao.GetCategorySqlMapper(nil).FindByUserId(userId)
 }
