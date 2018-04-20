@@ -10,6 +10,7 @@ import (
 	"github.com/geekappio/itonchain/app/dal"
 
 	"strconv"
+	"github.com/geekappio/itonchain/app/model/field_enum"
 )
 
 func HandleArticleShare(request ArticleShareRequest) (*ArticleShareReturnData, ErrorCode) {
@@ -58,7 +59,8 @@ func doArticleMark(request ArticleMarkRequest, user *entity.WechatUser) (times i
 		markService := service.GetArticleMarkService(session)
 		articleService := service.GetArticleService(session)
 
-		if MARK.Equals(request.DoMark) {
+		markType := field_enum.ValueOf(request.DoMark)
+		if field_enum.MARK == markType {
 			ok, err := markService.AddArticleMark(user.Id, request.ArticleId, request.CategoryId)
 			if !ok && nil != err {
 				return DB_INSERT_ERROR
@@ -68,7 +70,7 @@ func doArticleMark(request ArticleMarkRequest, user *entity.WechatUser) (times i
 				return DB_UPDATE_ERROR
 			}
 			return SYSTEM_SUCCESS
-		} else {
+		} else if field_enum.UNMARK == markType {
 			ok, err := markService.DelArticleMark(user.Id, request.ArticleId, request.CategoryId)
 			if !ok && nil != err {
 				return DB_INSERT_ERROR
@@ -78,6 +80,8 @@ func doArticleMark(request ArticleMarkRequest, user *entity.WechatUser) (times i
 				return DB_UPDATE_ERROR
 			}
 			return SYSTEM_SUCCESS
+		} else {
+			return INVALID_REQUEST_FIELD_VALUE
 		}
 	})
 	return

@@ -6,7 +6,6 @@ import (
 	"github.com/geekappio/itonchain/app/util"
 	"github.com/geekappio/itonchain/app/model"
 	"github.com/geekappio/itonchain/app/dal/entity"
-	"github.com/geekappio/itonchain/app/enum"
 )
 
 type ArticleService struct {
@@ -23,7 +22,7 @@ func GetArticleService(session ...*xorm.Session) *ArticleService {
 
 func (self *ArticleService) IncMarkTimes(articleId int64) (int32, error) {
 	mapper := dao.GetArticleSqlMapper(self.session)
-	err := mapper.AddArticleMark(articleId, 1)
+	_, err := mapper.AddArticleMark(articleId, 1)
 	if nil == err {
 		var article *entity.Article
 		article, err = mapper.SelectById(articleId)
@@ -36,7 +35,7 @@ func (self *ArticleService) IncMarkTimes(articleId int64) (int32, error) {
 
 func (self *ArticleService) DecMarkTimes(articleId int64) (int32, error) {
 	mapper := dao.GetArticleSqlMapper(self.session)
-	err := mapper.AddArticleMark(articleId, -1)
+	_, err := mapper.AddArticleMark(articleId, -1)
 	if nil == err {
 		var article *entity.Article
 		article, err = mapper.SelectById(articleId)
