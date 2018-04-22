@@ -30,17 +30,24 @@ func (sqlMapper *WechatUserSqlMapper) getSqlTemplateClient(sqlTagName string, ar
 
 // SelectUser calls predefined sql template to insert category
 func (sqlMapper *WechatUserSqlMapper) SelectUser(openId string) (*entity.WechatUser, error) {
-
 	wechatUser := &entity.WechatUser{}
 	paramMap := map[string]interface{}{"OpenId": openId}
-	err := dal.DB.SqlTemplateClient("select_user_by_openId.stpl").Find(&wechatUser, &paramMap)
-	return wechatUser, err
+	success, err := dal.DB.SqlTemplateClient("select_user_by_openId.stpl",&paramMap).Get(wechatUser)
+	if success  {
+		return wechatUser, err
+	} else {
+		return nil, err
+	}
 }
 
 // InsertUser calls predefined sql template to insert user
 func (wechatUserSqlMapper *WechatUserSqlMapper) InsertUser(wechatUser *entity.WechatUser) (int64, error) {
 	paramMap := map[string]interface{}{"OpenId": wechatUser.OpenId, "NickName": wechatUser.NickName, "AvatarUrl": wechatUser.AvatarUrl, "Gender": wechatUser.Gender, "City": wechatUser.City, "Province": wechatUser.Province, "Country": wechatUser.Country, "Language": wechatUser.Language, "IsDel": wechatUser.IsDel, "GmtCreate": time.Now(), "GmtUpdate": time.Now()}
 	result, err := wechatUserSqlMapper.getSqlTemplateClient("insert_wechat_user.stpl", &paramMap).Execute()
+	if err != nil {
+		return -1, err
+	}
+
 	wechatUser.Id, _ = result.LastInsertId()
 	affectedRows, _ := result.RowsAffected()
 	return affectedRows, err
@@ -53,6 +60,10 @@ func (wechatUserSqlMapper *WechatUserSqlMapper) UpdateCategoryOrders(openId stri
 	wechatUser.CategoryOrders = categoryOrders
 	paramMap := map[string]interface{}{"OpenId": openId, "CategoryOrders": categoryOrders}
 	result, err := wechatUserSqlMapper.getSqlTemplateClient("update_category_orders_with_openId.stpl", &paramMap).Execute()
+	if err != nil {
+		return -1, err
+	}
+
 	affectedRows, _ := result.RowsAffected()
 	return affectedRows, err
 }
