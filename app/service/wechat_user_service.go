@@ -38,7 +38,7 @@ func (self *WechatUserService) CreateUser(request *model.WechatUserRequest) (*mo
 		},
 		IsDel: "NO",
 	}
-	copier.Copy(wechatUser, request)
+	copier.Copy(&wechatUser, request)
 	//查询openId是否存在，存在报错
 	wechatUserSqlMapper := dao.GetWechatUserSqlMapper(nil)
 	user, err := wechatUserSqlMapper.SelectUser(request.OpenId)
@@ -48,6 +48,7 @@ func (self *WechatUserService) CreateUser(request *model.WechatUserRequest) (*mo
 	if user != nil {
 		//openId已存在
 		util.LogError("用户已存在")
+		return model.NewFailedResponseModel(enum.USER_ALREADY_EXISTS,enum.USER_ALREADY_EXISTS.GetRespMsg())
 	}
 	//否则创建用户
 	id, err := wechatUserSqlMapper.InsertUser(&wechatUser)

@@ -24,6 +24,7 @@ const (
 	IS_FIRST_CATEGORY           ErrorCode = "3003"
 	IS_LAST_CATEGORY            ErrorCode = "3004"
 	NOT_FIND_SPECIFIED_CATEGORY ErrorCode = "3005"
+	USER_ALREADY_EXISTS ErrorCode = "3006"
 )
 
 func (self ErrorCode) IsSuccess() bool {
@@ -72,6 +73,8 @@ func (self ErrorCode) GetRespMsg() string {
 		return "是最后一个目录"
 	case NOT_FIND_SPECIFIED_CATEGORY:
 		return "没有发现指定的目录"
+	case USER_ALREADY_EXISTS:
+		return "用户已存在"
 
 	default:
 		return "未定义错误码"
