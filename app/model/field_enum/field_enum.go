@@ -27,6 +27,11 @@ var UNFAVORITE = common_util.DefEnumType("UNFAVORITE")
 var UP = common_util.DefEnumType("UP")
 var DOWN = common_util.DefEnumType("DOWN")
 
+//性别
+var LADYBOY = common_util.DefEnumType("0")
+var MALE = common_util.DefEnumType("1")
+var FEMALE = common_util.DefEnumType("2")
+
 // 返回枚举值对应的类型
 func ValueOf(value string) *common_util.EnumType {
 	return common_util.EnumValueOf(value)
