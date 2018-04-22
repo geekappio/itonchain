@@ -11,6 +11,7 @@ import (
 
 	"strconv"
 	"github.com/geekappio/itonchain/app/model/field_enum"
+	"github.com/geekappio/itonchain/app/common/common_util"
 )
 
 func HandleArticleShare(request ArticleShareRequest) (*ArticleShareReturnData, ErrorCode) {
@@ -87,36 +88,38 @@ func doArticleMark(request ArticleMarkRequest, user *entity.WechatUser) (times i
 	return
 }
 
-func ArticleFavoriteHandler(request ArticleFavoriteRequest) (*ResponseModel) {
+func HandlerArticleFavorite(request ArticleFavoriteRequest) (*ResponseModel) {
 	util.LogInfo(request)
 	//TODO 校验参数
+	favoriteType := field_enum.ValueOf(request.DoFavorite)
+	if field_enum.FAVORITE != favoriteType && field_enum.UNFAVORITE != favoriteType {
+		return NewFailedResponseModel(INVALID_REQUEST_FIELD_VALUE,INVALID_REQUEST_FIELD_VALUE.GetRespMsg())
+	}
 	userService := service.GetWechatUserService()
-	articleFavoriteService := service.GetArticleFavoriteService()
 	articleService := service.GetArticleService()
 
 	user,err := userService.FindUserByOpenId(request.OpenId)
 	if err != nil {
-		return &ResponseModel{ReturnCode: SYSTEM_FAILED.GetRespCode()}
+		return NewFailedResponseModel(SYSTEM_FAILED,SYSTEM_FAILED.GetRespMsg())
 	}
 	if nil == user {
-		return &ResponseModel{ReturnCode: SYSTEM_FAILED.GetRespCode()}
+		return NewFailedResponseModel(USER_NOT_EXISTS,USER_NOT_EXISTS.GetRespMsg())
 	}
 	//点赞
 	var favoriteTimes int32
 	var errUpdate error
-	if request.DoFavorite == "FAVORITE" {
-		//TODO 保证事务
-		_,err = articleFavoriteService.InsertArticleFavorite(request.ArticleId, user.Id)
-		if err != nil {
-			return &ResponseModel{ReturnCode: SYSTEM_FAILED.GetRespCode()}
+	var errorCode ErrorCode
+	if field_enum.FAVORITE == favoriteType {
+		favoriteTimes, errorCode = doFavorite(request.ArticleId, user.Id,favoriteType)
+		if errUpdate != nil {
+			return NewFailedResponseModel(errorCode,errorCode.GetRespMsg())
 		}
-		favoriteTimes, errUpdate = articleService.UpdateArticleFavorite(request.ArticleId, request.DoFavorite)
 
 	} else {
-		favoriteTimes, errUpdate = articleService.UpdateArticleFavorite(request.ArticleId, request.DoFavorite)
-	}
-	if errUpdate != nil {
-		return &ResponseModel{ReturnCode: SYSTEM_FAILED.GetRespCode()}
+		favoriteTimes, errUpdate = articleService.UpdateArticleFavorite(request.ArticleId, favoriteType)
+		if errUpdate != nil {
+			return NewFailedResponseModel(DB_UPDATE_ERROR,DB_UPDATE_ERROR.GetRespMsg())
+		}
 	}
 	return &ResponseModel{
 		ReturnCode: SYSTEM_SUCCESS.GetRespCode(),
@@ -124,6 +127,25 @@ func ArticleFavoriteHandler(request ArticleFavoriteRequest) (*ResponseModel) {
 		ReturnData: favoriteTimes,
 	}
 
+}
+
+func doFavorite(articleId int64, userId int64, doFavorite *common_util.EnumType) (favoriteTimes int32, errorCode ErrorCode) {
+	errorCode = dal.Transaction(func(session *xorm.Session) ErrorCode {
+		articleFavoriteService := service.GetArticleFavoriteService(session)
+		_, err := articleFavoriteService.InsertArticleFavorite(articleId, userId)
+		articleService := service.GetArticleService(session)
+		if err != nil {
+			util.LogError(err)
+			return DB_INSERT_ERROR
+		}
+		favoriteTimes, err = articleService.UpdateArticleFavorite(articleId, doFavorite)
+		if err != nil {
+			util.LogError(err)
+			return DB_UPDATE_ERROR
+		}
+		return SYSTEM_SUCCESS
+	})
+	return
 }
 
 func HandlerArticleList(request ArticleListRequest) (*ResponseModel) {

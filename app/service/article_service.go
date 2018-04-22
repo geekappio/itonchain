@@ -6,6 +6,8 @@ import (
 	"github.com/geekappio/itonchain/app/util"
 	"github.com/geekappio/itonchain/app/model"
 	"github.com/geekappio/itonchain/app/dal/entity"
+	"github.com/geekappio/itonchain/app/common/common_util"
+	"github.com/geekappio/itonchain/app/model/field_enum"
 )
 
 type ArticleService struct {
@@ -46,7 +48,7 @@ func (self *ArticleService) DecMarkTimes(articleId int64) (int32, error) {
 	return 0, err
 }
 
-func (service *ArticleService) UpdateArticleFavorite(articleId int64, doFavorite string) (int32, error) {
+func (service *ArticleService) UpdateArticleFavorite(articleId int64, doFavorite *common_util.EnumType) (int32, error) {
 	articleSqlMapper := dao.GetArticleSqlMapper(service.session)
 	article, err := articleSqlMapper.SelectById(articleId)
 	if err != nil {
@@ -54,7 +56,7 @@ func (service *ArticleService) UpdateArticleFavorite(articleId int64, doFavorite
 		return 0, err
 	}
 	var favoriteTimes int32
-	if doFavorite == "FAVORITE" {
+	if doFavorite == field_enum.FAVORITE {
 		favoriteTimes = article.FavoriteTimes + 1
 	} else {
 		favoriteTimes = article.FavoriteTimes - 1

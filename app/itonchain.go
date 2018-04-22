@@ -77,7 +77,7 @@ func main() {
 	util.AddPostRouter(router, api.ApiRequestMapping.ArticleListQuery, web.HandlerArticleList)
 
 	//点赞文章
-	util.AddPostRouter(router, api.ApiRequestMapping.ArticleFavorite, web.HandlerArticleMark)
+	util.AddPostRouter(router, api.ApiRequestMapping.ArticleFavorite, web.HandlerArticleFavorite)
 
 	// 分享文章
 	util.AddPostRouter(router, api.ApiRequestMapping.ArticleShare, web.HandleArticleShare)

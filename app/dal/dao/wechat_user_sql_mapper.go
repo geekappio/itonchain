@@ -32,7 +32,7 @@ func (sqlMapper *WechatUserSqlMapper) getSqlTemplateClient(sqlTagName string, ar
 func (sqlMapper *WechatUserSqlMapper) SelectUser(openId string) (*entity.WechatUser, error) {
 	wechatUser := &entity.WechatUser{}
 	paramMap := map[string]interface{}{"OpenId": openId}
-	success, err := dal.DB.SqlTemplateClient("select_user_by_openId.stpl",&paramMap).Get(wechatUser)
+	success, err := sqlMapper.getSqlTemplateClient("select_user_by_openId.stpl",&paramMap).Get(wechatUser)
 	if success  {
 		return wechatUser, err
 	} else {

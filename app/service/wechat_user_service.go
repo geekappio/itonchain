@@ -15,19 +15,21 @@ import (
 
 	"github.com/geekappio/itonchain/app/enum"
 	"github.com/jinzhu/copier"
+	"github.com/xormplus/xorm"
 )
 
 var wechatUserService *WechatUserService
 
-func GetWechatUserService() *WechatUserService {
-	if wechatUserService == nil {
-		wechatUserService = &WechatUserService{}
+func GetWechatUserService(session ...*xorm.Session) *WechatUserService {
+	if len(session) == 0 {
+		return &WechatUserService{}
+	} else {
+		return &WechatUserService{session:session[0]}
 	}
-
-	return wechatUserService
 }
 
 type WechatUserService struct {
+	session *xorm.Session
 }
 
 func (self *WechatUserService) CreateUser(request *model.WechatUserRequest) (*model.ResponseModel) {
@@ -40,7 +42,7 @@ func (self *WechatUserService) CreateUser(request *model.WechatUserRequest) (*mo
 	}
 	copier.Copy(&wechatUser, request)
 	//查询openId是否存在，存在报错
-	wechatUserSqlMapper := dao.GetWechatUserSqlMapper(nil)
+	wechatUserSqlMapper := dao.GetWechatUserSqlMapper(self.session)
 	user, err := wechatUserSqlMapper.SelectUser(request.OpenId)
 	if err != nil {
 		util.LogError(err)
@@ -63,7 +65,7 @@ func (self *WechatUserService) CreateUser(request *model.WechatUserRequest) (*mo
 }
 
 func (self *WechatUserService) FindUserByOpenId(openId string) (wechatUser *entity.WechatUser, err error) {
-	wechatUserSqlMapper := dao.GetWechatUserSqlMapper(nil)
+	wechatUserSqlMapper := dao.GetWechatUserSqlMapper(self.session)
 	user, err := wechatUserSqlMapper.SelectUser(openId)
 	if err != nil {
 		util.LogError("根据openId查询用户失败 ", openId, user, err)
