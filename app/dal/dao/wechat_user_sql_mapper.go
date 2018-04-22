@@ -31,7 +31,7 @@ func (sqlMapper *WechatUserSqlMapper) getSqlTemplateClient(sqlTagName string, ar
 // SelectUser calls predefined sql template to insert category
 func (sqlMapper *WechatUserSqlMapper) SelectUser(openId string) (*entity.WechatUser, error) {
 	wechatUser := &entity.WechatUser{}
-	ok, err := dal.DB.SqlTemplateClient("select_user_by_openId").Get(wechatUser)
+	ok, err := dal.DB.SqlTemplateClient("select_user_by_openId.stpl").Get(wechatUser)
 	if err != nil {
 		util.LogError(err)
 		return nil, err
@@ -54,5 +54,5 @@ func (wechatUserSqlMapper *WechatUserSqlMapper) UpdateCategoryOrders(openId stri
 	wechatUser := entity.WechatUser{}
 	wechatUser.OpenId = openId
 	wechatUser.CategoryOrders = categoryOrders
-	return wechatUserSqlMapper.getSqlTemplateClient("update_category_orders_with_openId").Update(wechatUser)
+	return wechatUserSqlMapper.getSqlTemplateClient("update_category_orders_with_openId.stpl").Update(wechatUser)
 }

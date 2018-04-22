@@ -18,7 +18,10 @@ func InitDataSource() error {
 	var err error
 
 	DB, err = xorm.NewMySQL(Config.Database.DriverName, Config.Database.DatasourceName)
-	util.LogError(err)
+	if err != nil {
+		util.LogError(err)
+		return err
+	}
 
 	// 设置连接池
 	DB.SetMaxIdleConns(Config.Database.MaxIdelConnections)

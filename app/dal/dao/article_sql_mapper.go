@@ -29,7 +29,7 @@ func (sqlMapper *ArticleSqlMapper) getSqlTemplateClient(sqlTagName string, args 
 
 func (articleSqlMapper *ArticleSqlMapper) UpdateArticleFavorite(articleId int64, favoriteTimes int32) (affected sql.Result, err error) {
 	paramMap := map[string]interface{}{"id": articleId, "favoriteTimes": favoriteTimes}
-	return articleSqlMapper.getSqlTemplateClient("update_article_favorite", &paramMap).Execute()
+	return articleSqlMapper.getSqlTemplateClient("update_article_favorite.stpl", &paramMap).Execute()
 }
 
 func (articleSqlMapper *ArticleSqlMapper) SelectById(articleId int64) (*entity.Article, error) {

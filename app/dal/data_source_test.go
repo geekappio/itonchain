@@ -3,19 +3,19 @@ package dal
 import (
 	"testing"
 
-	. "github.com/geekappio/itonchain/app/config"
+	"github.com/geekappio/itonchain/app/config"
 
+	"github.com/geekappio/itonchain/app/common/logging"
 	"github.com/geekappio/itonchain/app/dal/entity"
 	"github.com/ian-kent/go-log/log"
-	. "github.com/geekappio/itonchain/app/common/logging"
 )
 
 func TestQuery(t *testing.T) {
 
 	// Setup
 	result := t.Run("Init config", func(t *testing.T) {
-		InitAppConfig(DEFAULT_CONFIG_PATH)
-		InitLoggers()
+		config.InitAppConfig(config.DEFAULT_CONFIG_PATH)
+		logging.InitLoggers()
 		InitDataSource()
 	})
 	if !result {

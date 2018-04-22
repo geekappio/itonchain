@@ -27,5 +27,5 @@ func (sqlMapper *ArticleFavoriteSqlMapper) getSqlTemplateClient(sqlTagName strin
 }
 
 func (articleFavoriteSqlMapper *ArticleFavoriteSqlMapper) InsertArticleFavorite(articleFavorite *entity.ArticleFavorite) (id int64, err error) {
-	return articleFavoriteSqlMapper.getSqlTemplateClient("insert_article_favorite").InsertOne(articleFavorite)
+	return articleFavoriteSqlMapper.getSqlTemplateClient("insert_article_favorite.stpl").InsertOne(articleFavorite)
 }

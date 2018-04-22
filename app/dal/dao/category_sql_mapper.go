@@ -29,7 +29,7 @@ func (sqlMapper *CategorySqlMapper) getSqlTemplateClient(sqlTagName string, args
 
 // AddCategory calls predefined sql template to insert category
 func (sqlMapper *CategorySqlMapper) AddCategory(category *entity.Category) (int64, error) {
-	return sqlMapper.getSqlTemplateClient("insert_category").InsertOne(category)
+	return sqlMapper.getSqlTemplateClient("insert_category.stpl").InsertOne(category)
 }
 
 // DeleteCategory calls predefined sql template to delete category
@@ -38,12 +38,12 @@ func (sqlMapper *CategorySqlMapper) DeleteCategory(categoryId int64, userId int6
 	category.Id = categoryId
 	category.UserId = userId
 	category.IsDel = field_enum.NO.Value
-	return sqlMapper.getSqlTemplateClient("delete_category").Delete(category)
+	return sqlMapper.getSqlTemplateClient("delete_category.stpl").Delete(category)
 }
 
 // 更新文章种类
 func (sqlMapper *CategorySqlMapper) UpdateCategory(category *entity.Category) (int64, error) {
-	return sqlMapper.getSqlTemplateClient("update_category").Update(category)
+	return sqlMapper.getSqlTemplateClient("update_category.stpl").Update(category)
 }
 
 func (self *CategorySqlMapper) FindByUserId(userId int64) ([]entity.Category, error) {

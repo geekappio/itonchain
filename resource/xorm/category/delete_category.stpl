@@ -1,2 +1,2 @@
 DELETE FROM category
-WHERE id = ?categoryId AND user_id = ?userId
+WHERE id = ?CategoryId AND user_id = ?UserId

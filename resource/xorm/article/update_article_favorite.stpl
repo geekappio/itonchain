@@ -1,1 +1,3 @@
-update article set favorite_times = ?favoriteTimes where id = ?id
+UPDATE article
+SET favorite_times = ?FavoriteTimes
+WHERE id = ?Id

@@ -51,7 +51,7 @@ func (service *ArticleCategoryService) AddArticleCategory(request *model.Article
 	session := dal.DB.NewSession();
 	defer session.Close()
 
-	categoryId, addErr := dao.GetCategorySqlMapper(session).AddCategory(&category)
+	_, addErr := dao.GetCategorySqlMapper(session).AddCategory(&category)
 	if addErr != nil {
 		session.Rollback()
 
@@ -61,7 +61,7 @@ func (service *ArticleCategoryService) AddArticleCategory(request *model.Article
 
 	if util.StringIsBlack(user.CategoryOrders) {
 		// There is no category before, just add current as a new one.
-		_, updatedErr := dao.GetWechatUserSqlMapper(session).UpdateCategoryOrders(request.OpenId, strconv.FormatInt(categoryId, 10))
+		_, updatedErr := dao.GetWechatUserSqlMapper(session).UpdateCategoryOrders(request.OpenId, strconv.FormatInt(category.Id, 10))
 		if updatedErr != nil {
 			session.Rollback()
 
@@ -74,9 +74,9 @@ func (service *ArticleCategoryService) AddArticleCategory(request *model.Article
 		categories := strings.Split(user.CategoryOrders, config.FIELD_CATEGORY_ORDRES_SEPARATER)
 		if request.InsertPos == -1 {
 			// Append to last
-			categories = append(categories, strconv.FormatInt(categoryId, 10))
+			categories = append(categories, strconv.FormatInt(category.Id, 10))
 		} else {
-			categories = util.StringArrayInsert(categories, request.InsertPos, strconv.FormatInt(categoryId, 10))
+			categories = util.StringArrayInsert(categories, request.InsertPos, strconv.FormatInt(category.Id, 10))
 		}
 
 		_, updatedErr := dao.GetWechatUserSqlMapper(session).UpdateCategoryOrders(request.OpenId, strings.Join(categories, config.FIELD_CATEGORY_ORDRES_SEPARATER))
@@ -90,7 +90,7 @@ func (service *ArticleCategoryService) AddArticleCategory(request *model.Article
 
 	// Commit transaction.
 	session.Commit();
-	return model.NewSuccessResponseModelWithData(model.ArticleCategoryAddReturnData{CategoryId: categoryId})
+	return model.NewSuccessResponseModelWithData(model.ArticleCategoryAddReturnData{CategoryId: category.Id})
 }
 
 func (service *ArticleCategoryService) DeleteArticleCategory(request *model.ArticleCategoryDeleteRequest) *model.ResponseModel {

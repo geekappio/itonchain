@@ -2,6 +2,8 @@ package config
 
 import (
 	"encoding/json"
+	"fmt"
+	"os"
 
 	"github.com/golang/go/src/io/ioutil"
 	"github.com/ian-kent/go-log/log"
@@ -66,6 +68,10 @@ var Config *AppConfig
 // FIXME 我调试了很久yaml格式的配置，但是一直没有调通，换用json格式
 func InitAppConfig(configPath string) error {
 	var err error
+
+	root, _ := os.Getwd()
+	fmt.Println("Working directory is :" + root)
+	fmt.Println("The config file path is :" + configPath)
 
 	// Read config from yaml file.
 	configFile, err = ioutil.ReadFile(configPath)
