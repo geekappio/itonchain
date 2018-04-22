@@ -31,11 +31,11 @@ func (service *ArticleShareService) AddArticleShare(userId, articleId int64) (bo
 			GmtUpdate :	time.Now(),
 		},
 	}
-	ok, err := dao.GetArticleShareSqlMapper(nil).InsertArticleShare(&articleShare)
+	rows, err := dao.GetArticleShareSqlMapper(nil).InsertArticleShare(&articleShare)
 	if err != nil {
 		util.LogError("Error happened when inserting article_share: ", articleId, userId, err)
 	}
-	return ok, err
+	return 1 == rows, err
 }
 
 func (self *ArticleShareService) CountArticleShare(articleId int64) (int64, error) {
