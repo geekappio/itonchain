@@ -6,7 +6,6 @@ import (
 	"github.com/geekappio/itonchain/app/dal/entity"
 	"github.com/xormplus/xorm"
 	"time"
-	"reflect"
 )
 
 var wechatUserSqlMapper *WechatUserSqlMapper
@@ -31,32 +30,19 @@ func (sqlMapper *WechatUserSqlMapper) getSqlTemplateClient(sqlTagName string, ar
 
 // SelectUser calls predefined sql template to insert category
 func (sqlMapper *WechatUserSqlMapper) SelectUser(openId string) (*entity.WechatUser, error) {
-
-	result := dal.DB.SqlTemplateClient("select_user_by_openId.stpl").Query()
-
-	if result.Error != nil {
-		return nil, result.Error
+	wechatUser := &entity.WechatUser{}
+	paramMap := map[string]interface{}{"OpenId": openId}
+	result, err := dal.DB.SqlTemplateClient("select_user_by_openId.stpl", &paramMap).Get(wechatUser)
+	if err != nil {
+		return nil, err
 	}
 
-	wechatUser := &entity.WechatUser{}
-	resultMap := result.Results[0];
-	wechatUser.Id = reflect.ValueOf(resultMap["id"]).Interface().(int64)
-	wechatUser.OpenId = reflect.ValueOf(resultMap["open_id"]).Interface().(string)
-	wechatUser.NickName = reflect.ValueOf(resultMap["nick_name"]).Interface().(string)
-	wechatUser.AvatarUrl = reflect.ValueOf(resultMap["avatar_url"]).Interface().(string)
-	wechatUser.Gender = reflect.ValueOf(resultMap["gender"]).Interface().(string)
-	wechatUser.City = reflect.ValueOf(resultMap["city"]).Interface().(string)
-	wechatUser.Province = reflect.ValueOf(resultMap["province"]).Interface().(string)
-	wechatUser.Country = reflect.ValueOf(resultMap["country"]).Interface().(string)
-	wechatUser.Language = reflect.ValueOf(resultMap["language"]).Interface().(string)
-	wechatUser.IsDel = reflect.ValueOf(resultMap["is_del"]).Interface().(string)
-	wechatUser.CategoryOrders = reflect.ValueOf(resultMap["category_orders"]).Interface().(string)
-	wechatUser.GmtCreate = reflect.ValueOf(resultMap["gmt_create"]).Interface().(time.Time)
-	wechatUser.GmtUpdate = reflect.ValueOf(resultMap["gmt_update"]).Interface().(time.Time)
-	wechatUser.CreateUser = reflect.ValueOf(resultMap["create_user"]).Interface().(string)
-	wechatUser.UpdateUser = reflect.ValueOf(resultMap["update_user"]).Interface().(string)
+	if result {
+		return wechatUser, nil
+	} else {
+		return nil, err
+	}
 
-	return wechatUser, nil
 }
 
 // InsertUser calls predefined sql template to insert user
