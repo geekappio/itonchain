@@ -1,3 +1,3 @@
-update category
-set category_name = ?CategoryName, description = ?Description, gmt_update = now(), update_user = ?UserId
-where user_id = ?UserId and id = ?Id
+UPDATE category
+SET category_name = ?CategoryName, description = ?Description, gmt_update = NOW(), update_user = ?UserId
+WHERE id = ?Id AND user_id = ?UserId AND is_del != 'YES'

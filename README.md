@@ -84,3 +84,13 @@ tmp             临时目录
 ### 数据操作ORM 
  1. 使用xormplus作为数据库orm类库，使用stpl模板
  2. 默认模板都放置在项目的/resource/xorm目录下，每个Table创建一个子目录，每个查询语句创建一个模板文件
+
+
+## 开发
+### Goland安装远程发布插件
+参考：https://blog.csdn.net/weixin_41571449/article/details/78957144
+
+### 如何Debug
+ 1. 使用geekappio用户ssh登录 geekapp.itonchina.com
+ 2. 进入目录/home/geekappio/go/src/github.com/geekappio/itonchain
+ 3. 运行命令：go build -o itonchain -gcflags='-N -l' github.com/geekappio/itonchain/app && dlv --listen=:9000 --headless=true --api-version=2 exec ./itonchain
