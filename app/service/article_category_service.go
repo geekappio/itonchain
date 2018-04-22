@@ -48,7 +48,7 @@ func (service *ArticleCategoryService) AddArticleCategory(request *model.Article
 	category.Id = user.Id
 
 	// Create transaction session
-	session := dal.DB.NewSession();
+	session := dal.DB.NewSession()
 	defer session.Close()
 
 	_, addErr := dao.GetCategorySqlMapper(session).AddCategory(&category)
@@ -89,7 +89,7 @@ func (service *ArticleCategoryService) AddArticleCategory(request *model.Article
 	}
 
 	// Commit transaction.
-	session.Commit();
+	session.Commit()
 	return model.NewSuccessResponseModelWithData(model.ArticleCategoryAddReturnData{CategoryId: category.Id})
 }
 
@@ -106,7 +106,7 @@ func (service *ArticleCategoryService) DeleteArticleCategory(request *model.Arti
 		return model.NewFailedResponseModel(enum.USER_NOT_EXISTS, "指定的用户不存在")
 	}
 
-	session := dal.DB.NewSession();
+	session := dal.DB.NewSession()
 	defer session.Close()
 
 	_, deleteErr := dao.GetCategorySqlMapper(session).DeleteCategory(request.CategoryId, user.Id)
@@ -133,24 +133,44 @@ func (service *ArticleCategoryService) DeleteArticleCategory(request *model.Arti
 
 	session.Commit()
 
-	return model.NewSuccessResponseModel();
+	return model.NewSuccessResponseModel()
 }
 
 /**
   文章类别统一管理服务实现
  */
 func (service *ArticleCategoryService) ArticleCategoryChangeService(request *model.ArticleCategoryChangeRequest) (*model.ResponseModel) {
+	// 根据openId获取用户的id
+	wechatUserSqlMapper := dao.GetWechatUserSqlMapper(nil)
+	user, userErr := wechatUserSqlMapper.SelectUser(request.OpenId)
+	if userErr != nil {
+		util.LogError("根据openId查询用户失败 ", request.OpenId, user, userErr)
+	}
+
+	if user == nil  {
+		util.LogError("Cannot find user by specified open id: ", request.OpenId, userErr)
+		return model.NewFailedResponseModel(enum.USER_NOT_EXISTS, "指定的用户不存在")
+	}
+
 	// Here calls dao method to access database.
 	category := entity.Category{}
 	copier.Copy(category, request)
+	// get userId
+	category.UserId = user.Id
+
+	// 开始事务
+	session := dal.DB.NewSession()
+	defer session.Close()
 
 	_, err := dao.GetCategorySqlMapper(nil).UpdateCategory(&category)
 	if err != nil {
+		session.Close()
 		util.LogError("Error happened when inserting category: ", category, err)
 		return model.NewFailedResponseModel(enum.DB_INSERT_ERROR, "更新category数据失败")
-	} else {
-		return model.NewFailedResponseModel(enum.SYSTEM_SUCCESS, "更新数据成功")
 	}
+
+	session.Commit()
+	return model.NewFailedResponseModel(enum.SYSTEM_SUCCESS, "更新数据成功")
 }
 
 // 查询某个用户的目录分类信息列表
