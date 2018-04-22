@@ -39,10 +39,6 @@ func (sqlMapper *CategorySqlMapper) AddCategory(category *entity.Category) (int6
 
 // DeleteCategory calls predefined sql template to delete category
 func (sqlMapper *CategorySqlMapper) DeleteCategory(categoryId int64, userId int64) (int64, error) {
-	category := entity.Category{}
-	category.Id = categoryId
-	category.UserId = userId
-	category.IsDel = field_enum.NO.Value
 	paramMap := map[string]interface{}{"CategoryId": categoryId, "UserId": userId, "IsDel": field_enum.NO.Value}
 	result, _ := sqlMapper.getSqlTemplateClient("delete_category.stpl", &paramMap).Execute()
 	return result.RowsAffected()
