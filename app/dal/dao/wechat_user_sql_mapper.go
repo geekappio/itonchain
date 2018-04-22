@@ -30,19 +30,11 @@ func (sqlMapper *WechatUserSqlMapper) getSqlTemplateClient(sqlTagName string, ar
 
 // SelectUser calls predefined sql template to insert category
 func (sqlMapper *WechatUserSqlMapper) SelectUser(openId string) (*entity.WechatUser, error) {
+
 	wechatUser := &entity.WechatUser{}
 	paramMap := map[string]interface{}{"OpenId": openId}
-	result, err := dal.DB.SqlTemplateClient("select_user_by_openId.stpl", &paramMap).Get(wechatUser)
-	if err != nil {
-		return nil, err
-	}
-
-	if result {
-		return wechatUser, nil
-	} else {
-		return nil, err
-	}
-
+	err := dal.DB.SqlTemplateClient("select_user_by_openId.stpl").Find(&wechatUser, &paramMap)
+	return wechatUser, err
 }
 
 // InsertUser calls predefined sql template to insert user
