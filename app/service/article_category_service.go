@@ -160,11 +160,18 @@ func (service *ArticleCategoryService) ArticleCategoryChangeService(request *mod
 	session := dal.DB.NewSession()
 	defer session.Close()
 
-	_, err := dao.GetCategorySqlMapper(nil).UpdateCategory(&category)
+	rowsAffected, err := dao.GetCategorySqlMapper(nil).UpdateCategory(&category)
 	if err != nil {
 		session.Close()
 		util.LogError("Error happened when inserting category: ", category, err)
 		return model.NewFailedResponseModel(enum.DB_INSERT_ERROR, "更新category数据失败")
+	}
+
+	// 更新行数不唯一，需要进行回滚
+	if rowsAffected != 1 {
+		session.Rollback()
+		util.LogError("Error happened when inserting category: ", category, err)
+		return model.NewFailedResponseModel(enum.DB_INSERT_ERROR, "更新category数据，不唯一")
 	}
 
 	session.Commit()
