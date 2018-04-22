@@ -6,7 +6,7 @@ package model
 type ArticleCategoryChangeRequest struct {
 	BaseRequest
 	OpenId       string `json:"openId" binding:"required"`
-	CategoryId   int    `json:"categoryId" binding:"required"`
+	CategoryId   int64    `json:"categoryId" binding:"required"`
 	CategoryName string `json:"categoryName"`
 	Description  string `json:"description"`
 }

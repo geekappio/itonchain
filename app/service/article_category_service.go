@@ -153,10 +153,8 @@ func (service *ArticleCategoryService) ArticleCategoryChangeService(request *mod
 	}
 
 	// Here calls dao method to access database.
-	category := entity.Category{}
-	copier.Copy(category, request)
-	// get userId
-	category.UserId = user.Id
+	category := entity.Category{BaseEntity:entity.BaseEntity{Id:request.CategoryId},
+	CategoryName:request.CategoryName, Description:request.Description, UserId:user.Id}
 
 	// 开始事务
 	session := dal.DB.NewSession()
