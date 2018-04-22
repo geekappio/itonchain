@@ -6,6 +6,7 @@ import (
 	"github.com/geekappio/itonchain/app/dal/entity"
 	"github.com/xormplus/xorm"
 	"time"
+	"github.com/geekappio/itonchain/app/util"
 )
 
 var wechatUserSqlMapper *WechatUserSqlMapper
@@ -36,6 +37,7 @@ func (sqlMapper *WechatUserSqlMapper) SelectUser(openId string) (*entity.WechatU
 	if success  {
 		return wechatUser, err
 	} else {
+		util.LogError(err)
 		return nil, err
 	}
 }
@@ -45,6 +47,7 @@ func (wechatUserSqlMapper *WechatUserSqlMapper) InsertUser(wechatUser *entity.We
 	paramMap := map[string]interface{}{"OpenId": wechatUser.OpenId, "NickName": wechatUser.NickName, "AvatarUrl": wechatUser.AvatarUrl, "Gender": wechatUser.Gender, "City": wechatUser.City, "Province": wechatUser.Province, "Country": wechatUser.Country, "Language": wechatUser.Language, "IsDel": wechatUser.IsDel, "GmtCreate": time.Now(), "GmtUpdate": time.Now()}
 	result, err := wechatUserSqlMapper.getSqlTemplateClient("insert_wechat_user.stpl", &paramMap).Execute()
 	if err != nil {
+		util.LogError(err)
 		return -1, err
 	}
 
@@ -61,6 +64,7 @@ func (wechatUserSqlMapper *WechatUserSqlMapper) UpdateCategoryOrders(openId stri
 	paramMap := map[string]interface{}{"OpenId": openId, "CategoryOrders": categoryOrders}
 	result, err := wechatUserSqlMapper.getSqlTemplateClient("update_category_orders_with_openId.stpl", &paramMap).Execute()
 	if err != nil {
+		util.LogError(err)
 		return -1, err
 	}
 
