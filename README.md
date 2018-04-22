@@ -87,6 +87,9 @@ tmp             临时目录
 
 
 ## 开发
+### Goland安装远程发布插件
+参考：https://blog.csdn.net/weixin_41571449/article/details/78957144
+
 ### 如何Debug
  1. 使用geekappio用户ssh登录 geekapp.itonchina.com
  2. 进入目录/home/geekappio/go/src/github.com/geekappio/itonchain
