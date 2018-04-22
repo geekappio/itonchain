@@ -18,7 +18,7 @@ type ArticleShareSqlMapper struct {
 	session *xorm.Session
 }
 
-func (self *ArticleShareSqlMapper) getSqlTemplateClient(sqlTagName string, args ...interface{}) *xorm.Session{
+func (self *ArticleShareSqlMapper) getSqlTemplateClient(sqlTagName string, args ...interface{}) *xorm.Session {
 	if self.session == nil {
 		return dal.DB.SqlTemplateClient(sqlTagName, args ...)
 	} else {
@@ -27,7 +27,7 @@ func (self *ArticleShareSqlMapper) getSqlTemplateClient(sqlTagName string, args 
 }
 
 func (self *ArticleShareSqlMapper) InsertArticleShare(articleShare *entity.ArticleShare) (int64, error) {
-	paramMap := map[string]interface{}{"ArticleId":articleShare.ArticleId, "UserId":articleShare.UserId, "GmtCreate":articleShare.GmtCreate, "GmtUpdate":articleShare.GmtUpdate}
+	paramMap := map[string]interface{}{"ArticleId": articleShare.ArticleId, "UserId": articleShare.UserId, "GmtCreate": articleShare.GmtCreate, "GmtUpdate": articleShare.GmtUpdate}
 	r, err := self.getSqlTemplateClient("insert_article_share.stpl", &paramMap).Execute()
 	id, _ := r.LastInsertId()
 	articleShare.Id = id
@@ -37,7 +37,7 @@ func (self *ArticleShareSqlMapper) InsertArticleShare(articleShare *entity.Artic
 
 func (self *ArticleShareSqlMapper) CountArticleShare(articleId int64) (int64, error) {
 	var count []int64
-	paramMap := map[string]interface{}{"ArticleId":articleId}
+	paramMap := map[string]interface{}{"ArticleId": articleId}
 	err := self.getSqlTemplateClient("count_article_share.stpl", &paramMap).Find(&count)
 	if len(count) == 1 {
 		return count[0], err

@@ -6,12 +6,13 @@ import (
 	"github.com/geekappio/itonchain/app/dal/entity"
 	"github.com/geekappio/itonchain/app/model/field_enum"
 	"github.com/xormplus/xorm"
+	"time"
 )
 
 var categorySqlMapper *CategorySqlMapper
 
 func GetCategorySqlMapper(session *xorm.Session) (*CategorySqlMapper) {
-	return &CategorySqlMapper{session:session}
+	return &CategorySqlMapper{session: session}
 }
 
 type CategorySqlMapper struct {
@@ -19,7 +20,7 @@ type CategorySqlMapper struct {
 	session *xorm.Session
 }
 
-func (sqlMapper *CategorySqlMapper) getSqlTemplateClient(sqlTagName string, args ...interface{}) *xorm.Session{
+func (sqlMapper *CategorySqlMapper) getSqlTemplateClient(sqlTagName string, args ...interface{}) *xorm.Session {
 	if sqlMapper.session == nil {
 		return dal.DB.SqlTemplateClient(sqlTagName, args ...)
 	} else {
@@ -29,7 +30,11 @@ func (sqlMapper *CategorySqlMapper) getSqlTemplateClient(sqlTagName string, args
 
 // AddCategory calls predefined sql template to insert category
 func (sqlMapper *CategorySqlMapper) AddCategory(category *entity.Category) (int64, error) {
-	return sqlMapper.getSqlTemplateClient("insert_category.stpl").InsertOne(category)
+	paramMap := map[string]interface{}{"UserID": category.UserId, "CategoryName": category.CategoryName, "Description": category.Description, "GmtCreate": time.Now(), "GmtUpdate": time.Now()}
+	result, err := sqlMapper.getSqlTemplateClient("insert_category.stpl", &paramMap).Execute()
+	category.Id, _ = result.LastInsertId()
+	affectedRows, _ := result.RowsAffected();
+	return affectedRows, err
 }
 
 // DeleteCategory calls predefined sql template to delete category
@@ -38,12 +43,16 @@ func (sqlMapper *CategorySqlMapper) DeleteCategory(categoryId int64, userId int6
 	category.Id = categoryId
 	category.UserId = userId
 	category.IsDel = field_enum.NO.Value
-	return sqlMapper.getSqlTemplateClient("delete_category.stpl").Delete(category)
+	paramMap := map[string]interface{}{"CategoryId": categoryId, "UserId": userId, "IsDel": field_enum.NO.Value}
+	result, _ := sqlMapper.getSqlTemplateClient("delete_category.stpl", &paramMap).Execute()
+	return result.RowsAffected()
 }
 
 // 更新文章种类
 func (sqlMapper *CategorySqlMapper) UpdateCategory(category *entity.Category) (int64, error) {
-	return sqlMapper.getSqlTemplateClient("update_category.stpl").Update(category)
+	paramMap := map[string]interface{}{"CategoryName": category.CategoryName, "Description": category.Description, "UserId": category.UserId, "Id": category.Id}
+	result, _ := sqlMapper.getSqlTemplateClient("update_category.stpl", &paramMap).Execute()
+	return result.RowsAffected()
 }
 
 func (self *CategorySqlMapper) FindByUserId(userId int64) ([]entity.Category, error) {
