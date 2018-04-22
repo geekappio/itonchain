@@ -5,10 +5,10 @@ import (
 	"github.com/geekappio/itonchain/app/common/logging"
 	"github.com/geekappio/itonchain/app/dal"
 	"testing"
-	"fmt"
+	"github.com/stretchr/testify/assert"
 )
 
-func init()  {
+func init() {
 	config.InitAppConfig(config.DEFAULT_CONFIG_PATH)
 	logging.InitLoggers()
 	dal.InitDataSource()
@@ -17,6 +17,5 @@ func init()  {
 func TestSelectUser(t *testing.T) {
 
 	wechat, _ := GetWechatUserSqlMapper(nil).SelectUser("1")
-
-	fmt.Println(wechat);
+	assert.NotNil(t, wechat)
 }

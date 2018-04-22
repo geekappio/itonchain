@@ -16,6 +16,7 @@ import (
 	"github.com/geekappio/itonchain/app/web/api"
 	"github.com/gin-gonic/gin"
 	"github.com/gorilla/websocket"
+	"io/ioutil"
 )
 
 func initConfig() error {
@@ -65,18 +66,20 @@ func main() {
 		return
 	}
 
-	gin.SetMode(config.Config.RunMode) //全局设置环境，此为开发环境，线上环境为gin.ReleaseMode
-	router := gin.Default()            //获得路由实例
-	//添加中间件
+	gin.SetMode(config.Config.RunMode) // 全局设置环境，此为开发环境，线上环境为gin.ReleaseMode
+	router := gin.Default()            // 获得路由实例
+	// 添加中间件
 	router.Use(Middleware)
 
-	//注册用户
+	router.GET("/", rootHandler)
+
+	// 注册用户
 	util.AddPostRouter(router, api.ApiRequestMapping.UserRegister, web.HandleUserRegister)
 
-	//查询/搜索文章列表
+	// 查询/搜索文章列表
 	util.AddPostRouter(router, api.ApiRequestMapping.ArticleListQuery, web.HandlerArticleList)
 
-	//点赞文章
+	// 点赞文章
 	util.AddPostRouter(router, api.ApiRequestMapping.ArticleFavorite, web.HandlerArticleMark)
 
 	// 分享文章
@@ -127,4 +130,13 @@ func wshandler(w http.ResponseWriter, r *http.Request) {
 
 func Middleware(c *gin.Context) {
 	fmt.Println("this is a middleware!")
+}
+
+func rootHandler(c *gin.Context) {
+	w := c.Writer
+	content, err := ioutil.ReadFile("resource/web/public/index.html")
+	if err != nil {
+		fmt.Println("Could not open file.", err)
+	}
+	fmt.Fprintf(w, "%s", content)
 }
