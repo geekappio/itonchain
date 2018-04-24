@@ -11,7 +11,7 @@
   },
   "database":{
     "driverName":"mysql",
-    "datasourceName":"codyy:welcometocodyy@tcp(localhost:3306)/applet.geekapp?parseTime=true",
+    "datasourceName":"root:cgV8vokF@tcp(121.40.78.46:3306)/applet.geekapp?parseTime=true",
     "maxIdelConnections":20,
     "maxOpenConnections":20
   },
