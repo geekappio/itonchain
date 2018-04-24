@@ -24,5 +24,8 @@
     "defaultLogPath":"log/default.log",
     "errorLogPath":"log/error.log",
     "apiLogPath":"log/api.log"
+  },
+  "geekapp.publish": {
+    "token":"geekapp2publish"
   }
 }

@@ -17,6 +17,9 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/gorilla/websocket"
 	"io/ioutil"
+	"sort"
+	"strings"
+	"crypto/sha1"
 )
 
 func initConfig() error {
@@ -73,6 +76,8 @@ func main() {
 
 	// 浏览器里显示静态页面
 	router.GET("/", rootHandler)
+
+	router.GET("/publish/authentication", authenticateGeeappPublishHandler)
 
 	// 注册用户
 	util.AddPostRouter(router, api.ApiRequestMapping.UserRegister, web.HandleUserRegister)
@@ -142,4 +147,25 @@ func rootHandler(c *gin.Context) {
 		fmt.Println("Could not open file.", err)
 	}
 	fmt.Fprintf(w, "%s", content)
+}
+
+func authenticateGeeappPublishHandler(c *gin.Context) {
+	logging.Logger.Info("Received request: " + c.Request.RequestURI)
+
+	signature := c.GetString("signature")
+	timestamp := c.GetString("timestamp")
+	nonce := c.GetString("nonce")
+
+	arrs := []string{config.Config.GeekappPublish.Token, timestamp, nonce}
+	sort.Strings(arrs)
+
+	raw := strings.Join(arrs, "")
+	h := sha1.New();
+	h.Write([]byte(raw))
+	bs :=h.Sum(nil)
+
+	if signature == string(bs) {
+		logging.Logger.Info("publish.geekapp authentication success.")
+		c.Writer.Write([]byte(c.GetString("echostr")))
+	}
 }

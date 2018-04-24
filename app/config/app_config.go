@@ -21,6 +21,11 @@ type AppConfig struct {
 	Database DatabaseConfig `json:"database"`
 	XormPlus XormPlusConfig `json:"xormPlus"`
 	SeaWeedFS SeaWeedFSConfig `json:"seaweed"`
+	GeekappPublish GeekappPublishConfig `json:"geekapp.publish"`
+}
+
+type GeekappPublishConfig struct {
+	Token string `json:"token"`
 }
 
 type LoggingConfig struct {
