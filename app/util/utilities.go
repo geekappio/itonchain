@@ -1,8 +1,10 @@
 package util
 
 func StringArrayInsert(src []string, index int, inserted string) []string {
+	_first := make([]string, index)
+	copy(_first, src)
 	last := src[index:]
-	first := append(src[0:index], inserted)
+	first := append(_first, inserted)
 	return append(first, last...)
 }
 

@@ -93,8 +93,8 @@ func (service *WechatUserService) ChangingArticleCategoryOrder(request *model.Ar
 		categories := strings.Split(userModel.CategoryOrders, config.FIELD_CATEGORY_ORDRES_SEPARATER)
 		for index, v:= range categories {
 			if v == categoryStr {
-				enumValue := field_enum.ValueOf(v)
-				if enumValue == field_enum.UP {
+				upDownValue := field_enum.ValueOf(request.UpDown)
+				if upDownValue == field_enum.UP {
 					switch {
 					case index == 0:
 						// 已经是第一个，无法上移
@@ -110,12 +110,13 @@ func (service *WechatUserService) ChangingArticleCategoryOrder(request *model.Ar
 							return model.NewFailedResponseModel(enum.DB_UPDATE_ERROR, "更新目录项数据失败")
 						}
 
+						return model.NewSuccessResponseModel()
 					case index == -1 || index > len(categories):
 						// 没找到
 						return model.NewFailedResponseModel(enum.NOT_FIND_SPECIFIED_CATEGORY, "没有发现指定的目录项，category：" + strconv.FormatInt(request.CategoryId, 10))
 					}
 
-				} else if enumValue == field_enum.DOWN {
+				} else if upDownValue == field_enum.DOWN {
 
 					switch {
 					case index == len(categories) - 1:
@@ -132,6 +133,7 @@ func (service *WechatUserService) ChangingArticleCategoryOrder(request *model.Ar
 							return model.NewFailedResponseModel(enum.DB_UPDATE_ERROR, "更新目录项数据失败")
 						}
 
+						return model.NewSuccessResponseModel()
 					case index == -1 || index > len(categories):
 						// 没找到
 						return model.NewFailedResponseModel(enum.NOT_FIND_SPECIFIED_CATEGORY, "没有发现指定的目录项，category：" + strconv.FormatInt(request.CategoryId, 10))
@@ -142,6 +144,6 @@ func (service *WechatUserService) ChangingArticleCategoryOrder(request *model.Ar
 			}
 		}
 
-		return model.NewSuccessResponseModel()
+		return model.NewFailedResponseModel(enum.NOT_FIND_SPECIFIED_CATEGORY, "没有发现指定的目录名")
 	}
 }

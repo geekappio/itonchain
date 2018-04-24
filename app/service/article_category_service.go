@@ -33,7 +33,7 @@ type ArticleCategoryService struct {
 func (service *ArticleCategoryService) AddArticleCategory(request *model.ArticleCategoryAddRequest) (*model.ResponseModel) {
 	// Here calls dao method to access database.
 	category := entity.Category{}
-	copier.Copy(category, request)
+	copier.Copy(&category, request)
 
 	// Get user model by open id.
 	user, userErr := dao.GetWechatUserSqlMapper(nil).SelectUser(request.OpenId)
@@ -45,7 +45,7 @@ func (service *ArticleCategoryService) AddArticleCategory(request *model.Article
 		return model.NewFailedResponseModel(enum.USER_NOT_EXISTS, "指定的用户不存在")
 	}
 
-	category.Id = user.Id
+	category.UserId = user.Id
 
 	// Create transaction session
 	session := dal.DB.NewSession()
@@ -72,7 +72,7 @@ func (service *ArticleCategoryService) AddArticleCategory(request *model.Article
 	} else {
 		// Insert category into proper position
 		categories := strings.Split(user.CategoryOrders, config.FIELD_CATEGORY_ORDRES_SEPARATER)
-		if request.InsertPos == -1 {
+		if request.InsertPos < 0 || request.InsertPos >= len(categories) {
 			// Append to last
 			categories = append(categories, strconv.FormatInt(category.Id, 10))
 		} else {
