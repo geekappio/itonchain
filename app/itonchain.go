@@ -71,6 +71,7 @@ func main() {
 	// 添加中间件
 	router.Use(Middleware)
 
+	// 浏览器里显示静态页面
 	router.GET("/", rootHandler)
 
 	// 注册用户
@@ -94,8 +95,10 @@ func main() {
 
 	// 添加文章类目
 	util.AddPostRouter(router, api.ApiRequestMapping.ArticleCategoryAdd, web.HandleArticleCategoryAdd)
+
 	// 删除文章类目
 	util.AddPostRouter(router, api.ApiRequestMapping.ArticleCategoryDelete, web.HandleArticleCategoryDelete)
+
 	// 修改文章类目次序
 	util.AddPostRouter(router, api.ApiRequestMapping.ArticleCategoryOrderChange, web.HandleArticleCategoryOrderChange)
 
