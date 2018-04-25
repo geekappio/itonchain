@@ -77,7 +77,7 @@ func main() {
 	// 浏览器里显示静态页面
 	router.GET("/", rootHandler)
 
-	router.GET("/publish/authentication", authenticateGeeappPublishHandler)
+	router.GET("/publish/authentication", authenticateGeekappPublishHandler)
 
 	// 注册用户
 	util.AddPostRouter(router, api.ApiRequestMapping.UserRegister, web.HandleUserRegister)
@@ -149,12 +149,8 @@ func rootHandler(c *gin.Context) {
 	fmt.Fprintf(w, "%s", content)
 }
 
-func authenticateGeeappPublishHandler(c *gin.Context) {
-	logging.Logger.Info("Received request: " + c.Request.RequestURI)
 
-	signature := c.GetString("signature")
-	timestamp := c.GetString("timestamp")
-	nonce := c.GetString("nonce")
+func CheckWechatPublishSign(signature string, timestamp string, nonce string) bool {
 
 	arrs := []string{config.Config.GeekappPublish.Token, timestamp, nonce}
 	sort.Strings(arrs)
@@ -162,10 +158,26 @@ func authenticateGeeappPublishHandler(c *gin.Context) {
 	raw := strings.Join(arrs, "")
 	h := sha1.New();
 	h.Write([]byte(raw))
-	bs :=h.Sum(nil)
+	sha := fmt.Sprintf("%x", h.Sum(nil))
+	return signature == sha
+}
 
-	if signature == string(bs) {
+func authenticateGeekappPublishHandler(c *gin.Context) {
+	logging.Logger.Info("Received request: " + c.Request.RequestURI)
+
+	values :=c.Request.URL.Query()
+	signature := values.Get("signature")
+	timestamp := values.Get("timestamp")
+	nonce := values.Get("nonce")
+	echostr := values.Get("echostr")
+
+	isValid := CheckWechatPublishSign(signature, timestamp, nonce)
+
+	if isValid {
 		logging.Logger.Info("publish.geekapp authentication success.")
-		c.Writer.Write([]byte(c.GetString("echostr")))
+		c.Writer.Write([]byte(echostr))
+	} else {
+		logging.Logger.Info("publish.geekapp authentication failed.")
+		c.Writer.Write([]byte("Error"))
 	}
 }
