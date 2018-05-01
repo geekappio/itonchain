@@ -8,6 +8,13 @@ import (
 	"time"
 	"github.com/geekappio/itonchain/app/common/seaweedfs"
 	"github.com/geekappio/itonchain/app/config"
+	"github.com/PuerkitoBio/goquery"
+	"strings"
+	"regexp"
+	"net/http"
+	"io/ioutil"
+	"bytes"
+	"golang.org/x/net/html"
 )
 
 const FEED_LAST_ARTICLE_PREFIX = "FEED_LAST_ARTICLE_PREFIX."
@@ -34,6 +41,7 @@ func (self *FeedSpider) Capture(sources []*model.ArticleSource) error {
 			return err
 		}
 		for _, article := range articles {
+			localize(article)
 			fid, err := save(article)
 			if nil != err {
 				return err
@@ -51,6 +59,71 @@ func (self *FeedSpider) Capture(sources []*model.ArticleSource) error {
 // TODO 从文章内容提取关键字
 func parseKeywords(content string) string {
 	return ""
+}
+
+// 文章在保存之前对其进行本地化操作
+func localize(feedArticle *feedArticle) error {
+	doc, err := goquery.NewDocumentFromReader(strings.NewReader(feedArticle.content))
+	if err != nil {
+		return err
+	}
+	doc.Find("img").Each(func(i int, s *goquery.Selection) {
+		src, exists := s.Attr("src")
+		if exists {
+			src = getCompleteURL(feedArticle.link, src)
+			resp, err := http.Get(src)
+			if err != nil {
+				return
+			}
+			data, err := ioutil.ReadAll(resp.Body)
+			if err != nil {
+				return
+			}
+			model, err := seaweedfs.UploadFileContent(src, data, config.Config.SeaWeedFS.UploadAddrUrl)
+			if err != nil {
+				return
+			}
+			s.SetAttr("src", model.Fid)
+		}
+	})
+	buf := bytes.NewBuffer([]byte{})
+	rootNode := doc.Nodes[0]	// FIXME
+	html.Render(buf, rootNode)
+	feedArticle.content = buf.String()
+	return nil
+}
+
+func getCompleteURL(parentUrl, curUrl string) string {
+	if (strings.HasPrefix(curUrl, "http")){
+		return curUrl
+	} else if (strings.HasPrefix(curUrl, "//")) {
+		end := strings.Index(parentUrl, "//")
+		res := parentUrl[0:end] + curUrl
+		return res
+	} else if (strings.HasPrefix(curUrl, "/")) {
+		prefix, _ := getRoot(parentUrl)
+		return prefix + curUrl
+	} else {
+		prefix, _ := getPath(parentUrl)
+		return prefix + curUrl
+	}
+}
+
+func getRoot(url string) (string, error) {
+	return regexUrl("^.*?://[^:/]+:?\\d*", url)
+}
+
+func getPath(url string) (string, error) {
+	return regexUrl("^.*?://[^:/]+:?\\d*.*/", url)
+}
+
+func regexUrl(regex, url string) (string, error) {
+	reg, err := regexp.Compile(regex)
+	if err != nil {
+		return "", err
+	}
+	root := reg.FindString(url)
+	return root, nil
 }
 
 // 从Feed抓取的文章模型
