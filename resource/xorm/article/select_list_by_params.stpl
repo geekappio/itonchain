@@ -1,2 +1,2 @@
 SELECT * FROM article
-WHERE article_title like ?ArticleTitle
+WHERE article_title like ?articleTitle and id in(?id)
