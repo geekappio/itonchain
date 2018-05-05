@@ -8,6 +8,9 @@ import (
 	"github.com/geekappio/itonchain/app/dal/entity"
 	"github.com/geekappio/itonchain/app/common/common_util"
 	"github.com/geekappio/itonchain/app/model/field_enum"
+	"strconv"
+	"github.com/geekappio/itonchain/app/enum"
+	"fmt"
 )
 
 type ArticleService struct {
@@ -74,3 +77,24 @@ func (service *ArticleService) GetArticleList(request model.ArticleListRequest, 
 	articleSqlMapper := dao.GetArticleSqlMapper(service.session)
 	return articleSqlMapper.SelectListByParamsInPage(request, articleIdList)
 }
+
+func (service *ArticleService) GetArticle(request model.ArticleQueryRequest) (*model.ResponseModel) {
+	articleModel, err := dao.GetArticleSqlMapper(nil).SelectByArticleIdOrInternelUrl(request.ArticleId, request.InternelUrl)
+
+	if err != nil {
+		util.LogError("查询文章信息失败", "articleId = "+strconv.FormatInt(request.ArticleId, 10)+";internelUrl = "+request.InternelUrl, err)
+		return model.NewFailedResponseModel(enum.NOT_FIND_SPECIFIED_ARTICLE, "查询文章信息失败")
+	}
+
+	// FIXME, 20180505, HENRY, READ ARTICLE CONTENT FROM NOSQL STORAGE(SEAWEEDFS)
+	// Get article content
+
+
+	// ....
+	fmt.Print(articleModel.InternelUrl)
+
+	// End of _FIXME_
+
+	return model.NewSuccessResponseModelWithData(articleModel)
+}
+

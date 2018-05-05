@@ -41,8 +41,8 @@ func HandleArticleCategoryOrderChange(reqeustModel *model.ArticleCategoryOrderCh
 	return service.ChangingArticleCategoryOrder(reqeustModel)
 }
 
-// HandlerArticleCategoryListQuery
-func HandlerArticleCategoryListQuery(request model.ArticleCategoryListRequest) ([]*model.ArticleCategoryListResponse, enum.ErrorCode) {
+// HandleArticleCategoryListQuery
+func HandleArticleCategoryListQuery(request model.ArticleCategoryListRequest) ([]*model.ArticleCategoryModel, enum.ErrorCode) {
 	util.LogInfo(request)
 	userService := service.GetWechatUserService()
 	user, err := userService.FindUserByOpenId(request.OpenId)
@@ -55,15 +55,15 @@ func HandlerArticleCategoryListQuery(request model.ArticleCategoryListRequest) (
 
 	categoryService := service.GetArticleCategoryService()
 	categories, _ := categoryService.ListCategoryByUserId(user.Id)
-	response := make([]*model.ArticleCategoryListResponse, len(categories))
+	response := make([]*model.ArticleCategoryModel, len(categories))
 	for i, c := range categories {
 		response[i] = buildCategoryListResponse(&c)
 	}
 	return response, enum.SYSTEM_SUCCESS
 }
 
-func buildCategoryListResponse(category *entity.Category) *model.ArticleCategoryListResponse{
-	return &model.ArticleCategoryListResponse{
+func buildCategoryListResponse(category *entity.Category) *model.ArticleCategoryModel {
+	return &model.ArticleCategoryModel{
 		CategoryId:category.Id,
 		CategoryName:category.CategoryName,
 		ArticleCount:category.ArticleCount,

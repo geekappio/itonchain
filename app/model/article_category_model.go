@@ -44,7 +44,7 @@ type ArticleCategoryListRequest struct {
 	OpenId string `json:"openId"`
 }
 
-type ArticleCategoryListResponse struct {
+type ArticleCategoryModel struct {
 	BaseResponse
 	CategoryId   int64  `json:"categoryId"`
 	CategoryName string `json:"categoryName"`

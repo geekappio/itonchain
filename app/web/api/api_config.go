@@ -3,6 +3,7 @@ package api
 type requestMapping struct {
 	UserRegister               string
 	ArticleListQuery           string
+	ArticleQuery               string
 	ArticleFavorite            string
 	ArticleShare               string
 	ArticleMark                string
@@ -19,6 +20,7 @@ var ApiRequestMapping *requestMapping
 func init() {
 	ApiRequestMapping = &requestMapping{
 		UserRegister:               "/wechat_user/register",
+		ArticleQuery:               "/article/query",
 		ArticleListQuery:           "/article/list/query",
 		ArticleFavorite:            "/article/favorite",
 		ArticleShare:               "/article/share",

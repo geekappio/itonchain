@@ -3,7 +3,7 @@ package model
 type ArticleShareRequest struct {
 	BaseRequest
 	OpenId    string `json:"openId" binding:"required"`
-	ArticleId int64    `json:"articleId" binding:"required"`
+	ArticleId int64  `json:"articleId" binding:"required"`
 }
 
 // Return Data field of article share response
@@ -26,45 +26,59 @@ type ArticleMarkResponse struct {
 
 type ArticleFavoriteRequest struct {
 	BaseRequest
-	OpenId    string `json:"openId"`
-	ArticleId int64    `json:"articleId"`
-	DoFavorite string    `json:"doFavorite"`
+	OpenId     string `json:"openId"`
+	ArticleId  int64  `json:"articleId"`
+	DoFavorite string `json:"doFavorite"`
 }
 
 type ArticleListRequest struct {
 	PageRequest
 	SearchParams ArticleSearchParams `json:"searchParams"`
-	OrderType string `json:"orderType"`
+	OrderType    string              `json:"orderType"`
 }
 
 type ArticleSearchParams struct {
-	OpenId string `json:"openId"`
-	CategoryId string `json:"categoryId"`
-	ArticleTitle string `json:"articleTitle"`
-	ArticleLabels string `json:"articleLabels"`
+	OpenId          string `json:"openId"`
+	CategoryId      string `json:"categoryId"`
+	ArticleTitle    string `json:"articleTitle"`
+	ArticleLabels   string `json:"articleLabels"`
 	ArticleKeywords string `json:"articleKeywords"`
-	GetTechnology string `json:"getTechnology"`
-	GetBlockchain string `json:"getBlockchain"`
-	GetRecent string `json:"getRecent"`
-	GetMarked string `json:"getMarked"`
-	StartTime string `json:"startTime"`
-	EndTime string `json:"endTime"`
-	State string `json:"state"`
+	GetTechnology   string `json:"getTechnology"`
+	GetBlockchain   string `json:"getBlockchain"`
+	GetRecent       string `json:"getRecent"`
+	GetMarked       string `json:"getMarked"`
+	StartTime       string `json:"startTime"`
+	EndTime         string `json:"endTime"`
+	State           string `json:"state"`
 }
 
-type ArticleListResponse struct {
-	Id int64 `json:"openId"`
-	ArticleTitle string `json:"articleTitle"`
-	ArticleFrom string `json:"articleFrom"`
-	ArticleUrl string `json:"articleUrl"`
-	ArticleLabels string `json:"articleLabels"`
+type ArticleModel struct {
+	Id              int64  `json:"openId"`
+	ArticleTitle    string `json:"articleTitle"`
+	ArticleFrom     string `json:"articleFrom"`
+	ArticleUrl      string `json:"articleUrl"`
+	InternelUrl     string `json:"internelUrl"`
+	ContentType     string `json:"contentType"`
+	Images          string `json:"images"`
+	PreviewLayout   string `json:"previewLayout"`
+	ArticleLabels   string `json:"articleLabels"`
 	ArticleKeywords string `json:"articleKeywords"`
-	FavoriteTimes int32 `json:"favoriteTimes"`
-	ViewTimes int32 `json:"viewTimes"`
-	MarkTimes int32 `json:"markTimes"`
-	IsTechnology string `json:"isTechnology"`
-	IsBlockchain string `json:"isBlockchain"`
-	State string `json:"state"`
-	Comment string `json:"comment"`
-	GmtCreate string `json:"gmtCreate"`
+	FavoriteTimes   int32  `json:"favoriteTimes"`
+	ViewTimes       int32  `json:"viewTimes"`
+	MarkTimes       int32  `json:"markTimes"`
+	IsTechnology    string `json:"isTechnology"`
+	IsBlockchain    string `json:"isBlockchain"`
+	State           string `json:"state"`
+	Comment         string `json:"comment"`
+	GmtCreate       string `json:"gmtCreate"`
+}
+
+type ArticleQueryRequest struct {
+	ArticleId   int64 `json:"artileId"`
+	InternelUrl string `json:"internelUrl"`
+}
+
+type ArticleContentModel struct {
+	ArticleModel
+	Content string
 }

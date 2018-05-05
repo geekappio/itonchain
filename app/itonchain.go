@@ -77,23 +77,30 @@ func main() {
 	// 浏览器里显示静态页面
 	router.GET("/", rootHandler)
 
+	// 微信小程序认证
 	router.GET("/publish/authentication", authenticateGeekappPublishHandler)
+
+	// Loading article image from NoSQL storage.
+	router.GET("/article/image/get", web.HandleArticleImageGet)
 
 	// 注册用户
 	util.AddPostRouter(router, api.ApiRequestMapping.UserRegister, web.HandleUserRegister)
 
 	// 查询/搜索文章列表
-	util.AddPostRouter(router, api.ApiRequestMapping.ArticleListQuery, web.HandlerArticleList)
+	util.AddPostRouter(router, api.ApiRequestMapping.ArticleListQuery, web.HandleArticleListQuery)
 
+	util.AddPostRouter(router, api.ApiRequestMapping.ArticleQuery, web.HandleArticleQuery)
 	//点赞文章
-	util.AddPostRouter(router, api.ApiRequestMapping.ArticleFavorite, web.HandlerArticleFavorite)
+	util.AddPostRouter(router, api.ApiRequestMapping.ArticleFavorite, web.HandleArticleFavorite)
 
 	// 分享文章
 	util.AddPostRouter(router, api.ApiRequestMapping.ArticleShare, web.HandleArticleShare)
+
 	// 收藏文章
-	util.AddPostRouter(router, api.ApiRequestMapping.ArticleMark, web.HandlerArticleMark)
+	util.AddPostRouter(router, api.ApiRequestMapping.ArticleMark, web.HandleArticleMark)
+
 	// 查询分类列表
-	util.AddPostRouter(router, api.ApiRequestMapping.ArticleCategoryListQuery, web.HandlerArticleCategoryListQuery)
+	util.AddPostRouter(router, api.ApiRequestMapping.ArticleCategoryListQuery, web.HandleArticleCategoryListQuery)
 
 	// 修改修改文章类别信息
 	util.AddPostRouter(router, api.ApiRequestMapping.ArticleCategoryInfoChange, web.HandleArticleCategoryChange)
@@ -176,8 +183,10 @@ func authenticateGeekappPublishHandler(c *gin.Context) {
 	if isValid {
 		logging.Logger.Info("publish.geekapp authentication success.")
 		c.Writer.Write([]byte(echostr))
+		c.Writer.Flush()
 	} else {
 		logging.Logger.Info("publish.geekapp authentication failed.")
 		c.Writer.Write([]byte("Error"))
+		c.Writer.Flush()
 	}
 }

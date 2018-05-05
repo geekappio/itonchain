@@ -19,12 +19,18 @@ const (
 	DB_TRANSACTION_ERROR ErrorCode = "2005"
 
 	// Business error
-	USER_NOT_EXISTS             ErrorCode = "3001"
-	NULL_CATEGORY_ORDERS        ErrorCode = "3002"
-	IS_FIRST_CATEGORY           ErrorCode = "3003"
-	IS_LAST_CATEGORY            ErrorCode = "3004"
-	NOT_FIND_SPECIFIED_CATEGORY ErrorCode = "3005"
-	USER_ALREADY_EXISTS ErrorCode = "3006"
+	// 30XX User
+	USER_NOT_EXISTS     ErrorCode = "3001"
+	USER_ALREADY_EXISTS ErrorCode = "3002"
+
+	// 31XX Article
+	NOT_FIND_SPECIFIED_ARTICLE ErrorCode = "3101"
+
+	// 32XX Category
+	NULL_CATEGORY_ORDERS        ErrorCode = "3201"
+	IS_FIRST_CATEGORY           ErrorCode = "3202"
+	IS_LAST_CATEGORY            ErrorCode = "3203"
+	NOT_FIND_SPECIFIED_CATEGORY ErrorCode = "3204"
 )
 
 func (self ErrorCode) IsSuccess() bool {

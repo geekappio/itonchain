@@ -16,7 +16,7 @@ import (
 
 var articleCategoryService *ArticleCategoryService
 
-// GetArticleCategoryService returns ArticleCategory service instance which provides method calls.
+// GetArticleCategoryService returns ArticleCategoryModel service instance which provides method calls.
 func GetArticleCategoryService() *ArticleCategoryService {
 	if articleCategoryService == nil {
 		articleCategoryService = &ArticleCategoryService{}
@@ -25,7 +25,7 @@ func GetArticleCategoryService() *ArticleCategoryService {
 	return articleCategoryService
 }
 
-// Implementation struct of ArticleCategory to bind functions wi
+// Implementation struct of ArticleCategoryModel to bind functions wi
 type ArticleCategoryService struct {
 }
 
