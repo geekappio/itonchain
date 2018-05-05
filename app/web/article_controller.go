@@ -165,12 +165,16 @@ func HandleArticleListQuery(request model.ArticleListRequest) (*model.ResponseMo
 	}
 
 	categoryId := request.SearchParams.CategoryId
-	categoryIdOther, err := strconv.ParseInt(categoryId, 10, 64)
-	if err != nil {
-		util.LogError("字符串转int64错误", categoryId, err)
-		return &model.ResponseModel{
-			ReturnCode: enum.DB_ERROR.GetRespCode(),
-			ReturnMsg:  "查询用户信息失败",
+	var categoryIdOther int64
+	var errOther error
+	if categoryId != "" {
+		categoryIdOther, errOther = strconv.ParseInt(categoryId, 10, 64)
+		if errOther != nil {
+			util.LogError("字符串转int64错误", categoryId, errOther)
+			return &model.ResponseModel{
+				ReturnCode: enum.ILLEGAL_PARAMETERS.GetRespCode(),
+				ReturnMsg:  "请求参数不合法",
+			}
 		}
 	}
 

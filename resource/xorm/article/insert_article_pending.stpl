@@ -1,0 +1,4 @@
+INSERT INTO article_pending
+(article_title, article_from, article_url, article_keywords, gmt_create, gmt_update)
+VALUES
+(?ArticleTitle, ?ArticleFrom, ?ArticleUrl, ?ArticleKeywords, ?GmtCreate, ?GmtUpdate)
