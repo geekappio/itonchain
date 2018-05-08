@@ -12,6 +12,9 @@ type requestMapping struct {
 	ArticleCategoryDelete      string
 	ArticleCategoryOrderChange string
 	ArticleCategoryInfoChange  string
+	ResourceArticleLoad        string
+	ResourceImageLoad          string
+	WechatPublishAuthen        string
 }
 
 // Export Api request mapping object.
@@ -30,10 +33,13 @@ func init() {
 		ArticleCategoryDelete:      "/article_category/delete",
 		ArticleCategoryOrderChange: "/article_category/order/change",
 		ArticleCategoryInfoChange:  "/article_category/info/change",
+		ResourceArticleLoad:        "/resource/article/:fid",
+		ResourceImageLoad:          "/resource/image/:fid",
+		WechatPublishAuthen:        "/publish/authentication",
 	}
 }
 
 const (
 	RESOURCE_ARTICLE_URI = "/resource/article/"
-	RESOURCE_IMAGE_URI = "/resource/image/"
+	RESOURCE_IMAGE_URI   = "/resource/image/"
 )

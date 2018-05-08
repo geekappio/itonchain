@@ -57,7 +57,9 @@ type ArticleModel struct {
 	ArticleTitle    string `json:"articleTitle"`
 	ArticleFrom     string `json:"articleFrom"`
 	ArticleUrl      string `json:"articleUrl"`
+	InernelFid      string `json:"internelFid"`
 	InternelUrl     string `json:"internelUrl"`
+	InternelSize    string `json:internelSize`
 	ContentType     string `json:"contentType"`
 	Images          string `json:"images"`
 	PreviewLayout   string `json:"previewLayout"`
@@ -74,8 +76,8 @@ type ArticleModel struct {
 }
 
 type ArticleQueryRequest struct {
-	ArticleId   int64 `json:"artileId"`
-	InternelUrl string `json:"internelUrl"`
+	ArticleId   int64  `json:"artileId"`
+	InternelFid string `json:"internelFid"`
 }
 
 type ArticleContentModel struct {

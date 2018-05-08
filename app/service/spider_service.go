@@ -79,7 +79,7 @@ func localize(feedArticle *feedArticle) error {
 			if err != nil {
 				return
 			}
-			submitResult, err := seaweedfs.SubmitFileContent(src, data, nil)
+			submitResult, err := seaweedfs.SubmitRourceContent(src, data, nil)
 			if err != nil {
 				return
 			}
@@ -87,9 +87,6 @@ func localize(feedArticle *feedArticle) error {
 		}
 	})
 
-	// buf := bytes.NewBuffer([]byte{})
-	// rootNode := doc.Nodes[0] // FIXME
-	// html.Render(buf, rootNode)
 	content, err := doc.Html()
 	if err != nil {
 		return err
@@ -144,7 +141,7 @@ type feedArticle struct {
 func save(feedArticle *feedArticle) (result *goswfsModel.SubmitResult, err error) {
 	name := feedArticle.title
 	content := []byte(feedArticle.content)
-	return seaweedfs.SubmitFileContent(name, content, nil)
+	return seaweedfs.SubmitRourceContent(name, content, nil)
 }
 
 func download(feedUrl string) (string, []*feedArticle, error) {

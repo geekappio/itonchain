@@ -117,10 +117,10 @@ func (self *ArticleSqlMapper) SelectListByParams(request ArticleListRequest) (*[
 	return &articleList, err
 }
 
-func (self *ArticleSqlMapper)SelectByArticleIdOrInternelUrl(articleId int64, internelUrl string) (*entity.Article, error) {
-	paramMap := map[string]interface{}{"ArticleId": articleId, "InternelUrl": internelUrl}
+func (self *ArticleSqlMapper)SelectByArticleIdOrInternelUrl(articleId int64, internelFid string) (*entity.Article, error) {
+	paramMap := map[string]interface{}{"ArticleId": articleId, "InternelFid": internelFid}
 	articleModel := &entity.Article{}
-	_, err := self.getSqlTemplateClient("select_by_articleId_or_internelUrl.stpl", &paramMap).Get(articleModel)
+	_, err := self.getSqlTemplateClient("select_by_articleId_or_internelFid.stpl", &paramMap).Get(articleModel)
 	return articleModel, err
 }
 

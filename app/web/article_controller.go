@@ -1,14 +1,16 @@
 package web
 
 import (
-
-"github.com/geekappio/itonchain/app/dal"
+	"github.com/geekappio/itonchain/app/common/logging"
+	"github.com/geekappio/itonchain/app/common/seaweedfs"
+	"github.com/geekappio/itonchain/app/dal"
 "github.com/geekappio/itonchain/app/dal/entity"
 "github.com/geekappio/itonchain/app/enum"
 "github.com/geekappio/itonchain/app/model"
 "github.com/geekappio/itonchain/app/service"
 "github.com/geekappio/itonchain/app/util"
-"github.com/xormplus/xorm"
+	"github.com/gin-gonic/gin"
+	"github.com/xormplus/xorm"
 
 
 
@@ -240,19 +242,21 @@ func HandleArticleListQuery(request model.ArticleListRequest) (*model.ResponseMo
 func HandleArticleQuery(request model.ArticleQueryRequest) (*model.ResponseModel) {
 	return service.GetArticleService(nil).GetArticle(request);
 }
-//
-// func HandleArticleImageGet(c *gin.Context) {
-// 	logging.Logger.Info("Received request: " + c.Request.RequestURI)
-//
-// 	// values :=c.Request.URL.Query()
-// 	// volume := values.Get("volume")
-// 	// imageKey := values.Get("key")
-//
-// 	// FIXME, 20180505, Henry, Read image from NoSQL storage
-// 	// imageContent :=
-// 	var imageContent []byte
-// 	c.Writer.Write([]byte(imageContent))
-// 	c.Writer.Flush()
-//
-// 	return
-// }
+
+func HandleResourceGet(c *gin.Context) {
+	logging.Logger.Info("Received request: " + c.Request.RequestURI)
+
+	// values :=c.Request.URL.Query()
+	fid := c.Param("fid")
+
+	content, err :=seaweedfs.DownloadResourceContent(fid)
+	if err != nil {
+		logging.Logger.Error(err)
+		return
+	}
+
+	c.Writer.Write([]byte(content))
+	c.Writer.Flush()
+
+	return
+}

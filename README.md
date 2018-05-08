@@ -94,3 +94,9 @@ tmp             临时目录
  1. 使用geekappio用户ssh登录 geekapp.itonchina.com
  2. 进入目录/home/geekappio/go/src/github.com/geekappio/itonchain
  3. 运行命令：go build -o itonchain -gcflags='-N -l' github.com/geekappio/itonchain/app && dlv --listen=:9000 --headless=true --api-version=2 exec ./itonchain
+
+### 访问SeaWeedFS存储的文件
+ 1. 通过Nginx代理对外暴露内部的SeaWeedFS服务
+ 2. 对外暴露的URL路径为
+    文件：https://geekapp.itonchain.com/itonchain/resource/article/[fid]
+    图片：https://geekapp.itonchain.com/itonchain/resource/image/[fid]

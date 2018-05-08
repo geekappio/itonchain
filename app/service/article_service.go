@@ -1,16 +1,19 @@
 package service
 
 import (
-	"github.com/xormplus/xorm"
-	"github.com/geekappio/itonchain/app/dal/dao"
-	"github.com/geekappio/itonchain/app/util"
-	"github.com/geekappio/itonchain/app/model"
-	"github.com/geekappio/itonchain/app/dal/entity"
-	"github.com/geekappio/itonchain/app/common/common_util"
-	"github.com/geekappio/itonchain/app/model/field_enum"
-	"strconv"
-	"github.com/geekappio/itonchain/app/enum"
 	"fmt"
+	"strconv"
+
+	"github.com/geekappio/itonchain/app/common/common_util"
+	"github.com/geekappio/itonchain/app/common/seaweedfs"
+	"github.com/geekappio/itonchain/app/dal/dao"
+	"github.com/geekappio/itonchain/app/dal/entity"
+	"github.com/geekappio/itonchain/app/enum"
+	"github.com/geekappio/itonchain/app/model"
+	"github.com/geekappio/itonchain/app/model/field_enum"
+	"github.com/geekappio/itonchain/app/util"
+	"github.com/jinzhu/copier"
+	"github.com/xormplus/xorm"
 )
 
 type ArticleService struct {
@@ -72,7 +75,6 @@ func (service *ArticleService) UpdateArticleFavorite(articleId int64, doFavorite
 	return favoriteTimes, nil
 }
 
-//TODO
 func (service *ArticleService) GetArticleList(request model.ArticleListRequest, articleIdList *[]int64) (*[]entity.Article, error) {
 	articleSqlMapper := dao.GetArticleSqlMapper(service.session)
 	return articleSqlMapper.SelectListByParamsInPage(request, articleIdList)
@@ -86,15 +88,21 @@ func (service *ArticleService) GetArticle(request model.ArticleQueryRequest) (*m
 		return model.NewFailedResponseModel(enum.NOT_FIND_SPECIFIED_ARTICLE, "查询文章信息失败")
 	}
 
-	// FIXME, 20180505, HENRY, READ ARTICLE CONTENT FROM NOSQL STORAGE(SEAWEEDFS)
 	// Get article content
+	content, cErr := seaweedfs.DownloadResourceContent(articleModel.InternelFid)
+	if cErr != nil {
+		util.LogError("查询文章内容失败", "internelFid = ", articleModel.InternelFid,
+			", internelUrl = ", articleModel.InternelUrl, cErr)
+		return model.NewFailedResponseModel(enum.NOT_FIND_SPECIFIED_ARTICLE, "查询文章内容失败")
+	}
 
+	m := model.ArticleModel{}
+	copier.Copy(&m, articleModel)
+	contentModel := &model.ArticleContentModel{
+		ArticleModel: m,
+		Content: fmt.Sprintf("%s", content),
+	}
 
-	// ....
-	fmt.Print(articleModel.InternelUrl)
-
-	// End of _FIXME_
-
-	return model.NewSuccessResponseModelWithData(articleModel)
+	return model.NewSuccessResponseModelWithData(contentModel)
 }
 

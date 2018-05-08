@@ -9,6 +9,11 @@ import (
 	"github.com/geekappio/itonchain/app/common/seaweedfs"
 	"github.com/geekappio/itonchain/app/util"
 
+	"crypto/sha1"
+	"io/ioutil"
+	"sort"
+	"strings"
+
 	"github.com/geekappio/itonchain/app/common/logging"
 	"github.com/geekappio/itonchain/app/common/redis"
 	"github.com/geekappio/itonchain/app/config"
@@ -17,10 +22,6 @@ import (
 	"github.com/geekappio/itonchain/app/web/api"
 	"github.com/gin-gonic/gin"
 	"github.com/gorilla/websocket"
-	"io/ioutil"
-	"sort"
-	"strings"
-	"crypto/sha1"
 )
 
 func initConfig() error {
@@ -82,10 +83,13 @@ func main() {
 	router.GET("/", rootHandler)
 
 	// 微信小程序认证
-	router.GET("/publish/authentication", authenticateGeekappPublishHandler)
+	router.GET(api.ApiRequestMapping.WechatPublishAuthen, authenticateGeekappPublishHandler)
 
-	// // Loading article image from NoSQL storage.
-	// router.GET("/nosql/article/image/get", web.HandleArticleImageGet)
+	// Loading article image from NoSQL storage.
+	router.GET(api.ApiRequestMapping.ResourceImageLoad, web.HandleResourceGet)
+
+	// Loading article from NoSQL storage.
+	router.GET(api.ApiRequestMapping.ResourceArticleLoad, web.HandleResourceGet)
 
 	// 注册用户
 	util.AddPostRouter(router, api.ApiRequestMapping.UserRegister, web.HandleUserRegister)
@@ -93,8 +97,10 @@ func main() {
 	// 查询/搜索文章列表
 	util.AddPostRouter(router, api.ApiRequestMapping.ArticleListQuery, web.HandleArticleListQuery)
 
+	// 查询文章详情
 	util.AddPostRouter(router, api.ApiRequestMapping.ArticleQuery, web.HandleArticleQuery)
-	//点赞文章
+
+	// 点赞文章
 	util.AddPostRouter(router, api.ApiRequestMapping.ArticleFavorite, web.HandleArticleFavorite)
 
 	// 分享文章
@@ -160,7 +166,6 @@ func rootHandler(c *gin.Context) {
 	fmt.Fprintf(w, "%s", content)
 }
 
-
 func CheckWechatPublishSign(signature string, timestamp string, nonce string) bool {
 
 	arrs := []string{config.App.GeekappPublish.Token, timestamp, nonce}
@@ -176,7 +181,7 @@ func CheckWechatPublishSign(signature string, timestamp string, nonce string) bo
 func authenticateGeekappPublishHandler(c *gin.Context) {
 	logging.Logger.Info("Received request: " + c.Request.RequestURI)
 
-	values :=c.Request.URL.Query()
+	values := c.Request.URL.Query()
 	signature := values.Get("signature")
 	timestamp := values.Get("timestamp")
 	nonce := values.Get("nonce")
