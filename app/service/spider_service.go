@@ -1,20 +1,20 @@
 package service
 
 import (
-	"github.com/mmcdole/gofeed"
-	"github.com/geekappio/itonchain/app/model"
-	"github.com/geekappio/itonchain/app/common/redis"
-	"github.com/geekappio/itonchain/app/util"
-	"time"
-	"github.com/geekappio/itonchain/app/common/seaweedfs"
-	"github.com/geekappio/itonchain/app/config"
-	"github.com/PuerkitoBio/goquery"
-	"strings"
-	"regexp"
-	"net/http"
 	"io/ioutil"
-	"bytes"
-	"golang.org/x/net/html"
+	"net/http"
+	"regexp"
+	"strings"
+	"time"
+
+	"github.com/PuerkitoBio/goquery"
+	"github.com/geekappio/itonchain/app/common/redis"
+	"github.com/geekappio/itonchain/app/common/seaweedfs"
+	"github.com/geekappio/itonchain/app/model"
+	"github.com/geekappio/itonchain/app/util"
+	"github.com/geekappio/itonchain/app/web/api"
+	goswfsModel "github.com/linxGnu/goseaweedfs/model"
+	"github.com/mmcdole/gofeed"
 )
 
 const FEED_LAST_ARTICLE_PREFIX = "FEED_LAST_ARTICLE_PREFIX."
@@ -42,11 +42,11 @@ func (self *FeedSpider) Capture(sources []*model.ArticleSource) error {
 		}
 		for _, article := range articles {
 			localize(article)
-			fid, err := save(article)
+			submitResult, err := save(article)
 			if nil != err {
 				return err
 			}
-			_, err = articlePendingService.AddArticlePending(article.title, article.link, fid, parseKeywords(article.content))
+			_, err = articlePendingService.AddArticlePending(article.title, article.link, submitResult.FileID, submitResult.FileURL, submitResult.Size, parseKeywords(article.content))
 			if nil != err {
 				return err
 			}
@@ -79,22 +79,28 @@ func localize(feedArticle *feedArticle) error {
 			if err != nil {
 				return
 			}
-			model, err := seaweedfs.UploadFileContent(src, data, config.Config.SeaWeedFS.UploadAddrUrl)
+			submitResult, err := seaweedfs.SubmitFileContent(src, data, nil)
 			if err != nil {
 				return
 			}
-			s.SetAttr("src", model.Fid)
+			s.SetAttr("src", api.RESOURCE_IMAGE_URI + submitResult.FileID)
 		}
 	})
-	buf := bytes.NewBuffer([]byte{})
-	rootNode := doc.Nodes[0]	// FIXME
-	html.Render(buf, rootNode)
-	feedArticle.content = buf.String()
+
+	// buf := bytes.NewBuffer([]byte{})
+	// rootNode := doc.Nodes[0] // FIXME
+	// html.Render(buf, rootNode)
+	content, err := doc.Html()
+	if err != nil {
+		return err
+	}
+
+	feedArticle.content = content
 	return nil
 }
 
 func getCompleteURL(parentUrl, curUrl string) string {
-	if (strings.HasPrefix(curUrl, "http")){
+	if (strings.HasPrefix(curUrl, "http")) {
 		return curUrl
 	} else if (strings.HasPrefix(curUrl, "//")) {
 		end := strings.Index(parentUrl, "//")
@@ -135,15 +141,10 @@ type feedArticle struct {
 	content string
 }
 
-func save(feedArticle *feedArticle) (string, error) {
+func save(feedArticle *feedArticle) (result *goswfsModel.SubmitResult, err error) {
 	name := feedArticle.title
 	content := []byte(feedArticle.content)
-	url := config.Config.SeaWeedFS.UploadAddrUrl
-	resp, err := seaweedfs.UploadFileContent(name, content, url)
-	if err != nil {
-		return "", err
-	}
-	return resp.Fid, nil
+	return seaweedfs.SubmitFileContent(name, content, nil)
 }
 
 func download(feedUrl string) (string, []*feedArticle, error) {

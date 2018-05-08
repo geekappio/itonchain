@@ -6,6 +6,7 @@ import (
 	"log"
 	"net/http"
 
+	"github.com/geekappio/itonchain/app/common/seaweedfs"
 	"github.com/geekappio/itonchain/app/util"
 
 	"github.com/geekappio/itonchain/app/common/logging"
@@ -25,7 +26,7 @@ import (
 func initConfig() error {
 
 	// Parse command line arguments
-	// Config file path
+	// App file path
 	configPath := flag.String("config", config.DEFAULT_CONFIG_PATH, "Needs config file path.")
 	flag.Parse()
 
@@ -50,6 +51,9 @@ func initConfig() error {
 		return err
 	}
 
+	// Init SeaWeedFS
+	seaweedfs.InitSeaWeedFS();
+
 	// Init database
 	err = dal.InitDataSource()
 	if err != nil {
@@ -69,8 +73,8 @@ func main() {
 		return
 	}
 
-	gin.SetMode(config.Config.RunMode) // 全局设置环境，此为开发环境，线上环境为gin.ReleaseMode
-	router := gin.Default()            // 获得路由实例
+	gin.SetMode(config.App.RunMode) // 全局设置环境，此为开发环境，线上环境为gin.ReleaseMode
+	router := gin.Default()         // 获得路由实例
 	// 添加中间件
 	router.Use(Middleware)
 
@@ -80,8 +84,8 @@ func main() {
 	// 微信小程序认证
 	router.GET("/publish/authentication", authenticateGeekappPublishHandler)
 
-	// Loading article image from NoSQL storage.
-	router.GET("/article/image/get", web.HandleArticleImageGet)
+	// // Loading article image from NoSQL storage.
+	// router.GET("/nosql/article/image/get", web.HandleArticleImageGet)
 
 	// 注册用户
 	util.AddPostRouter(router, api.ApiRequestMapping.UserRegister, web.HandleUserRegister)
@@ -119,7 +123,7 @@ func main() {
 		wshandler(c.Writer, c.Request)
 	})
 
-	router.Run(config.Config.Server.Address)
+	router.Run(config.App.Server.Address)
 }
 
 var wsupgrader = websocket.Upgrader{
@@ -159,7 +163,7 @@ func rootHandler(c *gin.Context) {
 
 func CheckWechatPublishSign(signature string, timestamp string, nonce string) bool {
 
-	arrs := []string{config.Config.GeekappPublish.Token, timestamp, nonce}
+	arrs := []string{config.App.GeekappPublish.Token, timestamp, nonce}
 	sort.Strings(arrs)
 
 	raw := strings.Join(arrs, "")

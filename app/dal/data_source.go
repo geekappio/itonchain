@@ -17,24 +17,24 @@ var DB *xorm.Engine
 func InitDataSource() error {
 	var err error
 
-	DB, err = xorm.NewMySQL(Config.Database.DriverName, Config.Database.DatasourceName)
+	DB, err = xorm.NewMySQL(App.Database.DriverName, App.Database.DatasourceName)
 	if err != nil {
 		util.LogError(err)
 		return err
 	}
 
 	// 设置连接池
-	DB.SetMaxIdleConns(Config.Database.MaxIdelConnections)
-	DB.SetMaxOpenConns(Config.Database.MaxOpenConnections)
+	DB.SetMaxIdleConns(App.Database.MaxIdelConnections)
+	DB.SetMaxOpenConns(App.Database.MaxOpenConnections)
 
 	// 配置模板文件
-	err = DB.RegisterSqlMap(xorm.Xml(Config.XormPlus.XmlDirectory, ".xml"))
+	err = DB.RegisterSqlMap(xorm.Xml(App.XormPlus.XmlDirectory, ".xml"))
 	if err != nil {
 		util.LogError(err)
 		return err
 	}
 
-	err = DB.RegisterSqlTemplate(xorm.Pongo2(Config.XormPlus.StplDirectory, ".stpl"))
+	err = DB.RegisterSqlTemplate(xorm.Pongo2(App.XormPlus.StplDirectory, ".stpl"))
 	if err != nil {
 		util.LogError(err)
 		return err

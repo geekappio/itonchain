@@ -11,8 +11,8 @@ var redisClient *redis.Client
 
 func InitRedis() error {
 	redisClient = redis.NewClient(&redis.Options{
-		Addr: config.Config.Redis.Address,
-		DB:   config.Config.Redis.DB,
+		Addr: config.App.Redis.Address,
+		DB:   config.App.Redis.DB,
 	})
 
 	pong, err := redisClient.Ping().Result()

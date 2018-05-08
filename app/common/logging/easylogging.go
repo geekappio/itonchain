@@ -26,12 +26,12 @@ func initLoggerWriter(loggerPath string) (*rotatelogs.RotateLogs, error) {
 }
 
 func initCommonLogger() (*logrus.Logger, error) {
-	defaultWriter, err := initLoggerWriter(config.Config.Logging.DefaultLogPath)
+	defaultWriter, err := initLoggerWriter(config.App.Logging.DefaultLogPath)
 	if err != nil {
 		return nil, err
 	}
 
-	errorWriter, err := initLoggerWriter(config.Config.Logging.ErrorLogPath)
+	errorWriter, err := initLoggerWriter(config.App.Logging.ErrorLogPath)
 	if err != nil {
 		return nil, err
 	}
@@ -49,7 +49,7 @@ func initCommonLogger() (*logrus.Logger, error) {
 	)
 
 	logger := logrus.New()
-	level, err := logrus.ParseLevel(config.Config.Logging.LogLevel)
+	level, err := logrus.ParseLevel(config.App.Logging.LogLevel)
 	if err != nil {
 		fmt.Errorf("Not specified log level, use info as default.")
 		level = logrus.InfoLevel
@@ -61,7 +61,7 @@ func initCommonLogger() (*logrus.Logger, error) {
 }
 
 func initApiLogger() (*logrus.Logger, error) {
-	apiWriter, err := initLoggerWriter(config.Config.Logging.ApiLogPath)
+	apiWriter, err := initLoggerWriter(config.App.Logging.ApiLogPath)
 	if err != nil {
 		return nil, err
 	}
@@ -79,7 +79,7 @@ func initApiLogger() (*logrus.Logger, error) {
 	)
 
 	logger := logrus.New()
-	level, err := logrus.ParseLevel(config.Config.Logging.LogLevel)
+	level, err := logrus.ParseLevel(config.App.Logging.LogLevel)
 	if err != nil {
 		fmt.Errorf("Not specified log level, use info as default.")
 		level = logrus.InfoLevel

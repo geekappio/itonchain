@@ -9,18 +9,19 @@ import (
 	"github.com/ian-kent/go-log/log"
 
 	// "gopkg.in/yaml.v2"
+	"time"
 )
 
 // App configs.
 type AppConfig struct {
 	// "debug"、"release"、"test"
-	RunMode  string         `json:"runMode"`
-	Logging  LoggingConfig  `json:"util"`
-	Server   ServerConfig   `json:"server"`
-	Redis    RedisConfig    `json:"redis"`
-	Database DatabaseConfig `json:"database"`
-	XormPlus XormPlusConfig `json:"xormPlus"`
-	SeaWeedFS SeaWeedFSConfig `json:"seaweed"`
+	RunMode        string               `json:"runMode"`
+	Logging        LoggingConfig        `json:"util"`
+	Server         ServerConfig         `json:"server"`
+	Redis          RedisConfig          `json:"redis"`
+	Database       DatabaseConfig       `json:"database"`
+	XormPlus       XormPlusConfig       `json:"xormPlus"`
+	SeaWeedFS      SeaWeedFSConfig      `json:"seaweed"`
 	GeekappPublish GeekappPublishConfig `json:"geekapp.publish"`
 }
 
@@ -49,7 +50,12 @@ type RedisConfig struct {
 // SeaWeedFS configs.
 type SeaWeedFSConfig struct {
 	// 上传地址 url
-	UploadAddrUrl string `json:"uploadAddressUrl"`
+	SwFSMasterUrl string        `json:"SwFSMasterUrl"`
+	SwFSSchema    string        `json:"SwFSSchema"`
+	SwFSFilerUrls string        `json:"SwFSFilerUrl"`
+	ChunkSize     int64         `json"chunkSize"`
+	Duration      time.Duration `json"duration"`
+	UploadAddrUrl string        `json:"uploadAddressUrl"`
 }
 
 //  Databae configs.
@@ -69,7 +75,7 @@ type XormPlusConfig struct {
 var configFile []byte
 
 // Export config object.
-var Config *AppConfig
+var App *AppConfig
 
 // Init application configs.
 // FIXME 我调试了很久yaml格式的配置，但是一直没有调通，换用json格式
@@ -88,7 +94,7 @@ func InitAppConfig(configPath string) error {
 	}
 
 	// Set config items.
-	Config, err = getAppConfig()
+	App, err = getAppConfig()
 	if err != nil {
 		log.Fatalf("yamlFile.Get err %v ", err)
 		return err
@@ -98,8 +104,8 @@ func InitAppConfig(configPath string) error {
 }
 
 func getAppConfig() (appConfig *AppConfig, err error) {
-	if Config != nil {
-		return Config, nil
+	if App != nil {
+		return App, nil
 	}
 
 	appConfig = new(AppConfig)

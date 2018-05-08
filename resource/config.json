@@ -7,11 +7,15 @@
     "db":0
   },
   "seaweed":{
-    "uploadAddressUrl":"http://35.194.190.28:9333/submit"
+    "SwFSMasterUrl":"35.194.190.28:9333",
+    "SwFSFilerUrl":"",
+    "SwFSSchema":"http",
+    "chunkSize": 2,
+    "duration": 5
   },
   "database":{
     "driverName":"mysql",
-    "datasourceName":"root:cgV8vokF@tcp(121.40.78.46:3306)/applet.geekapp?parseTime=true&connectTimeout=60000&socketTimeout=60000",
+    "datasourceName":"root:cgV8vokF@tcp(121.40.78.46:3306)/applet.geekapp?parseTime=true",
     "maxIdelConnections":20,
     "maxOpenConnections":20
   },

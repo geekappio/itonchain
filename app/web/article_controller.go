@@ -1,19 +1,22 @@
 package web
 
 import (
-	"github.com/geekappio/itonchain/app/enum"
-	"github.com/geekappio/itonchain/app/model"
-	"github.com/geekappio/itonchain/app/service"
-	"github.com/geekappio/itonchain/app/util"
-	"github.com/xormplus/xorm"
-	"github.com/geekappio/itonchain/app/dal/entity"
-	"github.com/geekappio/itonchain/app/dal"
 
-	"strconv"
-	"github.com/geekappio/itonchain/app/model/field_enum"
-	"github.com/geekappio/itonchain/app/common/common_util"
-	"github.com/gin-gonic/gin"
-	"github.com/geekappio/itonchain/app/common/logging"
+"github.com/geekappio/itonchain/app/dal"
+"github.com/geekappio/itonchain/app/dal/entity"
+"github.com/geekappio/itonchain/app/enum"
+"github.com/geekappio/itonchain/app/model"
+"github.com/geekappio/itonchain/app/service"
+"github.com/geekappio/itonchain/app/util"
+"github.com/xormplus/xorm"
+
+
+
+"strconv"
+
+"github.com/geekappio/itonchain/app/common/common_util"
+"github.com/geekappio/itonchain/app/model/field_enum"
+
 )
 
 func HandleArticleShare(request model.ArticleShareRequest) (*model.ArticleShareReturnData, enum.ErrorCode) {
@@ -237,19 +240,19 @@ func HandleArticleListQuery(request model.ArticleListRequest) (*model.ResponseMo
 func HandleArticleQuery(request model.ArticleQueryRequest) (*model.ResponseModel) {
 	return service.GetArticleService(nil).GetArticle(request);
 }
-
-func HandleArticleImageGet((c *gin.Context) {
-	logging.Logger.Info("Received request: " + c.Request.RequestURI)
-
-	// values :=c.Request.URL.Query()
-	// volume := values.Get("volume")
-	// imageKey := values.Get("key")
-
-	// FIXME, 20180505, Henry, Read image from NoSQL storage
-	// imageContent :=
-	var imageContent []byte
-	c.Writer.Write([]byte(imageContent))
-	c.Writer.Flush()
-
-	return
-}
+//
+// func HandleArticleImageGet(c *gin.Context) {
+// 	logging.Logger.Info("Received request: " + c.Request.RequestURI)
+//
+// 	// values :=c.Request.URL.Query()
+// 	// volume := values.Get("volume")
+// 	// imageKey := values.Get("key")
+//
+// 	// FIXME, 20180505, Henry, Read image from NoSQL storage
+// 	// imageContent :=
+// 	var imageContent []byte
+// 	c.Writer.Write([]byte(imageContent))
+// 	c.Writer.Flush()
+//
+// 	return
+// }

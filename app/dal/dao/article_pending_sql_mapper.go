@@ -8,7 +8,7 @@ import (
 )
 
 func GetArticlePendingSqlMapper(session *xorm.Session) (articleSqlMapper *ArticlePendingSqlMapper) {
-	return &ArticlePendingSqlMapper{session:session}
+	return &ArticlePendingSqlMapper{session: session}
 }
 
 type ArticlePendingSqlMapper struct {
@@ -26,9 +26,14 @@ func (sqlMapper *ArticlePendingSqlMapper) getSqlTemplateClient(sqlTagName string
 
 func (self *ArticlePendingSqlMapper) AddArticlePending(articlePending *entity.ArticlePending) (int64, error) {
 	paramMap := map[string]interface{}{
-		"ArticleTitle": articlePending.ArticleTitle, "ArticleFrom": articlePending.ArticleFrom,
-		"ArticleUrl":articlePending.ArticleUrl, "ArticleKeywords":articlePending.ArticleKeywords,
-		"GmtCreate": articlePending.GmtCreate, "GmtUpdate": articlePending.GmtUpdate,
+		"ArticleTitle":    articlePending.ArticleTitle,
+		"ArticleFrom":     articlePending.ArticleFrom,
+		"InternelFid":     articlePending.InternelFid,
+		"InternelUrl":     articlePending.InternelUrl,
+		"InternelSize":    articlePending.InternelSize,
+		"ArticleKeywords": articlePending.ArticleKeywords,
+		"GmtCreate":       articlePending.GmtCreate,
+		"GmtUpdate":       articlePending.GmtUpdate,
 	}
 	r, err := self.getSqlTemplateClient("insert_article_pending.stpl", &paramMap).Execute()
 	id, _ := r.LastInsertId()
@@ -36,4 +41,3 @@ func (self *ArticlePendingSqlMapper) AddArticlePending(articlePending *entity.Ar
 	rows, _ := r.RowsAffected()
 	return rows, err
 }
-

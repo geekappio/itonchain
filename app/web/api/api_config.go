@@ -32,3 +32,8 @@ func init() {
 		ArticleCategoryInfoChange:  "/article_category/info/change",
 	}
 }
+
+const (
+	RESOURCE_ARTICLE_URI = "/resource/article/"
+	RESOURCE_IMAGE_URI = "/resource/image/"
+)
