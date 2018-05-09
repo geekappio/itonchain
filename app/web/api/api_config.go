@@ -41,5 +41,5 @@ func init() {
 
 const (
 	RESOURCE_ARTICLE_URI = "/resource/article/"
-	RESOURCE_IMAGE_URI   = "/resource/image/"
+	RESOURCE_IMAGE_URI   = "/itonchain/resource/image/"
 )
