@@ -28,6 +28,7 @@ func (self *ArticlePendingSqlMapper) AddArticlePending(articlePending *entity.Ar
 	paramMap := map[string]interface{}{
 		"ArticleTitle":    articlePending.ArticleTitle,
 		"ArticleFrom":     articlePending.ArticleFrom,
+		"ArticleUrl":      articlePending.ArticleUrl,
 		"InternelFid":     articlePending.InternelFid,
 		"InternelUrl":     articlePending.InternelUrl,
 		"InternelSize":    articlePending.InternelSize,

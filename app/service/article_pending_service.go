@@ -21,10 +21,11 @@ func GetArticlePendingService(session ...*xorm.Session) *ArticlePendingService {
 	}
 }
 
-func (self *ArticlePendingService) AddArticlePending(title, from, internelFid string, internelUrl string, internelSize int64, keywords string) (bool, error) {
+func (self *ArticlePendingService) AddArticlePending(title, from, url, internelFid, internelUrl string, internelSize int64, keywords string) (bool, error) {
 	articlePending := entity.ArticlePending{
 		ArticleTitle:    title,
 		ArticleFrom:     from,
+		ArticleUrl:      url,
 		InternelFid:     internelFid,
 		InternelUrl:     internelUrl,
 		InternelSize:    internelSize,
@@ -38,7 +39,7 @@ func (self *ArticlePendingService) AddArticlePending(title, from, internelFid st
 
 	rows, err := mapper.AddArticlePending(&articlePending)
 	if err != nil {
-		util.LogError("Error happened when inserting article_pending: ", title, from, internelFid, internelUrl, internelSize, keywords, err)
+		util.LogError("Error happened when inserting article_pending: ", title, from, url, internelFid, internelUrl, internelSize, keywords, err)
 	}
 	return 1 == rows, err
 }

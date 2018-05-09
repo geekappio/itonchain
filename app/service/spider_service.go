@@ -8,6 +8,7 @@ import (
 	"time"
 
 	"github.com/PuerkitoBio/goquery"
+	"github.com/geekappio/itonchain/app/common/network"
 	"github.com/geekappio/itonchain/app/common/redis"
 	"github.com/geekappio/itonchain/app/common/seaweedfs"
 	"github.com/geekappio/itonchain/app/model"
@@ -46,7 +47,7 @@ func (self *FeedSpider) Capture(sources []*model.ArticleSource) error {
 			if nil != err {
 				return err
 			}
-			_, err = articlePendingService.AddArticlePending(article.title, article.link, submitResult.FileID, submitResult.FileURL, submitResult.Size, parseKeywords(article.content))
+			_, err = articlePendingService.AddArticlePending(article.title, article.domain, article.link, submitResult.FileID, submitResult.FileURL, submitResult.Size, parseKeywords(article.content))
 			if nil != err {
 				return err
 			}
@@ -83,7 +84,7 @@ func localize(feedArticle *feedArticle) error {
 			if err != nil {
 				return
 			}
-			s.SetAttr("src", api.RESOURCE_IMAGE_URI + submitResult.FileID)
+			s.SetAttr("src", api.RESOURCE_IMAGE_URI+submitResult.FileID)
 		}
 	})
 
@@ -131,6 +132,7 @@ func regexUrl(regex, url string) (string, error) {
 
 // 从Feed抓取的文章模型
 type feedArticle struct {
+	domain  string
 	title   string
 	desc    string
 	link    string
@@ -156,7 +158,9 @@ func download(feedUrl string) (string, []*feedArticle, error) {
 	articles := make([]*feedArticle, len(feed.Items))
 	for i, item := range feed.Items {
 		if "" == lastArticleMark || item.GUID != lastArticleMark {
+			_, domain, _ := network.GetUrlInfo(item.Link)
 			articles[i] = &feedArticle{
+				domain:  domain,
 				title:   item.Title,
 				desc:    item.Description,
 				link:    item.Link,
