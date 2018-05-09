@@ -45,6 +45,7 @@ func (self *ArticleSqlMapper) AddArticleMark(articleId int64, addend int) (int64
 	rows, _ := r.RowsAffected()
 	return rows, err
 }
+
 func (self *ArticleSqlMapper) SelectListByParamsInPage(request ArticleListRequest, articleIdList *[]int64) (*[]entity.Article, error) {
 	var articleList []entity.Article
 	//TODO 优化分页 类似实现拦截器统一封装

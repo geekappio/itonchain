@@ -4,21 +4,18 @@ import (
 	"github.com/geekappio/itonchain/app/common/logging"
 	"github.com/geekappio/itonchain/app/common/seaweedfs"
 	"github.com/geekappio/itonchain/app/dal"
-"github.com/geekappio/itonchain/app/dal/entity"
-"github.com/geekappio/itonchain/app/enum"
-"github.com/geekappio/itonchain/app/model"
-"github.com/geekappio/itonchain/app/service"
-"github.com/geekappio/itonchain/app/util"
+	"github.com/geekappio/itonchain/app/dal/entity"
+	"github.com/geekappio/itonchain/app/enum"
+	"github.com/geekappio/itonchain/app/model"
+	"github.com/geekappio/itonchain/app/service"
+	"github.com/geekappio/itonchain/app/util"
 	"github.com/gin-gonic/gin"
 	"github.com/xormplus/xorm"
 
+	"strconv"
 
-
-"strconv"
-
-"github.com/geekappio/itonchain/app/common/common_util"
-"github.com/geekappio/itonchain/app/model/field_enum"
-
+	"github.com/geekappio/itonchain/app/common/common_util"
+	"github.com/geekappio/itonchain/app/model/field_enum"
 )
 
 func HandleArticleShare(request model.ArticleShareRequest) (*model.ArticleShareReturnData, enum.ErrorCode) {
@@ -216,7 +213,9 @@ func HandleArticleListQuery(request model.ArticleListRequest) (*model.ResponseMo
 			ArticleTitle:    article.ArticleTitle,
 			ArticleFrom:     article.ArticleFrom,
 			ArticleUrl:      article.ArticleUrl,
+			InternelFid:     article.InternelFid,
 			InternelUrl:     article.InternelUrl,
+			InternelSize:    article.InternelSize,
 			ContentType:     article.ContentType,
 			Images:          article.Images,
 			PreviewLayout:   article.PreviewLayout,
@@ -249,7 +248,7 @@ func HandleResourceGet(c *gin.Context) {
 	// values :=c.Request.URL.Query()
 	fid := c.Param("fid")
 
-	content, err :=seaweedfs.DownloadResourceContent(fid)
+	content, err := seaweedfs.DownloadResourceContent(fid)
 	if err != nil {
 		logging.Logger.Error(err)
 		return

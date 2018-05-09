@@ -57,9 +57,9 @@ type ArticleModel struct {
 	ArticleTitle    string `json:"articleTitle"`
 	ArticleFrom     string `json:"articleFrom"`
 	ArticleUrl      string `json:"articleUrl"`
-	InernelFid      string `json:"internelFid"`
+	InternelFid     string `json:"internelFid"`
 	InternelUrl     string `json:"internelUrl"`
-	InternelSize    string `json:"internelSize"`
+	InternelSize    int64  `json:"internelSize"`
 	ContentType     string `json:"contentType"`
 	Images          string `json:"images"`
 	PreviewLayout   string `json:"previewLayout"`
