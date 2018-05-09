@@ -6,11 +6,12 @@
 -- -----------------------------------------------------
 -- Change History --------------------------------------
 -- -----------------------------------------------------
--- 2018-05-05 ver0.5
+-- 2018-05-08 ver0.5
 --    1. Add two columns in article table.
 --        `internel_fid` VARCHAR(100) NOT NULL COMMENT '内部存储的fid'
 --        `internel_size` BIGINT(20) UNSIGNED NOT NULL DEFAULT 0 COMMENT '内部存储的size'
 --    2. Modify columns in article_pending table.
+--          ADD COLUMN `article_url` VARCHAR(1000) NOT NULL COMMENT '文章原文url地址',
 --          CHANGE `article_url` `internel_fid` VARCHAR(100);
 --          MODIFY `internel_fid` VARCHAR(100) NOT NULL COMMENT '内部存储的fid';
 --          ADD COLUMN `internel_size` BIGINT(20) UNSIGNED NOT NULL DEFAULT 0 COMMENT '内部存储的size';
