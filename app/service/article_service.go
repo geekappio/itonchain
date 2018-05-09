@@ -81,10 +81,10 @@ func (service *ArticleService) GetArticleList(request model.ArticleListRequest, 
 }
 
 func (service *ArticleService) GetArticle(request model.ArticleQueryRequest) (*model.ResponseModel) {
-	articleModel, err := dao.GetArticleSqlMapper(nil).SelectByArticleIdOrInternelUrl(request.ArticleId, request.InternelUrl)
+	articleModel, err := dao.GetArticleSqlMapper(nil).SelectByArticleIdOrInternelUrl(request.ArticleId, request.InternelFid)
 
 	if err != nil {
-		util.LogError("查询文章信息失败", "articleId = "+strconv.FormatInt(request.ArticleId, 10)+";internelUrl = "+request.InternelUrl, err)
+		util.LogError("查询文章信息失败", "articleId = "+strconv.FormatInt(request.ArticleId, 10)+";internelUrl = "+request.InternelFid, err)
 		return model.NewFailedResponseModel(enum.NOT_FIND_SPECIFIED_ARTICLE, "查询文章信息失败")
 	}
 
