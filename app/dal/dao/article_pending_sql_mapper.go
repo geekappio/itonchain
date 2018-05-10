@@ -5,7 +5,6 @@ import (
 	"github.com/geekappio/itonchain/app/dal"
 	"github.com/geekappio/itonchain/app/dal/entity"
 	"github.com/xormplus/xorm"
-	"github.com/dgrijalva/jwt-go/request"
 	"github.com/geekappio/itonchain/app/util"
 )
 

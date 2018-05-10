@@ -5,7 +5,6 @@ import (
 	"github.com/geekappio/itonchain/app/model"
 	"github.com/geekappio/itonchain/app/util"
 	"github.com/geekappio/itonchain/app/enum"
-	"github.com/geekappio/itonchain/app/dal/entity"
 	"github.com/geekappio/itonchain/app/model/field_enum"
 )
 

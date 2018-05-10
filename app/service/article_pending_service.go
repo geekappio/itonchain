@@ -2,15 +2,11 @@ package service
 
 import (
 	"time"
-
 	"github.com/geekappio/itonchain/app/dal/dao"
 	"github.com/geekappio/itonchain/app/dal/entity"
 	"github.com/geekappio/itonchain/app/util"
 	"github.com/xormplus/xorm"
 	"github.com/geekappio/itonchain/app/model/field_enum"
-	"github.com/geekappio/itonchain/app/enum"
-	"github.com/geekappio/itonchain/app/dal"
-	"github.com/dgrijalva/jwt-go/request"
 )
 
 type ArticlePendingService struct {

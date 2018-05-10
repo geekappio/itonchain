@@ -9,7 +9,6 @@ import (
 	."github.com/geekappio/itonchain/app/model"
 	"github.com/xormplus/xorm"
 	"github.com/geekappio/itonchain/app/util"
-	"github.com/geekappio/itonchain/app/model/field_enum"
 	"time"
 )
 
@@ -128,6 +127,7 @@ func (self *ArticleSqlMapper)SelectByArticleIdOrInternelUrl(articleId int64, int
 	return articleModel, err
 }
 
+// 插入文章模型
 func (self *ArticleSqlMapper)InsertArticle(article *entity.Article) (int64, error) {
 	paramMap := map[string]interface{}{
 		"ArticleTitle":    article.ArticleTitle,
