@@ -31,7 +31,7 @@ func InitSeaWeedFS() {
 // SubmitRourceContent 提交文件内容到seaweedfs
 func SubmitRourceContent(fileName string, content []byte, args url.Values) (result *model.SubmitResult, err error) {
 	filePart := model.NewFilePartFromReader(bytes.NewBuffer(content), fileName, int64(len(content)))
-	return SeaWeedFS.SubmitFilePart(filePart, args);
+	return SeaWeedFS.SubmitFilePart(filePart, args)
 }
 
 // UploadResourceContent 上传文件内容到seaweedsfs

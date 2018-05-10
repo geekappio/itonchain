@@ -15,6 +15,9 @@ type requestMapping struct {
 	ResourceArticleLoad        string
 	ResourceImageLoad          string
 	WechatPublishAuthen        string
+	// 后台服务
+	AdminLogin				   string
+
 }
 
 // Export Api request mapping object.
@@ -36,6 +39,8 @@ func init() {
 		ResourceArticleLoad:        "/resource/article/:fid",
 		ResourceImageLoad:          "/resource/image/:fid",
 		WechatPublishAuthen:        "/publish/authentication",
+		// 后台服务URL
+		AdminLogin:					"admin/login",
 	}
 }
 

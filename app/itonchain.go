@@ -124,6 +124,12 @@ func main() {
 	// 修改文章类目次序
 	util.AddPostRouter(router, api.ApiRequestMapping.ArticleCategoryOrderChange, web.HandleArticleCategoryOrderChange)
 
+	/**
+	 * 后台服务API
+	 */
+	// 后台用户登录
+	util.AddPostRouter(router, api.ApiRequestMapping.AdminLogin, web.HandleAdminLogin)
+
 	// Handle websocket
 	router.GET("/ws", func(c *gin.Context) {
 		wshandler(c.Writer, c.Request)
