@@ -5,6 +5,7 @@ import (
 
 	"github.com/geekappio/itonchain/app/config"
 	"github.com/go-redis/redis"
+	"math"
 )
 
 var redisClient *redis.Client
@@ -36,7 +37,7 @@ func Get(key string) (value string) {
 }
 
 func Set(key string, value string) {
-	err := redisClient.Set(key, value, 1000000).Err()
+	err := redisClient.Set(key, value, math.MaxInt64).Err()
 	if err != nil {
 		log.Println("redis set failed:", err)
 	}

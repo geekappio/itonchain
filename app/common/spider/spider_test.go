@@ -1,14 +1,15 @@
-package service
+package spider
 
 import (
 	"testing"
 
+	"github.com/geekappio/itonchain/app/config"
 	"github.com/geekappio/itonchain/app/common/logging"
 	"github.com/geekappio/itonchain/app/common/redis"
 	"github.com/geekappio/itonchain/app/common/seaweedfs"
-	"github.com/geekappio/itonchain/app/config"
 	"github.com/geekappio/itonchain/app/dal"
-	"github.com/geekappio/itonchain/app/model"
+	"github.com/geekappio/itonchain/app/dal/entity"
+	"time"
 )
 
 func init()  {
@@ -17,12 +18,14 @@ func init()  {
 	redis.InitRedis()
 	seaweedfs.InitSeaWeedFS()
 	dal.InitDataSource()
-
 }
 
 func TestFeedSpider_Capture(t *testing.T) {
-	spider := &FeedSpider{}
-	var sources []*model.ArticleSource
-	sources = append(sources, &model.ArticleSource{Url:"http://cmsblogs.com/?feed=rss2"})
-	spider.Capture(sources)
+	sources := make([]*entity.ArticleSource, 1)
+	sources[0] = &entity.ArticleSource{
+		SourceType: "FEED",
+		SourceUrl: "https://wanqu.co/feed/",
+	}
+	Capture(sources)
+	time.Sleep(10 * time.Minute)
 }
