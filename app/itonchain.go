@@ -129,8 +129,13 @@ func main() {
 	 */
 	// 后台用户登录
 	util.AddPostRouter(router, api.ApiRequestMapping.AdminLogin, web.HandleAdminLogin)
+	// 获取pending的文章总数
 	util.AddPostRouter(router, api.ApiRequestMapping.ArticlePendingCount, web.HandleGetArticlePendingCount)
+	// 获取pending文章列表，支持文件标题进行查询
 	util.AddPostRouter(router, api.ApiRequestMapping.ArticlePendingListQuery, web.HandleGetArticlePendingList)
+	// 将Penging文章推送至文章表（状态为编辑）
+	util.AddPostRouter(router, api.ApiRequestMapping.PublishPengingToArticle, web.HandlePublishPengingToArticle)
+
 
 	// Handle websocket
 	router.GET("/ws", func(c *gin.Context) {

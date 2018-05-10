@@ -19,6 +19,7 @@ type requestMapping struct {
 	AdminLogin				   string
 	ArticlePendingCount		   string
 	ArticlePendingListQuery	   string
+	PublishPengingToArticle	   string
 
 }
 
@@ -45,6 +46,7 @@ func init() {
 		AdminLogin:					"/portal/login",
 		ArticlePendingCount:		"/portal/article_pending/count",
 		ArticlePendingListQuery:	"/portal/article_pending/list",
+		PublishPengingToArticle: 	"/portal/article_pending/publish",
 	}
 }
 

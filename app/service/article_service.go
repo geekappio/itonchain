@@ -106,3 +106,31 @@ func (service *ArticleService) GetArticle(request model.ArticleQueryRequest) (*m
 	return model.NewSuccessResponseModelWithData(contentModel)
 }
 
+func (service *ArticleService) AddArticle(pending *entity.ArticlePending) (bool, error) {
+	article := entity.Article{
+		ArticleTitle:    pending.ArticleTitle,
+		ArticleFrom:     pending.ArticleFrom,
+		ArticleUrl:      pending.ArticleUrl,
+		ArticleLabels:   "",// 文章标签只能上线时选择
+		InternelFid:     pending.InternelFid,
+		InternelUrl:     pending.InternelUrl,
+		InternelSize:    pending.InternelSize,
+		ContentType:     field_enum.ARTICLE_HTML.Value,
+		Images:          "", // 文章标题小图
+		PreviewLayout:   "", //
+		ArticleKeywords: pending.ArticleKeywords,
+		FavoriteTimes:   0,
+		ViewTimes:       0,
+		MarkTimes:       0,
+		IsTechnology:    field_enum.NO.Value,
+		IsBlockchain:    field_enum.NO.Value,
+		State:           field_enum.ARTICLE_STATE_EDIT.Value,
+		Comment:         "新文章上线", // 后续定义剥离
+	}
+	rows, err := dao.GetArticleSqlMapper(nil).InsertArticle(&article)
+	if err != nil {
+		util.LogError("新增文章失败: ", err)
+	}
+	return 1 == rows, err
+}
+

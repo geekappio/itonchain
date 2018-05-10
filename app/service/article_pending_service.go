@@ -7,6 +7,10 @@ import (
 	"github.com/geekappio/itonchain/app/dal/entity"
 	"github.com/geekappio/itonchain/app/util"
 	"github.com/xormplus/xorm"
+	"github.com/geekappio/itonchain/app/model/field_enum"
+	"github.com/geekappio/itonchain/app/enum"
+	"github.com/geekappio/itonchain/app/dal"
+	"github.com/dgrijalva/jwt-go/request"
 )
 
 type ArticlePendingService struct {
@@ -30,6 +34,8 @@ func (self *ArticlePendingService) AddArticlePending(title, from, url, internelF
 		InternelUrl:     internelUrl,
 		InternelSize:    internelSize,
 		ArticleKeywords: keywords,
+		// 文章发布状态默认为未发布
+		State:			 field_enum.ARTICLE_PENDING_UNPUBLISH.Value,
 		BaseEntity: entity.BaseEntity{
 			GmtCreate: time.Now(),
 			GmtUpdate: time.Now(),
@@ -74,4 +80,15 @@ func (self *ArticlePendingService) GetArticlePendingList(pageNum int, pageSize i
 func (self *ArticlePendingService) GetArticlePending(articlePendingId int64) (*entity.ArticlePending, error) {
 	mapper := dao.GetArticlePendingSqlMapper(self.session)
 	return mapper.SelectArticlePendingById(articlePendingId)
+}
+
+/**
+ * 将临时表中的未发布的文章标记为已发布
+ */
+func (service *ArticlePendingService) UpdateArticlePendingStateToPublished(articlePendingId int64) (bool, error) {
+	rowsAffected, err := dao.GetArticlePendingSqlMapper(nil).UpdateArticlePendingToPublished(articlePendingId)
+	if err != nil {
+		util.LogError("标记临时表文章为发布状态失败: ", err)
+	}
+	return 1 == rowsAffected, err
 }

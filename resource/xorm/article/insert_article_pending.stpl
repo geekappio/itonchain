@@ -1,4 +1,4 @@
 INSERT INTO article_pending
-(article_title, article_from, article_url, internel_fid, internel_url, internel_size, article_keywords, gmt_create, gmt_update)
+(article_title, article_from, article_url, internel_fid, internel_url, internel_size, article_keywords, gmt_create, gmt_update, state)
 VALUES
-(?ArticleTitle, ?ArticleFrom, ?ArticleUrl, ?InternelFid, ?InternelUrl, ?InternelSize, ?ArticleKeywords, ?GmtCreate, ?GmtUpdate)
+(?ArticleTitle, ?ArticleFrom, ?ArticleUrl, ?InternelFid, ?InternelUrl, ?InternelSize, ?ArticleKeywords, ?GmtCreate, ?GmtUpdate, ?State)

@@ -6,6 +6,7 @@ import (
 	"github.com/geekappio/itonchain/app/dal/entity"
 	"github.com/xormplus/xorm"
 	"github.com/dgrijalva/jwt-go/request"
+	"github.com/geekappio/itonchain/app/util"
 )
 
 func GetArticlePendingSqlMapper(session *xorm.Session) (articleSqlMapper *ArticlePendingSqlMapper) {
@@ -36,6 +37,7 @@ func (self *ArticlePendingSqlMapper) AddArticlePending(articlePending *entity.Ar
 		"ArticleKeywords": articlePending.ArticleKeywords,
 		"GmtCreate":       articlePending.GmtCreate,
 		"GmtUpdate":       articlePending.GmtUpdate,
+		"State":       	   articlePending.State,
 	}
 	r, err := self.getSqlTemplateClient("insert_article_pending.stpl", &paramMap).Execute()
 	id, _ := r.LastInsertId()
@@ -66,4 +68,16 @@ func (self *ArticlePendingSqlMapper) SelectArticlePendingById(articlePendingId i
 	paramMap := map[string]interface{}{"Id":articlePendingId}
 	err := self.getSqlTemplateClient("select_article_pending_by_id.stpl", &paramMap).Find(&articlePending)
 	return &articlePending, err
+}
+
+// 将临时表中的未发布的文章标记为已发布
+func (self *ArticlePendingSqlMapper) UpdateArticlePendingToPublished(articlePendingId int64) (int64, error) {
+	paramMap := map[string]interface{}{"Id":articlePendingId}
+	result,err := self.getSqlTemplateClient("update_article_pending.stpl", &paramMap).Execute()
+	if err != nil {
+		util.LogError(err)
+		return -1, err
+	}
+
+	return result.RowsAffected()
 }

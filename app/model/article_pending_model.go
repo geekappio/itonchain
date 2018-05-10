@@ -5,6 +5,14 @@ type ArticlePendingListRequest struct {
 	ArticleTitle string `json:"searchParams"`
 }
 
+/**
+ * 将零时表的文章迁移至文章表中
+ */
+type PendingToArticleRequest struct {
+	BaseRequest
+	ArticlePendingId int64 `json:"articlePendingId"`
+}
+
 type ArticlePendingModel struct {
 	BaseResponse
 	ArticlePendinId   int64  `json:"articlePendinId"`

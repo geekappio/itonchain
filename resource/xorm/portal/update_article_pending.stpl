@@ -1,0 +1,1 @@
+update article_pending set state = 'PUBLISHED' where id = ?ID
