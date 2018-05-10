@@ -5,6 +5,7 @@ import (
 	"github.com/geekappio/itonchain/app/dal"
 	"github.com/geekappio/itonchain/app/dal/entity"
 	"github.com/xormplus/xorm"
+	"github.com/dgrijalva/jwt-go/request"
 )
 
 func GetArticlePendingSqlMapper(session *xorm.Session) (articleSqlMapper *ArticlePendingSqlMapper) {
@@ -41,4 +42,28 @@ func (self *ArticlePendingSqlMapper) AddArticlePending(articlePending *entity.Ar
 	articlePending.Id = id
 	rows, _ := r.RowsAffected()
 	return rows, err
+}
+
+// 获取pend文章的记录总数
+func (self *ArticlePendingSqlMapper) CountArticlePendings() (int, error) {
+	resultMap := self.getSqlTemplateClient("count_article_pending.stpl").Query()
+	return resultMap.Count()
+}
+
+// 获取pend文章的记录，分页查询
+func (self *ArticlePendingSqlMapper) SelectArticlePendings(pageNum int, pageSize int, articleTitle string) ([]entity.ArticlePending, error) {
+	// 计算记录起始行和结束行
+	start := (pageNum - 1) * pageSize
+	var articlePendings []entity.ArticlePending
+	paramMap := map[string]interface{}{"start":start, "end":pageSize, "articleTitle" : articleTitle}
+	err := self.getSqlTemplateClient("select_article_pending.stpl", &paramMap).Find(&articlePendings)
+	return articlePendings, err
+}
+
+// 根据ID获取详细文章
+func (self *ArticlePendingSqlMapper) SelectArticlePendingById(articlePendingId int64) (*entity.ArticlePending, error) {
+	var articlePending entity.ArticlePending
+	paramMap := map[string]interface{}{"Id":articlePendingId}
+	err := self.getSqlTemplateClient("select_article_pending_by_id.stpl", &paramMap).Find(&articlePending)
+	return &articlePending, err
 }

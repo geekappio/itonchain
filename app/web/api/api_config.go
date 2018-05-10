@@ -17,6 +17,8 @@ type requestMapping struct {
 	WechatPublishAuthen        string
 	// 后台服务
 	AdminLogin				   string
+	ArticlePendingCount		   string
+	ArticlePendingListQuery	   string
 
 }
 
@@ -40,7 +42,9 @@ func init() {
 		ResourceImageLoad:          "/resource/image/:fid",
 		WechatPublishAuthen:        "/publish/authentication",
 		// 后台服务URL
-		AdminLogin:					"admin/login",
+		AdminLogin:					"/portal/login",
+		ArticlePendingCount:		"/portal/article_pending/count",
+		ArticlePendingListQuery:	"/portal/article_pending/list",
 	}
 }
 

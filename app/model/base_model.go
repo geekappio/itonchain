@@ -37,7 +37,7 @@ func NewSuccessResponseModelWithData(returnData interface{}) *ResponseModel {
 		response.ReturnData = returnData
 	}
 
-	return response;
+	return response
 }
 
 // Create response model instance with FAILURE or ERROR result.

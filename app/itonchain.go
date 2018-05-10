@@ -129,6 +129,8 @@ func main() {
 	 */
 	// 后台用户登录
 	util.AddPostRouter(router, api.ApiRequestMapping.AdminLogin, web.HandleAdminLogin)
+	util.AddPostRouter(router, api.ApiRequestMapping.ArticlePendingCount, web.HandleGetArticlePendingCount)
+	util.AddPostRouter(router, api.ApiRequestMapping.ArticlePendingListQuery, web.HandleGetArticlePendingList)
 
 	// Handle websocket
 	router.GET("/ws", func(c *gin.Context) {
