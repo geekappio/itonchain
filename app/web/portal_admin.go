@@ -56,6 +56,9 @@ func HandleGetArticlePendingList(request model.ArticlePendingListRequest) (*mode
 	return model.NewSuccessResponseModelWithData(articlePendings)
 }
 
+/**
+ * 将临时文章发布至正式文章表中，并且标记临时文章表状态为已发布，文章表状态为编辑状态
+ */
 func HandlePublishPengingToArticle(request model.PendingToArticleRequest) (*model.ResponseModel) {
 	articlePending, err := service.GetArticlePendingService().GetArticlePending(request.ArticlePendingId)
 	if err != nil {
@@ -82,6 +85,30 @@ func HandlePublishPengingToArticle(request model.PendingToArticleRequest) (*mode
 	if err != nil || !resultPend {
 		util.LogError("标记临时表文章为发布状态失败", err)
 		return model.NewFailedResponseModel(enum.SYSTEM_FAILED,"标记临时表文章为发布状态失败！")
+	}
+	return model.NewSuccessResponseModel()
+}
+
+/**
+ * 将文章表中的文章记录标记为上线，即可见
+ */
+func HandleArticleStateToOnline(request model.ArticleIdsRequest) (*model.ResponseModel) {
+	result,err :=service.GetArticleService().UpdateArticleStateToOnline(request.ArticleIds)
+	if err != nil || !result {
+		util.LogError("文章上线失败", err)
+		return model.NewFailedResponseModel(enum.ARTICLE_ONLINE_FAILED,"文章上线失败！")
+	}
+	return model.NewSuccessResponseModel()
+}
+
+/**
+ * 将文章表中的文章记录标记为下线，即不可见
+ */
+func HandleArticleStateToOffline(request model.ArticleIdsRequest) (*model.ResponseModel) {
+	result,err :=service.GetArticleService().UpdateArticleStateToOffline(request.ArticleIds)
+	if err != nil || !result {
+		util.LogError("文章下线失败", err)
+		return model.NewFailedResponseModel(enum.ARTICLE_OFFLINE_FAILED,"文章下线失败！")
 	}
 	return model.NewSuccessResponseModel()
 }

@@ -84,3 +84,9 @@ type ArticleContentModel struct {
 	ArticleModel
 	Content string
 }
+
+// 文章ID列表请求模型
+type ArticleIdsRequest struct {
+	BaseRequest
+	ArticleIds   []int64  `json:"artileIds"`
+}

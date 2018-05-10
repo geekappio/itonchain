@@ -162,3 +162,32 @@ func (self *ArticleSqlMapper)InsertArticle(article *entity.Article) (int64, erro
 	return affectedRows,err
 }
 
+// 文章上线，只修改下线和编辑的
+func (self *ArticleSqlMapper)UpdateArticleStateToOnline(articleIds []int64) (int64, error) {
+	paramMap := map[string]interface{}{
+		"ArticleIds" : articleIds,
+	}
+	result, err := self.getSqlTemplateClient("update_article_state_online.stpl", &paramMap).Execute()
+	if err != nil {
+		util.LogError(err)
+		return -1, err
+	}
+	affectedRows, _ := result.RowsAffected()
+	return affectedRows,err
+}
+
+// 文章下线，只修改上线和编辑的
+func (self *ArticleSqlMapper)UpdateArticleStateToOffline(articleIds []int64) (int64, error) {
+	paramMap := map[string]interface{}{
+		"ArticleIds" : articleIds,
+	}
+	result, err := self.getSqlTemplateClient("update_article_state_offline.stpl", &paramMap).Execute()
+	if err != nil {
+		util.LogError(err)
+		return -1, err
+	}
+	affectedRows, _ := result.RowsAffected()
+	return affectedRows,err
+}
+
+

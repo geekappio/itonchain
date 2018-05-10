@@ -1,0 +1,4 @@
+update article set state = 'ONLINE'
+where id in (?ArticleIds)
+and state = 'OFFLINE'
+or state = 'EDIT'

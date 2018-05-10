@@ -135,7 +135,10 @@ func main() {
 	util.AddPostRouter(router, api.ApiRequestMapping.ArticlePendingListQuery, web.HandleGetArticlePendingList)
 	// 将Penging文章推送至文章表（状态为编辑）
 	util.AddPostRouter(router, api.ApiRequestMapping.PublishPengingToArticle, web.HandlePublishPengingToArticle)
-
+	// 文章上线
+	util.AddPostRouter(router, api.ApiRequestMapping.ArticleOnline, web.HandleArticleStateToOnline)
+	// 文章下线
+	util.AddPostRouter(router, api.ApiRequestMapping.ArticleOffline, web.HandleArticleStateToOffline)
 
 	// Handle websocket
 	router.GET("/ws", func(c *gin.Context) {

@@ -26,6 +26,8 @@ const (
 
 	// 31XX Article
 	NOT_FIND_SPECIFIED_ARTICLE ErrorCode = "3101"
+	ARTICLE_ONLINE_FAILED ErrorCode = "3102"
+	ARTICLE_OFFLINE_FAILED ErrorCode = "3103"
 
 	// 32XX Category
 	NULL_CATEGORY_ORDERS        ErrorCode = "3201"

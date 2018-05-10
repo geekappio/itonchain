@@ -15,11 +15,20 @@ type requestMapping struct {
 	ResourceArticleLoad        string
 	ResourceImageLoad          string
 	WechatPublishAuthen        string
+
 	// 后台服务
+	// 后台用户登录，只有geekadmin，密码123456
 	AdminLogin				   string
+	// 临时文章总数
 	ArticlePendingCount		   string
+	// 临时文章列表查询
 	ArticlePendingListQuery	   string
+	// 临时文章publish至生产文章库中
 	PublishPengingToArticle	   string
+	// 文章上线
+	ArticleOnline			   string
+	// 文章下线
+	ArticleOffline 			   string
 
 }
 
@@ -47,6 +56,8 @@ func init() {
 		ArticlePendingCount:		"/portal/article_pending/count",
 		ArticlePendingListQuery:	"/portal/article_pending/list",
 		PublishPengingToArticle: 	"/portal/article_pending/publish",
+		ArticleOnline:				"/portal/article/online",
+		ArticleOffline:				"/portal/article/offline",
 	}
 }
 

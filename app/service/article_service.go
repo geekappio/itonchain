@@ -111,13 +111,13 @@ func (service *ArticleService) AddArticle(pending *entity.ArticlePending) (bool,
 		ArticleTitle:    pending.ArticleTitle,
 		ArticleFrom:     pending.ArticleFrom,
 		ArticleUrl:      pending.ArticleUrl,
-		ArticleLabels:   "",// 文章标签只能上线时选择
+		ArticleLabels:   "",// 文章标签只能编辑时选择
 		InternelFid:     pending.InternelFid,
 		InternelUrl:     pending.InternelUrl,
 		InternelSize:    pending.InternelSize,
 		ContentType:     field_enum.ARTICLE_HTML.Value,
-		Images:          "", // 文章标题小图
-		PreviewLayout:   "", //
+		Images:          "", // 文章标题小图只能编辑时选择
+		PreviewLayout:   "", // 列表页展示样式只能编辑时选择
 		ArticleKeywords: pending.ArticleKeywords,
 		FavoriteTimes:   0,
 		ViewTimes:       0,
@@ -132,5 +132,22 @@ func (service *ArticleService) AddArticle(pending *entity.ArticlePending) (bool,
 		util.LogError("新增文章失败: ", err)
 	}
 	return 1 == rows, err
+}
+// 文章上线，只修改下线和编辑的，只要记录条数大于0，即成功
+func (service *ArticleService) UpdateArticleStateToOnline(articleIds []int64) (bool, error) {
+	rows, err := dao.GetArticleSqlMapper(nil).UpdateArticleStateToOnline(articleIds)
+	if err != nil {
+		util.LogError("新增文章失败: ", err)
+	}
+	return rows > 0, err
+}
+
+// 文章下线，只修改上线和编辑的，只要记录条数大于0，即成功
+func (service *ArticleService) UpdateArticleStateToOffline(articleIds []int64) (bool, error) {
+	rows, err := dao.GetArticleSqlMapper(nil).UpdateArticleStateToOnline(articleIds)
+	if err != nil {
+		util.LogError("新增文章失败: ", err)
+	}
+	return rows > 0, err
 }
 
