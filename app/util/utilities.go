@@ -11,7 +11,7 @@ func StringArrayInsert(src []string, index int, inserted string) []string {
 func StrigArrayRemove(src []string, item string) [] string {
 	index := SliceIndex(src, item)
 	if len(src) > 0 && index >= 0 {
-		return append(src[:index], src[index+1:]...);
+		return append(src[:index], src[index+1:]...)
 	}
 
 	return nil
@@ -19,7 +19,7 @@ func StrigArrayRemove(src []string, item string) [] string {
 
  func StringArrayRemoveByIndex(src []string, index int) [] string {
 	 if len(src) > 0 && index >= 0 {
-		 return append(src[:index], src[index+1:]...);
+		 return append(src[:index], src[index+1:]...)
 	 }
 
 	 return nil

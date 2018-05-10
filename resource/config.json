@@ -31,5 +31,10 @@
   },
   "geekapp.publish": {
     "token":"geekapp2publish"
+  },
+
+  "admin.user": {
+    "userName":"geekadmin",
+    "password":"123456"
   }
 }

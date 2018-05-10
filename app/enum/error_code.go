@@ -22,6 +22,7 @@ const (
 	// 30XX User
 	USER_NOT_EXISTS     ErrorCode = "3001"
 	USER_ALREADY_EXISTS ErrorCode = "3002"
+	PASSWORD_ERROR ErrorCode = "3003"
 
 	// 31XX Article
 	NOT_FIND_SPECIFIED_ARTICLE ErrorCode = "3101"

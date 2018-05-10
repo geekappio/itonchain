@@ -10,6 +10,7 @@ import (
 
 	// "gopkg.in/yaml.v2"
 	"time"
+	"github.com/geekappio/itonchain/app/model"
 )
 
 // App configs.
@@ -23,6 +24,8 @@ type AppConfig struct {
 	XormPlus       XormPlusConfig       `json:"xormPlus"`
 	SeaWeedFS      SeaWeedFSConfig      `json:"seaweed"`
 	GeekappPublish GeekappPublishConfig `json:"geekapp.publish"`
+	// 后台管理员先使用配置文件定义
+	AdminUser 	   model.AdminUser		`json:"admin.user"`
 }
 
 type GeekappPublishConfig struct {
