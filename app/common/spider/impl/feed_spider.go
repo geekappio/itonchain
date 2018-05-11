@@ -11,6 +11,7 @@ import (
 	"github.com/mmcdole/gofeed"
 	"github.com/geekappio/itonchain/app/service"
 	"sync"
+	"github.com/geekappio/itonchain/app/web/api"
 )
 
 var (
@@ -87,7 +88,7 @@ func (self *FeedSpider) capture() error {
 		}
 		// 遍历并将数据持久化到文件系统后再将记录写入数据库
 		for _, article := range articles {
-			localize(article.link, article.content)
+			article.content = localize(article.link, article.content)
 			submitResult, err := save(article)
 			if nil != err {
 				return err
@@ -134,9 +135,9 @@ func download(feedUrl string) (string, []*FeedArticle, error) {
 		return lastArticleMark, nil, err
 	}
 
-	articles := make([]*FeedArticle, len(feed.Items))
+	articles := make([]*FeedArticle, 0, len(feed.Items))
 	// 遍历并转换文章模型
-	for i, item := range feed.Items {
+	for _, item := range feed.Items {
 		// 如果标记有效且遍历的该次文章与标记匹配则退出遍历
 		if "" != lastArticleMark && item.GUID == lastArticleMark {
 			break
@@ -146,7 +147,7 @@ func download(feedUrl string) (string, []*FeedArticle, error) {
 			item.Content, _ = network.HttpGet(item.Link)
 		}
 		_, domain, _ := network.GetUrlInfo(item.Link)
-		articles[i] = &FeedArticle{
+		article := &FeedArticle{
 			domain:  domain,
 			title:   item.Title,
 			desc:    item.Description,
@@ -154,6 +155,7 @@ func download(feedUrl string) (string, []*FeedArticle, error) {
 			pubTime: item.PublishedParsed,
 			content: item.Content,
 		}
+		articles = append(articles, article)
 	}
 	// 获取最后一篇文章标记
 	if len(feed.Items) > 0 {
@@ -162,12 +164,10 @@ func download(feedUrl string) (string, []*FeedArticle, error) {
 	return lastArticleMark, articles, nil
 }
 
-const FEED_LAST_ARTICLE_PREFIX = "FEED_LAST_ARTICLE_PREFIX."
-
 func getLastArticleMark(feedUrl string) string {
-	return redis.Get(FEED_LAST_ARTICLE_PREFIX + feedUrl)
+	return redis.Get(api.FEED_LAST_ARTICLE_PREFIX + feedUrl)
 }
 
 func setLastArticleMark(feedUrl, GUID string) {
-	redis.Set(FEED_LAST_ARTICLE_PREFIX+feedUrl, GUID)
+	redis.Set(api.FEED_LAST_ARTICLE_PREFIX+feedUrl, GUID)
 }

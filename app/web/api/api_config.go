@@ -47,4 +47,5 @@ func init() {
 const (
 	RESOURCE_ARTICLE_URI = "/resource/article/"
 	RESOURCE_IMAGE_URI   = "/itonchain/resource/image/"
+	FEED_LAST_ARTICLE_PREFIX = "FEED_LAST_ARTICLE_PREFIX."
 )

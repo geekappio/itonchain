@@ -24,7 +24,7 @@ func TestFeedSpider_Capture(t *testing.T) {
 	sources := make([]*entity.ArticleSource, 1)
 	sources[0] = &entity.ArticleSource{
 		SourceType: "FEED",
-		SourceUrl: "https://wanqu.co/feed/",
+		SourceUrl: "http://feedmaker.kindle4rss.com/feeds/archtime.weixin.xml",
 	}
 	Capture(sources)
 	time.Sleep(10 * time.Minute)

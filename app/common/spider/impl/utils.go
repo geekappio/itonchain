@@ -3,11 +3,12 @@ package impl
 import (
 	"github.com/PuerkitoBio/goquery"
 	"github.com/geekappio/itonchain/app/common/seaweedfs"
-	"github.com/geekappio/itonchain/app/web/api"
 	"strings"
 	"net/http"
 	"io/ioutil"
 	"github.com/geekappio/itonchain/app/common/network"
+	"bytes"
+	"golang.org/x/net/html"
 )
 
 // TODO 从文章内容提取关键字
@@ -16,14 +17,14 @@ func parseKeywords(htmlData string) string {
 }
 
 // 文章在保存之前对其进行本地化操作
-func localize(url, htmlData string) (string, error) {
+func localize(url, htmlData string) string {
 	if ("" == url || "" == htmlData) {
-		return htmlData, nil
+		return htmlData
 	}
 
 	doc, err := goquery.NewDocumentFromReader(strings.NewReader(htmlData))
 	if err != nil {
-		return htmlData, err
+		return htmlData
 	}
 	doc.Find("img").Each(func(i int, s *goquery.Selection) {
 		src, exists := s.Attr("src")
@@ -41,13 +42,11 @@ func localize(url, htmlData string) (string, error) {
 			if err != nil {
 				return
 			}
-			s.SetAttr("src", api.RESOURCE_IMAGE_URI+submitResult.FileID)
+			s.SetAttr("src", submitResult.FileID)
 		}
 	})
-	content, err := doc.Html()
-	if err != nil {
-		return htmlData, err
-	}
-	return content, nil
+	buf := bytes.NewBuffer([]byte{})
+	rootNode := doc.Nodes[0]	// FIXME
+	html.Render(buf, rootNode)
+	return buf.String()
 }
-
