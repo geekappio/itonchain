@@ -42,11 +42,21 @@ func (self *FeedSpider) Start() {
 		for {
 			select {
 			case <-timer.C:
-				self.capture()
+				// 对每个文章源起一个协程并等待全部执行完成
+				sources := self.getSource()
+				wg := sync.WaitGroup{}
+				wg.Add(len(sources))
+				for _, source := range self.getSource() {
+					go func() {
+						self.capture(source)
+						wg.Done()
+					}()
+				}
+				wg.Wait()
 			case <-self.exitChan:
 				goto Exit
 			}
-			timer.Reset(10 * time.Second)
+			timer.Reset(1 * time.Hour)
 		}
 	Exit:
 	}()
@@ -79,30 +89,28 @@ func (self *FeedSpider) getSource() []string {
 	return snapshot
 }
 
-func (self *FeedSpider) capture() error {
-	for _, source := range self.getSource() {
-		// 抓取文章列表并获取最后一篇文章的标记
-		lastArticleMark, articles, err := download(source)
+func (self *FeedSpider) capture(source string) error {
+	// 抓取文章列表并获取最后一篇文章的标记
+	lastArticleMark, articles, err := download(source)
+	if nil != err {
+		return err
+	}
+	// 遍历并将数据持久化到文件系统后再将记录写入数据库
+	for _, article := range articles {
+		article.content = localize(article.link, article.content)
+		submitResult, err := save(article)
 		if nil != err {
 			return err
 		}
-		// 遍历并将数据持久化到文件系统后再将记录写入数据库
-		for _, article := range articles {
-			article.content = localize(article.link, article.content)
-			submitResult, err := save(article)
-			if nil != err {
-				return err
-			}
-			_, err = articlePendingService.AddArticlePending(
-				article.title, article.domain, article.link, submitResult.FileID,
-				submitResult.FileURL, submitResult.Size, parseKeywords(article.content))
-			if nil != err {
-				return err
-			}
+		_, err = articlePendingService.AddArticlePending(
+			article.title, article.domain, article.link, submitResult.FileID,
+			submitResult.FileURL, submitResult.Size, parseKeywords(article.content))
+		if nil != err {
+			return err
 		}
-		// 等执行无误之后再将该文章源最后一篇文章的标记更新
-		setLastArticleMark(source, lastArticleMark)
 	}
+	// 等执行无误之后再将该文章源最后一篇文章的标记更新
+	setLastArticleMark(source, lastArticleMark)
 	return nil
 }
 

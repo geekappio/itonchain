@@ -8,8 +8,8 @@ import (
 	"github.com/geekappio/itonchain/app/common/redis"
 	"github.com/geekappio/itonchain/app/common/seaweedfs"
 	"github.com/geekappio/itonchain/app/dal"
-	"github.com/geekappio/itonchain/app/dal/entity"
 	"time"
+	"github.com/geekappio/itonchain/app/dal/dao"
 )
 
 func init()  {
@@ -20,12 +20,15 @@ func init()  {
 	dal.InitDataSource()
 }
 
+const PAGE_SIZE = 10
+
 func TestFeedSpider_Capture(t *testing.T) {
-	sources := make([]*entity.ArticleSource, 1)
-	sources[0] = &entity.ArticleSource{
-		SourceType: "FEED",
-		SourceUrl: "http://feedmaker.kindle4rss.com/feeds/archtime.weixin.xml",
+	articleSourceSqlMapper := dao.GetArticleSourceSqlMapper(nil)
+
+	total, _ := articleSourceSqlMapper.CountArticleSources()
+	for i := 1; i <= (total+PAGE_SIZE-1) / PAGE_SIZE; i++ {
+		sources, _ := articleSourceSqlMapper.SelectArticleSources(i, PAGE_SIZE)
+		Capture(sources)
 	}
-	Capture(sources)
 	time.Sleep(10 * time.Minute)
 }

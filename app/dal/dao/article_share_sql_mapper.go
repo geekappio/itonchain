@@ -7,8 +7,6 @@ import (
 	"github.com/geekappio/itonchain/app/dal/entity"
 )
 
-var articleShareSqlMapper *ArticleShareSqlMapper
-
 func GetArticleShareSqlMapper(session *xorm.Session) *ArticleShareSqlMapper {
 	return &ArticleShareSqlMapper{session: session}
 }

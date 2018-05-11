@@ -77,6 +77,15 @@ func TestArticleShare(t *testing.T) {
 	}
 }
 
+func TestArticleSource(t *testing.T) {
+	mapper := GetArticleSourceSqlMapper(nil)
+
+	count, err := mapper.CountArticleSources()
+	if nil != err || 1 >= count {
+		t.FailNow()
+	}
+}
+
 func TestArticle(t *testing.T) {
 	mapper := GetArticleSqlMapper(nil)
 
