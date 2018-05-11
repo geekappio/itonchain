@@ -1,0 +1,7 @@
+INSERT INTO article (article_title, article_from, article_url, internel_fid, internel_url,
+internel_size, article_labels, article_keywords, favorite_times, view_times, mark_times, is_technology,
+is_blockchain, state, comment, gmt_create, gmt_update, create_user, update_user, content_type, images, preview_layout
+) VALUES (?ArticleTitle, ?ArticleFrom,
+?ArticleUrl, ?InternelFid, ?InternelUrl, ?InternelSize, ?ArticleLabels, ?ArticleKeywords, ?FavoriteTimes, ?ViewTimes, ?MarkTimes,
+?IsTechnology, ?IsBlockchain, ?State, ?Comment, ?GmtCreate, ?GmtUpdate, ?CreateUser, ?UpdateUser, ?ContentType, ?Images, ?PreviewLayout
+)

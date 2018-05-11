@@ -8,6 +8,8 @@ import (
 	"github.com/geekappio/itonchain/app/dal/entity"
 	."github.com/geekappio/itonchain/app/model"
 	"github.com/xormplus/xorm"
+	"github.com/geekappio/itonchain/app/util"
+	"time"
 )
 
 func GetArticleSqlMapper(session *xorm.Session) (articleSqlMapper *ArticleSqlMapper) {
@@ -124,4 +126,68 @@ func (self *ArticleSqlMapper)SelectByArticleIdOrInternelUrl(articleId int64, int
 	_, err := self.getSqlTemplateClient("select_by_articleId_or_internelFid.stpl", &paramMap).Get(articleModel)
 	return articleModel, err
 }
+
+// 插入文章模型
+func (self *ArticleSqlMapper)InsertArticle(article *entity.Article) (int64, error) {
+	paramMap := map[string]interface{}{
+		"ArticleTitle":    article.ArticleTitle,
+		"ArticleFrom":     article.ArticleFrom,
+		"ArticleUrl":      article.ArticleUrl,
+		"InternelFid":     article.InternelFid,
+		"InternelUrl":     article.InternelUrl,
+		"InternelSize":    article.InternelSize,
+		"ArticleLabels":   article.ArticleLabels,
+		"ArticleKeywords": article.ArticleKeywords,
+		"FavoriteTimes":   article.FavoriteTimes,
+		"ViewTimes":       article.ViewTimes,
+		"MarkTimes":       article.MarkTimes,
+		"IsTechnology":    article.IsTechnology,
+		"IsBlockchain":    article.IsBlockchain,
+		"State":           article.State,
+		"Comment":         article.Comment,
+		"GmtCreate":       time.Now(),
+		"GmtUpdate":       time.Now(),
+		"CreateUser":      "admin",
+		"UpdateUser":      "admin",
+		"ContentType":     article.ContentType,
+		"Images":          article.Images,
+		"PreviewLayout":   article.PreviewLayout,
+		}
+	result, err := self.getSqlTemplateClient("insert_category.stpl", &paramMap).Execute()
+	if err != nil {
+		util.LogError(err)
+		return -1, err
+	}
+	affectedRows, _ := result.RowsAffected()
+	return affectedRows,err
+}
+
+// 文章上线，只修改下线和编辑的
+func (self *ArticleSqlMapper)UpdateArticleStateToOnline(articleIds []int64) (int64, error) {
+	paramMap := map[string]interface{}{
+		"ArticleIds" : articleIds,
+	}
+	result, err := self.getSqlTemplateClient("update_article_state_online.stpl", &paramMap).Execute()
+	if err != nil {
+		util.LogError(err)
+		return -1, err
+	}
+	affectedRows, _ := result.RowsAffected()
+	return affectedRows,err
+}
+
+// 文章下线，只修改上线和编辑的
+func (self *ArticleSqlMapper)UpdateArticleStateToOffline(articleIds []int64) (int64, error) {
+	paramMap := map[string]interface{}{
+		"ArticleIds" : articleIds,
+	}
+	result, err := self.getSqlTemplateClient("update_article_state_offline.stpl", &paramMap).Execute()
+	if err != nil {
+		util.LogError(err)
+		return -1, err
+	}
+	affectedRows, _ := result.RowsAffected()
+	return affectedRows,err
+}
+
 
