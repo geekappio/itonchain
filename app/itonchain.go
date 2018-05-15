@@ -82,6 +82,9 @@ func main() {
 	// 浏览器里显示静态页面
 	router.GET("/", rootHandler)
 
+	// 静态资源
+	router.Static("/backend", "resource/web/static/")
+
 	// 微信小程序认证
 	router.GET(api.ApiRequestMapping.WechatPublishAuthen, authenticateGeekappPublishHandler)
 
