@@ -76,14 +76,18 @@ func main() {
 
 	gin.SetMode(config.App.RunMode) // 全局设置环境，此为开发环境，线上环境为gin.ReleaseMode
 	router := gin.Default()         // 获得路由实例
-	// 添加中间件
 	router.Use(Middleware)
-
 	// 浏览器里显示静态页面
 	router.GET("/", rootHandler)
 
 	// 静态资源
-	router.Static("/backend", "resource/web/static/")
+	router.Static("/static", "resource/web/static/")
+
+	//router.GET("/login", func(c *gin.Context) {
+	//	c.HTML(http.StatusOK, "" ,gin.H{
+	//		"key":"value",
+	//	})
+	//})
 
 	// 微信小程序认证
 	router.GET(api.ApiRequestMapping.WechatPublishAuthen, authenticateGeekappPublishHandler)
@@ -178,7 +182,7 @@ func Middleware(c *gin.Context) {
 
 func rootHandler(c *gin.Context) {
 	w := c.Writer
-	content, err := ioutil.ReadFile("resource/web/public/index.html")
+	content, err := ioutil.ReadFile("resource/web/pages/index.html")
 	if err != nil {
 		fmt.Println("Could not open file.", err)
 	}
