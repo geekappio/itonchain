@@ -1,6 +1,6 @@
 select * from article_pending
 WHERE 1=1
-{% if articleTitle != nil%}
+{% if articleTitle != "" %}
 AND article_title like ?articleTitle
 {% endif %}
 ORDER BY gmt_create desc LIMIT ?start,?end

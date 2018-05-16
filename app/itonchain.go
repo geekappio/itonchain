@@ -80,7 +80,9 @@ func main() {
 	// 浏览器里显示静态页面
 	router.GET("/", rootHandler)
 
-	// 静态资源
+	// 加载模板资源
+	router.LoadHTMLGlob("resource/web/template/*")
+	// 加载静态资源
 	router.Static("/static", "resource/web/static/")
 
 	//router.GET("/login", func(c *gin.Context) {
@@ -134,18 +136,25 @@ func main() {
 	/**
 	 * 后台服务API
 	 */
-	// 后台用户登录
-	util.AddPostRouter(router, api.ApiRequestMapping.AdminLogin, web.HandleAdminLogin)
-	// 获取pending的文章总数
-	util.AddPostRouter(router, api.ApiRequestMapping.ArticlePendingCount, web.HandleGetArticlePendingCount)
+	/* region 返回Json，需要前端JS获取数据并展示 */
+	//// 后台用户登录
+	//util.AddPostRouter(router, api.ApiRequestMapping.AdminLogin, web.HandleAdminLogin)
+	//// 获取pending的文章总数
+	//util.AddPostRouter(router, api.ApiRequestMapping.ArticlePendingCount, web.HandleGetArticlePendingCount)
+	//// 获取pending文章列表，支持文件标题进行查询
+	//util.AddPostRouter(router, api.ApiRequestMapping.ArticlePendingListQuery, web.HandleGetArticlePendingList)
+	//// 将Penging文章推送至文章表（状态为编辑）
+	//util.AddPostRouter(router, api.ApiRequestMapping.PublishPengingToArticle, web.HandlePublishPengingToArticle)
+	//// 文章上线
+	//util.AddPostRouter(router, api.ApiRequestMapping.ArticleOnline, web.HandleArticleStateToOnline)
+	//// 文章下线
+	//util.AddPostRouter(router, api.ApiRequestMapping.ArticleOffline, web.HandleArticleStateToOffline)
+	/* endregion */
+
+	/* region 内部使用模板，返回动态页面 */
 	// 获取pending文章列表，支持文件标题进行查询
-	util.AddPostRouter(router, api.ApiRequestMapping.ArticlePendingListQuery, web.HandleGetArticlePendingList)
-	// 将Penging文章推送至文章表（状态为编辑）
-	util.AddPostRouter(router, api.ApiRequestMapping.PublishPengingToArticle, web.HandlePublishPengingToArticle)
-	// 文章上线
-	util.AddPostRouter(router, api.ApiRequestMapping.ArticleOnline, web.HandleArticleStateToOnline)
-	// 文章下线
-	util.AddPostRouter(router, api.ApiRequestMapping.ArticleOffline, web.HandleArticleStateToOffline)
+	router.GET(api.ApiRequestMapping.ArticlePendingListQuery, web.ArticlePendingList)
+	/* endregion */
 
 	// Handle websocket
 	router.GET("/ws", func(c *gin.Context) {
