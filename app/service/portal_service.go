@@ -17,12 +17,12 @@ func UserLogin(userModel *model.AdminUser) *model.ResponseModel  {
 	user := config.App.AdminUser
 
 	// 验证用户名
-	if user.UserName != userModel.UserName {
+	if userModel.UserName != user.UserName {
 		return model.NewFailedResponseModel(enum.USER_NOT_EXISTS,"用户名不正确！")
 	}
 
 	// 验证密码
-	if user.Password != util.MD5Hash(user.Password) {
+	if userModel.Password != util.MD5Hash(user.Password) {
 		return model.NewFailedResponseModel(enum.PASSWORD_ERROR,"密码错误！")
 	}
 

@@ -6,6 +6,11 @@ import (
 	"github.com/geekappio/itonchain/app/util"
 	"github.com/geekappio/itonchain/app/enum"
 	"github.com/geekappio/itonchain/app/model/field_enum"
+	"github.com/gin-contrib/sessions"
+	"github.com/geekappio/itonchain/app/common/common_util"
+	"github.com/geekappio/itonchain/app/web/api"
+	"github.com/gin-gonic/gin"
+	"net/http"
 )
 
 /**
@@ -110,4 +115,37 @@ func HandleArticleStateToOffline(request model.ArticleIdsRequest) (*model.Respon
 		return model.NewFailedResponseModel(enum.ARTICLE_OFFLINE_FAILED,"文章下线失败！")
 	}
 	return model.NewSuccessResponseModel()
+}
+
+
+func LoginGet(c *gin.Context) {
+	c.HTML(http.StatusOK, "login.html", nil)
+}
+
+func LoginPost(c *gin.Context) {
+	username := c.PostForm("username")
+	password := c.PostForm("password")
+	var errMsg string
+	if "" == username || "" == password {
+		errMsg = "用户名和密码不能为空"
+	} else {
+		user := &model.AdminUser{
+			UserName: username,
+			Password: password,
+		}
+		response := service.UserLogin(user)
+		if response.ReturnCode != enum.SYSTEM_SUCCESS.GetRespCode() {
+			errMsg = response.ReturnMsg
+		} else {
+			s := sessions.Default(c)
+			s.Clear()
+			s.Set(common_util.SESSION_KEY, username) // FIXME 简单区分登陆用户
+			s.Save()
+			c.Redirect(http.StatusMovedPermanently, api.ApiRequestMapping.ArticlePendingListQuery)
+			return
+		}
+	}
+	c.HTML(http.StatusOK, "login.html", gin.H{
+		"message": errMsg,
+	})
 }

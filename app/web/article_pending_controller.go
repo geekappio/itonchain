@@ -6,10 +6,20 @@ import (
 	"github.com/geekappio/itonchain/app/model"
 	"github.com/geekappio/itonchain/app/util"
 	"net/http"
+	"strconv"
 )
 
 func ArticlePendingList(c *gin.Context) {
-	articlePendings, _ := service.GetArticlePendingService().GetArticlePendingList(1, 50, "")
+	pageNum, err := strconv.Atoi(c.Param("pageNum"))
+	if nil != err {
+		pageNum = 1
+	}
+	pageSize, err := strconv.Atoi(c.Param("pageSize"))
+	if nil != err {
+		pageSize = 50
+	}
+
+	articlePendings, _ := service.GetArticlePendingService().GetArticlePendingList(pageNum, pageSize, "")
 	articles := make([]*model.ArticlePendingModel, len(articlePendings))
 	for i, articlePending := range articlePendings {
 		articles[i] = &model.ArticlePendingModel{

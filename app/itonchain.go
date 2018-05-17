@@ -22,6 +22,9 @@ import (
 	"github.com/geekappio/itonchain/app/web/api"
 	"github.com/gin-gonic/gin"
 	"github.com/gorilla/websocket"
+	"github.com/gin-contrib/sessions"
+	"github.com/geekappio/itonchain/app/common/common_util"
+	"github.com/gin-contrib/sessions/cookie"
 )
 
 func initConfig() error {
@@ -76,7 +79,8 @@ func main() {
 
 	gin.SetMode(config.App.RunMode) // 全局设置环境，此为开发环境，线上环境为gin.ReleaseMode
 	router := gin.Default()         // 获得路由实例
-	router.Use(Middleware)
+	setSessions(router)
+	router.Use(ShareData)
 	// 浏览器里显示静态页面
 	router.GET("/", rootHandler)
 
@@ -133,6 +137,11 @@ func main() {
 	// 修改文章类目次序
 	util.AddPostRouter(router, api.ApiRequestMapping.ArticleCategoryOrderChange, web.HandleArticleCategoryOrderChange)
 
+
+	// 登陆
+	router.GET(api.ApiRequestMapping.AdminLogin, web.LoginGet)
+	router.POST(api.ApiRequestMapping.AdminLogin, web.LoginPost)
+
 	/**
 	 * 后台服务API
 	 */
@@ -152,8 +161,10 @@ func main() {
 	/* endregion */
 
 	/* region 内部使用模板，返回动态页面 */
+	backend := router.Group("/")
+	backend.Use(AuthInterceptor)
 	// 获取pending文章列表，支持文件标题进行查询
-	router.GET(api.ApiRequestMapping.ArticlePendingListQuery, web.ArticlePendingList)
+	backend.GET(api.ApiRequestMapping.ArticlePendingListQuery, web.ArticlePendingList)
 	/* endregion */
 
 	// Handle websocket
@@ -185,8 +196,27 @@ func wshandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func Middleware(c *gin.Context) {
-	fmt.Println("this is a middleware!")
+func setSessions(router *gin.Engine) {
+	store := cookie.NewStore([]byte("secret"))
+	router.Use(sessions.Sessions("mysession", store))
+}
+
+// 将session中所存的数据写入到context中
+func ShareData(c *gin.Context) {
+	session := sessions.Default(c)
+	if uID := session.Get(common_util.SESSION_KEY); uID != nil {
+		c.Set(common_util.CONTEXT_USER_KEY, uID)
+	}
+	c.Next()
+}
+
+// 简单校验是否登陆
+func AuthInterceptor(c *gin.Context) {
+	if user, _ := c.Get(common_util.CONTEXT_USER_KEY); user == nil {
+		c.Redirect(http.StatusSeeOther, api.ApiRequestMapping.AdminLogin)
+		c.Abort()
+	}
+	c.Next()
 }
 
 func rootHandler(c *gin.Context) {
