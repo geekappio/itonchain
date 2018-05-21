@@ -155,7 +155,7 @@
                             </tr>
                             </thead>
                             <tbody>
-                            {{range .}}
+                            {{range .Articles}}
                             <tr>
                                 <td>{{.ArticlePendinId}}</td>
                                 <td>{{.ArticleTitle}}</td>
@@ -171,6 +171,9 @@
                             {{end}}
                             </tbody>
                         </table>
+
+                        <a href="/portal/article_pending/list?pageNum={{.CurPage}}">CurPage: {{.CurPage}}</a>
+                        <p>TotalPages: {{.TotalPages}}</p>
                         <!-- /.table-responsive -->
                     </div>
                     <!-- /.panel-body -->
@@ -195,9 +198,9 @@
 <script src="/static/vendor/metisMenu/metisMenu.min.js"></script>
 
 <!-- DataTables JavaScript -->
-<script src="/static/vendor/datatables/js/jquery.dataTables.min.js"></script>
-<script src="/static/vendor/datatables-plugins/dataTables.bootstrap.min.js"></script>
-<script src="/static/vendor/datatables-responsive/dataTables.responsive.js"></script>
+{{/*<script src="/static/vendor/datatables/js/jquery.dataTables.min.js"></script>*/}}
+{{/*<script src="/static/vendor/datatables-plugins/dataTables.bootstrap.min.js"></script>*/}}
+{{/*<script src="/static/vendor/datatables-responsive/dataTables.responsive.js"></script>*/}}
 
 <!-- Custom Theme JavaScript -->
 <script src="/static/dist/js/sb-admin-2.js"></script>

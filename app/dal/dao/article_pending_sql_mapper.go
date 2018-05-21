@@ -47,8 +47,13 @@ func (self *ArticlePendingSqlMapper) AddArticlePending(articlePending *entity.Ar
 
 // 获取pend文章的记录总数
 func (self *ArticlePendingSqlMapper) CountArticlePendings() (int, error) {
-	resultMap := self.getSqlTemplateClient("count_article_pending.stpl").Query()
-	return resultMap.Count()
+	var count []int
+	err := self.getSqlTemplateClient("count_article_pending.stpl").Find(&count)
+	if len(count) == 1 {
+		return count[0], err
+	} else {
+		return 0, err
+	}
 }
 
 // 获取pend文章的记录，分页查询
