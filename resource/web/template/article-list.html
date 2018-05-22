@@ -172,7 +172,9 @@
                             </tbody>
                         </table>
 
-                        <a href="/portal/article_pending/list?pageNum={{.CurPage}}">CurPage: {{.CurPage}}</a>
+                        <a href="/portal/article_pending/list?pageNum={{.CurPage | dec}}">上一页: {{.CurPage | dec}}</a>
+                        <a href="/portal/article_pending/list?pageNum={{.CurPage}}">当前页: {{.CurPage}}</a>
+                        <a href="/portal/article_pending/list?pageNum={{.CurPage | inc}}">下一页: {{.CurPage | inc}}</a>
                         <p>TotalPages: {{.TotalPages}}</p>
                         <!-- /.table-responsive -->
                     </div>

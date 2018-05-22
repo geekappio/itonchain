@@ -25,6 +25,7 @@ import (
 	"github.com/gin-contrib/sessions"
 	"github.com/geekappio/itonchain/app/common/common_util"
 	"github.com/gin-contrib/sessions/cookie"
+	"html/template"
 )
 
 func initConfig() error {
@@ -79,7 +80,11 @@ func main() {
 
 	gin.SetMode(config.App.RunMode) // 全局设置环境，此为开发环境，线上环境为gin.ReleaseMode
 	router := gin.Default()         // 获得路由实例
+	// 设置模板函数
+	setFuncMap(router)
+	// 设置会话模块
 	setSessions(router)
+
 	router.Use(ShareData)
 	// 浏览器里显示静态页面
 	router.GET("/", rootHandler)
@@ -178,6 +183,13 @@ func main() {
 var wsupgrader = websocket.Upgrader{
 	ReadBufferSize:  1024,
 	WriteBufferSize: 1024,
+}
+
+func setFuncMap(router *gin.Engine) {
+		router.SetFuncMap(template.FuncMap{
+		"inc": util.Inc,
+		"dec": util.Dec,
+	})
 }
 
 func wshandler(w http.ResponseWriter, r *http.Request) {

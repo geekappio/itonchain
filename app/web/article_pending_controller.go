@@ -17,6 +17,9 @@ func ArticlePendingList(c *gin.Context) {
 
 	count, _ := mapper.GetArticlePendingCount()
 	totalPages := (count + pageSize - 1) / pageSize
+	if (pageSize > totalPages || pageSize < 1) {
+		pageSize = 1	// 校验并设置默认页数，应该给提示，但是返回显示比较麻烦
+	}
 	articlePendings, _ := mapper.GetArticlePendingList(pageNum, pageSize, "")
 	articles := make([]*model.ArticlePendingModel, len(articlePendings))
 	for i, articlePending := range articlePendings {
