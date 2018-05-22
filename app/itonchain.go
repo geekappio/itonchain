@@ -170,6 +170,7 @@ func main() {
 	backend.Use(AuthInterceptor)
 	// 获取pending文章列表，支持文件标题进行查询
 	backend.GET(api.ApiRequestMapping.ArticlePendingListQuery, web.ArticlePendingList)
+	backend.GET(api.ApiRequestMapping.ArticlePendingSave, web.ArticlePendingList)
 	/* endregion */
 
 	// Handle websocket

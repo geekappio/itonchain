@@ -23,6 +23,8 @@ type requestMapping struct {
 	ArticlePendingCount		   string
 	// 临时文章列表查询
 	ArticlePendingListQuery	   string
+	// 临时文章保存
+	ArticlePendingSave	   string
 	// 临时文章publish至生产文章库中
 	PublishPengingToArticle	   string
 	// 文章上线
@@ -55,6 +57,7 @@ func init() {
 		AdminLogin:					"/portal/login",
 		ArticlePendingCount:		"/portal/article_pending/count",
 		ArticlePendingListQuery:	"/portal/article_pending/list",
+		ArticlePendingSave:			"/portal/article_pending/save",
 		PublishPengingToArticle: 	"/portal/article_pending/publish",
 		ArticleOnline:				"/portal/article/online",
 		ArticleOffline:				"/portal/article/offline",

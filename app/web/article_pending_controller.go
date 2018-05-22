@@ -7,8 +7,10 @@ import (
 	"github.com/geekappio/itonchain/app/util"
 	"net/http"
 	"strconv"
+	"github.com/geekappio/itonchain/app/common/seaweedfs"
 )
 
+// pending 分页列表函数
 func ArticlePendingList(c *gin.Context) {
 	pageNum, _ := strconv.Atoi(c.DefaultQuery("pageNum", "1"))
 	pageSize, _ := strconv.Atoi(c.DefaultQuery("pageSize", "50"))
@@ -42,4 +44,17 @@ func ArticlePendingList(c *gin.Context) {
 		"PageSize": pageSize,
 		"TotalPages": totalPages,
 	})
+}
+
+// FIXME pending 保存函数
+func ArticlePendingSave(c *gin.Context) {
+	// 获取原始Pending的fid 和 更新的内容
+	fid := c.PostForm("fid")
+	content := c.PostForm("content")
+
+	// 调用fs函数更新文件
+	_, err := seaweedfs.UpdateResourceContent("", fid, []byte(content), nil, true)
+
+	// 返回成功/失败
+	c.String(http.StatusOK, err.Error())
 }
