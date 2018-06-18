@@ -112,6 +112,9 @@ func main() {
 	// 注册用户
 	util.AddPostRouter(router, api.ApiRequestMapping.UserRegister, web.HandleUserRegister)
 
+	// 获取用户openid
+	util.AddPostRouter(router, api.ApiRequestMapping.UserOpenId, web.HandleUserOpenId)
+
 	// 查询/搜索文章列表
 	util.AddPostRouter(router, api.ApiRequestMapping.ArticleListQuery, web.HandleArticleListQuery)
 
