@@ -2,13 +2,13 @@ package spider
 
 import (
 	"testing"
+	"time"
 
-	"github.com/geekappio/itonchain/app/config"
 	"github.com/geekappio/itonchain/app/common/logging"
 	"github.com/geekappio/itonchain/app/common/redis"
 	"github.com/geekappio/itonchain/app/common/seaweedfs"
+	"github.com/geekappio/itonchain/app/config"
 	"github.com/geekappio/itonchain/app/dal"
-	"time"
 	"github.com/geekappio/itonchain/app/dal/dao"
 )
 
@@ -26,9 +26,12 @@ func TestFeedSpider_Capture(t *testing.T) {
 	articleSourceSqlMapper := dao.GetArticleSourceSqlMapper(nil)
 
 	total, _ := articleSourceSqlMapper.CountArticleSources()
-	for i := 1; i <= (total+PAGE_SIZE-1) / PAGE_SIZE; i++ {
+	for i := 1; i <= (total+PAGE_SIZE-1)/PAGE_SIZE; i++ {
 		sources, _ := articleSourceSqlMapper.SelectArticleSources(i, PAGE_SIZE)
 		Capture(sources)
 	}
+
+	logging.Logger.Info("Start to retrieve article from remote host.");
+	feedSpider.Start();
 	time.Sleep(10 * time.Minute)
 }

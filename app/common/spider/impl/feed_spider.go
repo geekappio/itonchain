@@ -3,15 +3,17 @@ package impl
 import (
 	"time"
 
+	"sync"
+
+	"github.com/geekappio/itonchain/app/common/logging"
 	"github.com/geekappio/itonchain/app/common/network"
 	"github.com/geekappio/itonchain/app/common/redis"
 	"github.com/geekappio/itonchain/app/common/seaweedfs"
+	"github.com/geekappio/itonchain/app/service"
 	"github.com/geekappio/itonchain/app/util"
+	"github.com/geekappio/itonchain/app/web/api"
 	goswfsModel "github.com/linxGnu/goseaweedfs/model"
 	"github.com/mmcdole/gofeed"
-	"github.com/geekappio/itonchain/app/service"
-	"sync"
-	"github.com/geekappio/itonchain/app/web/api"
 )
 
 var (
@@ -44,14 +46,13 @@ func (self *FeedSpider) Start() {
 			case <-timer.C:
 				// 对每个文章源起一个协程并等待全部执行完成
 				sources := self.getSource()
-				wg := sync.WaitGroup{}
+				wg :=  &sync.WaitGroup{}
 				wg.Add(len(sources))
+
 				for _, source := range self.getSource() {
-					go func() {
-						self.capture(source)
-						wg.Done()
-					}()
+					self.runCaptureTask(source, wg)
 				}
+
 				wg.Wait()
 			case <-self.exitChan:
 				goto Exit
@@ -59,6 +60,14 @@ func (self *FeedSpider) Start() {
 			timer.Reset(1 * time.Hour)
 		}
 	Exit:
+	}()
+}
+
+func (self *FeedSpider) runCaptureTask(source string, wg *sync.WaitGroup) {
+	go func() {
+		logging.Logger.Info("Retrieve srouce: ", source)
+		self.capture(source)
+		wg.Done()
 	}()
 }
 
@@ -177,5 +186,5 @@ func getLastArticleMark(feedUrl string) string {
 }
 
 func setLastArticleMark(feedUrl, GUID string) {
-	redis.Set(api.FEED_LAST_ARTICLE_PREFIX+feedUrl, GUID)
+	redis.Set(api.FEED_LAST_ARTICLE_PREFIX + feedUrl, GUID)
 }

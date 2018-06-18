@@ -17,9 +17,10 @@ var (
 	feedSpider = impl.NewFeedSpider()
 )
 
-func init() {
-	feedSpider.Start()
-}
+
+// func init() {
+// 	feedSpider.Start()
+// }
 
 func Capture(sources []*entity.ArticleSource) error {
 	for _, source := range sources {

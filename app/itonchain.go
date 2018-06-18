@@ -49,6 +49,7 @@ func initConfig() error {
 	if err != nil {
 		log.Fatal(err)
 	}
+
 	// Init redis.
 	err = redis.InitRedis()
 	if err != nil {
