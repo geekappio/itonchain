@@ -37,7 +37,7 @@ func (articleSqlMapper *ArticleSqlMapper) UpdateArticleFavorite(articleId int64,
 func (articleSqlMapper *ArticleSqlMapper) SelectById(articleId int64) (*entity.Article, error) {
 	var article entity.Article
 	paramMap := map[string]interface{}{"id": articleId}
-	_, err := articleSqlMapper.getSqlTemplateClient("select_article", &paramMap).Get(&article)
+	_, err := articleSqlMapper.getSqlTemplateClient("select_article_by_id.stpl", &paramMap).Get(&article)
 	return &article, err
 }
 
