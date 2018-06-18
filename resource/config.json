@@ -7,7 +7,7 @@
     "db":0
   },
   "seaweed":{
-    "SwFSMasterUrl":"35.194.190.28:9333",
+    "SwFSMasterUrl":"47.98.194.177:9333",
     "SwFSFilerUrl":"",
     "SwFSSchema":"http",
     "chunkSize": 2,
