@@ -66,7 +66,7 @@ func (self *FeedSpider) Start() {
 func (self *FeedSpider) runCaptureTask(source string, wg *sync.WaitGroup) {
 	go func() {
 		logging.Logger.Info("Retrieve srouce: ", source)
-		self.capture(source)
+		self.Capture(source)
 		wg.Done()
 	}()
 }
@@ -98,7 +98,7 @@ func (self *FeedSpider) getSource() []string {
 	return snapshot
 }
 
-func (self *FeedSpider) capture(source string) error {
+func (self *FeedSpider) Capture(source string) error {
 	// 抓取文章列表并获取最后一篇文章的标记
 	lastArticleMark, articles, err := download(source)
 	if nil != err {

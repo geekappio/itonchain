@@ -7,6 +7,8 @@ import (
 	"net/http"
 
 	"github.com/geekappio/itonchain/app/common/seaweedfs"
+	"github.com/geekappio/itonchain/app/common/spider"
+	"github.com/geekappio/itonchain/app/dal/dao"
 	"github.com/geekappio/itonchain/app/util"
 
 	"crypto/sha1"
@@ -14,19 +16,22 @@ import (
 	"sort"
 	"strings"
 
+	"html/template"
+
+	"github.com/geekappio/itonchain/app/common/common_util"
 	"github.com/geekappio/itonchain/app/common/logging"
 	"github.com/geekappio/itonchain/app/common/redis"
 	"github.com/geekappio/itonchain/app/config"
 	"github.com/geekappio/itonchain/app/dal"
 	"github.com/geekappio/itonchain/app/web"
 	"github.com/geekappio/itonchain/app/web/api"
+	"github.com/gin-contrib/sessions"
+	"github.com/gin-contrib/sessions/cookie"
 	"github.com/gin-gonic/gin"
 	"github.com/gorilla/websocket"
-	"github.com/gin-contrib/sessions"
-	"github.com/geekappio/itonchain/app/common/common_util"
-	"github.com/gin-contrib/sessions/cookie"
-	"html/template"
 )
+
+const PAGE_SIZE = 10
 
 func initConfig() error {
 
@@ -78,6 +83,9 @@ func main() {
 		log.Fatal(err)
 		return
 	}
+
+	// Run a thread to capture rss articles.
+	captureRssArticles();
 
 	gin.SetMode(config.App.RunMode) // 全局设置环境，此为开发环境，线上环境为gin.ReleaseMode
 	router := gin.Default()         // 获得路由实例
@@ -277,4 +285,18 @@ func authenticateGeekappPublishHandler(c *gin.Context) {
 		c.Writer.Write([]byte("Error"))
 		c.Writer.Flush()
 	}
+}
+
+func captureRssArticles() {
+
+	articleSourceSqlMapper := dao.GetArticleSourceSqlMapper(nil)
+
+	total, _ := articleSourceSqlMapper.CountArticleSources()
+	for i := 1; i <= (total+PAGE_SIZE-1)/PAGE_SIZE; i++ {
+		sources, _ := articleSourceSqlMapper.SelectArticleSources(i, PAGE_SIZE)
+		spider.Capture(sources)
+	}
+
+	logging.Logger.Info("Start to retrieve article from remote host.");
+	spider.FeedSpider.Start();
 }

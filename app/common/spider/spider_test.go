@@ -1,14 +1,15 @@
 package spider
 
 import (
-	"testing"
+
+"testing"
 	"time"
 
 	"github.com/geekappio/itonchain/app/common/logging"
-	"github.com/geekappio/itonchain/app/common/redis"
-	"github.com/geekappio/itonchain/app/common/seaweedfs"
-	"github.com/geekappio/itonchain/app/config"
-	"github.com/geekappio/itonchain/app/dal"
+"github.com/geekappio/itonchain/app/common/redis"
+"github.com/geekappio/itonchain/app/common/seaweedfs"
+"github.com/geekappio/itonchain/app/config"
+"github.com/geekappio/itonchain/app/dal"
 	"github.com/geekappio/itonchain/app/dal/dao"
 )
 
@@ -32,6 +33,10 @@ func TestFeedSpider_Capture(t *testing.T) {
 	}
 
 	logging.Logger.Info("Start to retrieve article from remote host.");
-	feedSpider.Start();
+	FeedSpider.Start();
 	time.Sleep(10 * time.Minute)
+}
+
+func TestFeedSpider_CaputreSource(t *testing.T) {
+	FeedSpider.Capture("http://feedmaker.kindle4rss.com/feeds/nbweekly.weixin.xml");
 }

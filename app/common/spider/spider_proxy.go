@@ -14,7 +14,7 @@ type Spider interface {
 }
 
 var (
-	feedSpider = impl.NewFeedSpider()
+	FeedSpider = impl.NewFeedSpider()
 )
 
 
@@ -26,7 +26,7 @@ func Capture(sources []*entity.ArticleSource) error {
 	for _, source := range sources {
 		switch field_enum.ValueOf(source.SourceType) {
 		case field_enum.FEED:
-			feedSpider.AddSource(source.SourceUrl)
+			FeedSpider.AddSource(source.SourceUrl)
 		default:
 			return errors.New("不支持的文章源种类")
 		}
