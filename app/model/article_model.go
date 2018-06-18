@@ -53,7 +53,7 @@ type ArticleSearchParams struct {
 }
 
 type ArticleModel struct {
-	Id              int64  `json:"openId"`
+	Id              int64  `json:"id"`
 	ArticleTitle    string `json:"articleTitle"`
 	ArticleFrom     string `json:"articleFrom"`
 	ArticleUrl      string `json:"articleUrl"`

@@ -11,3 +11,7 @@ type WechatUserRequest struct {
 	Country string `json:"country"`
 	Language string `json:"language"`
 }
+
+type WechatCodeRequest struct {
+	Code string `json:"code" binding:"required"`
+}
