@@ -9,5 +9,5 @@ type ArticlePending struct {
 	InternelUrl     string `xorm:'internel_url' varchar(1000) notnull`
 	InternelSize    int64  `xorm:'internel_size' bigint(10) default(0)`
 	ArticleKeywords string `xorm:'article_keywords' varchar(1000)`
-	State 			string `xorm:'state' varchar(20)`
+	State           string `xorm:'state' varchar(20)`
 }

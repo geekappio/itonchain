@@ -2,11 +2,12 @@ package service
 
 import (
 	"time"
+
 	"github.com/geekappio/itonchain/app/dal/dao"
 	"github.com/geekappio/itonchain/app/dal/entity"
+	"github.com/geekappio/itonchain/app/model/field_enum"
 	"github.com/geekappio/itonchain/app/util"
 	"github.com/xormplus/xorm"
-	"github.com/geekappio/itonchain/app/model/field_enum"
 )
 
 type ArticlePendingService struct {
@@ -70,6 +71,7 @@ func (self *ArticlePendingService) GetArticlePendingList(pageNum int, pageSize i
 	mapper := dao.GetArticlePendingSqlMapper(self.session)
 	return mapper.SelectArticlePendings(pageNum, pageSize, articleTitle)
 }
+
 /**
  * 根据articlePendingId，查询记录
  */

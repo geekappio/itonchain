@@ -15,14 +15,15 @@ type PendingToArticleRequest struct {
 
 type ArticlePendingModel struct {
 	BaseResponse
-	ArticlePendinId   int64  `json:"articlePendinId"`
-	ArticleTitle string `json:"articleTitle"`
-	ArticleFrom string  `json:"articleFrom"`
-	ArticleUrl string `json:"articleUrl"`
-	InternelFid string `json:"internelFid"`
-	InternelUrl string `json:"internelUrl"`
-	InternelSize int64 `json:"internelSize"`
+	ArticlePendinId int64  `json:"articlePendinId"`
+	ArticleTitle    string `json:"articleTitle"`
+	ArticleFrom     string `json:"articleFrom"`
+	ArticleUrl      string `json:"articleUrl"`
+	InternelFid     string `json:"internelFid"`
+	InternelUrl     string `json:"internelUrl"`
+	PublicUrl       string `json:"publicUrl"`
+	InternelSize    int64  `json:"internelSize"`
 	ArticleKeywords string `json:"articleKeywords"`
-	GmtCreate string `json:"gmtCreate"`
-	GmtUpdate string `json:"gmtUpdate"`
+	GmtCreate       string `json:"gmtCreate"`
+	GmtUpdate       string `json:"gmtUpdate"`
 }

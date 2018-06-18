@@ -7,6 +7,7 @@
     "db":0
   },
   "seaweed":{
+    "PublicHost":"47.98.194.177",
     "SwFSMasterUrl":"47.98.194.177:9333",
     "SwFSFilerUrl":"",
     "SwFSSchema":"http",

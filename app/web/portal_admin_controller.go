@@ -1,16 +1,18 @@
 package web
 
 import (
-	"github.com/geekappio/itonchain/app/service"
-	"github.com/geekappio/itonchain/app/model"
-	"github.com/geekappio/itonchain/app/util"
-	"github.com/geekappio/itonchain/app/enum"
-	"github.com/geekappio/itonchain/app/model/field_enum"
-	"github.com/gin-contrib/sessions"
-	"github.com/geekappio/itonchain/app/common/common_util"
-	"github.com/geekappio/itonchain/app/web/api"
-	"github.com/gin-gonic/gin"
 	"net/http"
+
+	"github.com/geekappio/itonchain/app/common/common_util"
+	"github.com/geekappio/itonchain/app/config"
+	"github.com/geekappio/itonchain/app/enum"
+	"github.com/geekappio/itonchain/app/model"
+	"github.com/geekappio/itonchain/app/model/field_enum"
+	"github.com/geekappio/itonchain/app/service"
+	"github.com/geekappio/itonchain/app/util"
+	"github.com/geekappio/itonchain/app/web/api"
+	"github.com/gin-contrib/sessions"
+	"github.com/gin-gonic/gin"
 )
 
 /**
@@ -51,6 +53,7 @@ func HandleGetArticlePendingList(request model.ArticlePendingListRequest) (*mode
 			ArticleUrl:      articlePending.ArticleUrl,
 			InternelFid:     articlePending.InternelFid,
 			InternelUrl:     articlePending.InternelUrl,
+			PublicUrl:       config.ReplaceUrlWithPublicHost(articlePending.InternelUrl),
 			InternelSize:    articlePending.InternelSize,
 			ArticleKeywords: articlePending.ArticleKeywords,
 			GmtCreate:       util.TimeFormat(articlePending.GmtCreate),

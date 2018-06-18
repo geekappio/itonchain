@@ -4,12 +4,14 @@ import (
 	"encoding/json"
 	"fmt"
 	"os"
+	"strings"
 
 	"github.com/golang/go/src/io/ioutil"
 	"github.com/ian-kent/go-log/log"
 
 	// "gopkg.in/yaml.v2"
 	"time"
+
 	"github.com/geekappio/itonchain/app/model"
 )
 
@@ -52,7 +54,7 @@ type RedisConfig struct {
 
 // SeaWeedFS configs.
 type SeaWeedFSConfig struct {
-	// 上传地址 url
+	PublicHost    string        `json:"PublicHost"`
 	SwFSMasterUrl string        `json:"SwFSMasterUrl"`
 	SwFSSchema    string        `json:"SwFSSchema"`
 	SwFSFilerUrls string        `json:"SwFSFilerUrl"`
@@ -114,4 +116,9 @@ func getAppConfig() (appConfig *AppConfig, err error) {
 	appConfig = new(AppConfig)
 	err = json.Unmarshal(configFile, appConfig)
 	return
+}
+
+// Replace domain of url with configed host
+func ReplaceUrlWithPublicHost(url string) string {
+	return strings.Replace(url, "127.0.0.1", App.SeaWeedFS.PublicHost, -1)
 }
