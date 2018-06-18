@@ -18,6 +18,9 @@ const (
 	DB_UPDATE_ERROR      ErrorCode = "2004"
 	DB_TRANSACTION_ERROR ErrorCode = "2005"
 
+	//Http error
+	HTTP_ERROR            ErrorCode = "6000"
+
 	// Business error
 	// 30XX User
 	USER_NOT_EXISTS     ErrorCode = "3001"
