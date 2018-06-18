@@ -13,13 +13,13 @@ import (
 // pending 分页列表函数
 func ArticlePendingList(c *gin.Context) {
 	pageNum, _ := strconv.Atoi(c.DefaultQuery("pageNum", "1"))
-	pageSize, _ := strconv.Atoi(c.DefaultQuery("pageSize", "50"))
+	pageSize, _ := strconv.Atoi(c.DefaultQuery("pageSize", "10"))
 
 	mapper := service.GetArticlePendingService()
 
 	count, _ := mapper.GetArticlePendingCount()
 	totalPages := (count + pageSize - 1) / pageSize
-	if (pageSize > totalPages || pageSize < 1) {
+	if pageSize > totalPages || pageSize < 1 {
 		pageSize = 1	// 校验并设置默认页数，应该给提示，但是返回显示比较麻烦
 	}
 	articlePendings, _ := mapper.GetArticlePendingList(pageNum, pageSize, "")
