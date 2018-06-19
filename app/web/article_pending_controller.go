@@ -1,6 +1,7 @@
 package web
 
 import (
+	"github.com/geekappio/itonchain/app/config"
 	"github.com/gin-gonic/gin"
 	"github.com/geekappio/itonchain/app/service"
 	"github.com/geekappio/itonchain/app/model"
@@ -32,6 +33,7 @@ func ArticlePendingList(c *gin.Context) {
 			ArticleUrl:      articlePending.ArticleUrl,
 			InternelFid:     articlePending.InternelFid,
 			InternelUrl:     articlePending.InternelUrl,
+			PublicUrl:       config.ReplaceUrlWithPublicHost(articlePending.InternelUrl),
 			InternelSize:    articlePending.InternelSize,
 			ArticleKeywords: articlePending.ArticleKeywords,
 			GmtCreate:       util.TimeFormat(articlePending.GmtCreate),
